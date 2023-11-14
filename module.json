@@ -1,7 +1,7 @@
 {
   "id": "simple-token-movement",
-  "title": "simple-token-movement",
-  "description": "",
+  "title": "Simple Token Movement",
+  "description": "A very simple controller for token movement designed for mobile",
   "version": "#{VERSION}#",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
