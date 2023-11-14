@@ -106,17 +106,17 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   activateListeners(html) {
     super.activateListeners(html)
-    $('.mtmc-select', html).click($.proxy(this.selectToken, this))
-    $('.mtmc-zoomin', html).click($.proxy(this.zoomIn, this))
-    $('.mtmc-zoomout', html).click($.proxy(this.zoomOut, this))
-    $('.mtmc-topleft', html).click($.proxy(this.moveTopLeft, this))
-    $('.mtmc-left', html).click($.proxy(this.moveLeft, this))
-    $('.mtmc-bottomleft', html).click($.proxy(this.moveBottomLeft, this))
-    $('.mtmc-top', html).click($.proxy(this.moveTop, this))
-    $('.mtmc-bottom', html).click($.proxy(this.moveBottom, this))
-    $('.mtmc-topright', html).click($.proxy(this.moveTopRight, this))
-    $('.mtmc-right', html).click($.proxy(this.moveRight, this))
-    $('.mtmc-bottomright', html).click($.proxy(this.moveBottomRight, this))
+    $('.mtmc-select', html).bind('touchstart click', $.proxy(this.selectToken, this))
+    $('.mtmc-zoomin', html).bind('touchstart click', $.proxy(this.zoomIn, this))
+    $('.mtmc-zoomout', html).bind('touchstart click', $.proxy(this.zoomOut, this))
+    $('.mtmc-topleft', html).bind('touchstart click', $.proxy(this.moveTopLeft, this))
+    $('.mtmc-left', html).bind('touchstart click', $.proxy(this.moveLeft, this))
+    $('.mtmc-bottomleft', html).bind('touchstart click', $.proxy(this.moveBottomLeft, this))
+    $('.mtmc-top', html).bind('touchstart click', $.proxy(this.moveTop, this))
+    $('.mtmc-bottom', html).bind('touchstart click', $.proxy(this.moveBottom, this))
+    $('.mtmc-topright', html).bind('touchstart click', $.proxy(this.moveTopRight, this))
+    $('.mtmc-right', html).bind('touchstart click', $.proxy(this.moveRight, this))
+    $('.mtmc-bottomright', html).bind('touchstart click', $.proxy(this.moveBottomRight, this))
   }
 
 
