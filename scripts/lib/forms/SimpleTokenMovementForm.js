@@ -12,7 +12,7 @@ export class SimpleTokenMovementForm extends FormApplication {
             template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
             id: "simple-token-movement",
             title: "Simple Token Movement",
-            height: 400,
+            height: 440,
             width: 400,
             minimizable: false,
             classes: ["simple-token-movement"]
@@ -125,7 +125,7 @@ export class SimpleTokenMovementForm extends FormApplication {
 
         // Create an object that is passed to the view template
         return {
-
+          character: game.user.character
         };
     }
 
