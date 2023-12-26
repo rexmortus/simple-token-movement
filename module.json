@@ -25,7 +25,8 @@
     "scripts/module.js"
   ],
   "scripts": [
-    "scripts/lib/lib.js"
+    "scripts/lib/lib.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.8/vue.cjs.js"
   ],
   "styles": [
     "styles/module.css"
@@ -42,6 +43,7 @@
   "download": "#{DOWNLOAD}#",
   "license": "LICENSE",
   "readme": "README.md",
+  "socket": true,
   "media": [
     {
       "type": "icon",
