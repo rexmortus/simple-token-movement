@@ -1,8 +1,8 @@
 export class SimpleTokenMovementForm extends FormApplication {
 
     constructor(socket) {
-      this.socket = socket;
       super();
+      this.socket = socket;
     }
 
     static get defaultOptions() {
@@ -20,7 +20,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     }
 
   move(x, y) {
-    this.socket.executeAsGM(game.user.character.id, [x,y])
+    this.socket.executeAsGM('moveToken', game.user.character.id, [x,y])
   }
 
   moveTopLeft() {
