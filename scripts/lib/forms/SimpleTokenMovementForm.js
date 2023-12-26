@@ -1,8 +1,8 @@
 export class SimpleTokenMovementForm extends FormApplication {
 
-    // The constructor needs both the timekeeper and journalkeeper
-    constructor() {
-        super();
+    constructor(socket) {
+      this.socket = socket;
+      super();
     }
 
     static get defaultOptions() {
@@ -19,57 +19,8 @@ export class SimpleTokenMovementForm extends FormApplication {
         });
     }
 
-  getToken() {
-    let token = game.user.character.getActiveTokens()[0]
-    token.control({ releaseOthers: true })
-    token.border.visible = false
-    return token
-  }
-
   move(x, y) {
-    let t = this.getToken()
-    let newX = t.x + t.w * x
-    let newY = t.y + t.h * y
-    const newPoint = canvas.grid.getSnappedPosition(newX, newY)
-    if (!t.checkCollision(newPoint)) {
-      t.document.update(newPoint)
-      canvas.animatePan({
-        duration: 250,
-        x: newPoint.x + t.w / 2,
-        y: newPoint.y + t.h / 2,
-        scale: canvas.scene._viewPosition.scale,
-      })
-    }
-  }
-
-  selectToken() {
-    let t = this.getToken()
-    canvas.animatePan({
-      duration: 150,
-      x: t.x + t.w / 2,
-      y: t.y + t.h / 2,
-      scale: canvas.scene._viewPosition.scale,
-    })
-  }
-
-  zoomIn() {
-    const view = canvas.scene._viewPosition
-    canvas.animatePan({
-      duration: 200,
-      x: view.x,
-      y: view.y,
-      scale: view.scale * 1.25,
-    })
-  }
-
-  zoomOut() {
-    const view = canvas.scene._viewPosition
-    canvas.animatePan({
-      duration: 200,
-      x: view.x,
-      y: view.y,
-      scale: view.scale * 0.80,
-    })
+    this.socket.executeAsGM(game.user.character.id, [x,y])
   }
 
   moveTopLeft() {
