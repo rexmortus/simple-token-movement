@@ -35,7 +35,7 @@ function move(actorID, move) {
 
 Hooks.once('ready', async function() {
 
-    const mainForm = new SimpleTokenMovementForm(socket);
+    const mainForm = new SimpleTokenMovementForm(socket, {tabs: [{navSelector: ".tabs", contentSelector: ".content", initial: "tab1"}] });
 
     mainForm.render(true);
 

@@ -12,12 +12,30 @@ export class SimpleTokenMovementForm extends FormApplication {
             template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
             id: "simple-token-movement",
             title: "Simple Token Movement",
-            height: 440,
-            width: 400,
+            height: 434,
+            width: 374,
             minimizable: false,
-            classes: ["simple-token-movement"]
+            classes: ["simple-token-movement"],
+            tabs: [
+              { navSelector: ".token-controller-tabs", contentSelector: ".token-controller-content", initial: "tab1" }
+            ]
         });
+  }
+
+  async _renderInner(...args) {
+    const html = await super._renderInner(...args);
+    const actionsListApi = game.modules.get('character-actions-list-5e').api;
+
+    try {
+      const actionsTab = html.find('.simple-token-controller-actions');
+      const actionsTabHtml = $(await actionsListApi.renderActionsList(game.user.character));
+      actionsTab.html(actionsTabHtml);
+    } catch (e) {
+      log(true, e);
     }
+
+    return html;
+  }
 
   move(x, y) {
     this.socket.executeAsGM('moveToken', game.user.character.id, [x,y])
@@ -69,8 +87,6 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('.mtmc-right', html).bind('touchstart click', $.proxy(this.moveRight, this))
     $('.mtmc-bottomright', html).bind('touchstart click', $.proxy(this.moveBottomRight, this))
   }
-
-
 
     getData() {
 

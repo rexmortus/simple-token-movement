@@ -1,32 +1,24 @@
-
-.outer-square {
-  left: 0;
-  width: 90%;
-  height: 90%;
-  background: url('https://th.bing.com/th/id/OIP.W9HpRHIFqLBCUo63qCFSDAHaKO?rs=1&pid=ImgDetMain');
-  margin: 5%;
-  display: -webkit-flex;
-  -webkit-flex-wrap: wrap;
-  display: flex;
-  flex-wrap: wrap;
-  border:1px solid black;
-  border-radius: 10px;
-}
-.inner-grid {
-  width: 33.3%;
-  height: 33.3%;
-  display: table;
-}
-.inner-square {
-  line-height: 100%;
-  font-size: 50px;
-  font-weight: bold;
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
+.token-controller-tabs {
+  max-height:30px;
 }
 
-img.character-icon {
-  border:none !important;
+.token-controller-grid {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, 1fr);
+  height:360px;
+  background-image: url('https://i.imgur.com/MRfwT6A.png');
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border-radius: 6px;
 }
 
+.character-image {
+  height: 80px;
+  position: absolute;
+  margin-left: 20px;
+  margin-top: 20px;
+  border:none;
+}

@@ -1,29 +1,24 @@
-<div class="outer-square">
-    <div class="inner-grid">
-      <div class="inner-square mtmc-topleft">↖️</div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square mtmc-top">⬆️</div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square mtmc-topright">↗️</div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square mtmc-left">⬅️</div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square"><img class="character-icon" src="{{character.img}}"/></div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square mtmc-right">➡️</div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square mtmc-bottomleft">↙️</div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square mtmc-bottom">⬇️</div>
-    </div>
-    <div class="inner-grid">
-      <div class="inner-square mtmc-bottomright">↘️</div>
+<nav class="token-controller-tabs tabs" data-group="primary-tabs">
+  <a class="item" data-tab="tab1" data-group="primary-tabs">👟 Movement</a>
+  <a class="item" data-tab="tab2" data-group="primary-tabs">🔥 Actions</a>
+</nav>
+
+<section class="token-controller-content">
+  <div class="tab" data-tab="tab1" data-group="primary-tabs">
+    <div class="token-controller-grid">
+      <div class="mtmc-topleft"></div>
+      <div class="mtmc-top"></div>
+      <div class="mtmc-topright"></div>
+      <div class="mtmc-left"></div>
+      <div class="mtmc-select"><img src="{{character.img}}" class="character-image" alt=""></div>
+      <div class="mtmc-right"></div>
+      <div class="mtmc-bottomleft"></div>
+      <div class="mtmc-bottom"></div>
+      <div class="mtmc-bottomright"></div>  
     </div>
   </div>
+  <div class="tab" data-tab="tab2" data-group="primary-tabs">
+    <div class="simple-token-controller-actions"></div>
+  </div>
+
+</section>
