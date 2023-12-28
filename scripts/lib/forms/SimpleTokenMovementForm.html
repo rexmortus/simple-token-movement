@@ -1,7 +1,11 @@
 <nav class="token-controller-tabs tabs" data-group="primary-tabs">
-  <a class="item" data-tab="tab1" data-group="primary-tabs">👟 Movement</a>
-  <a class="item" data-tab="tab2" data-group="primary-tabs">🔥 Actions</a>
+  <a class="item" data-tab="tab1" data-group="primary-tabs">Movement</a>
+  <a class="item" data-tab="tab2" data-group="primary-tabs">Actions</a>
+  <a class="item" data-tab="tab3" data-group="primary-tabs">Attributes</a>
+  <a class="item" data-tab="tab4" data-group="primary-tabs">Spells</a>
 </nav>
+
+<hr>
 
 <section class="token-controller-content">
   <div class="tab" data-tab="tab1" data-group="primary-tabs">
@@ -10,7 +14,7 @@
       <div class="mtmc-top"></div>
       <div class="mtmc-topright"></div>
       <div class="mtmc-left"></div>
-      <div class="mtmc-select"><img src="{{character.img}}" class="character-image" alt=""></div>
+      <div class="mtmc-select"><img src="{{character.prototypeToken.texture.src}}" class="character-image" alt=""></div>
       <div class="mtmc-right"></div>
       <div class="mtmc-bottomleft"></div>
       <div class="mtmc-bottom"></div>
@@ -19,26 +23,99 @@
   </div>
   <div class="tab" data-tab="tab2" data-group="primary-tabs">
     <div class="simple-token-controller-actions">
-      <h3>Actions</h3>
-      <table>
-        {{#each actionList.action}}
-          <tr>
-            <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-            <td>{{this.name}}</td>
-            <td>{{this.labels.activation}}</td>
-          </tr>
-        {{/each}}
-      </table>
-      <h3>Bonus</h3>
-      <table>
-        {{#each actionList.bonus}}
-           <tr>
-            <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-            <td>{{this.name}}</td>
-            <td>{{this.labels.activation}}</td>
-          </tr>
-        {{/each}}
-      </table>
+
+
+      {{#checklength actionList.action.size 0}}
+        <h3>Actions</h3>
+        <table>
+          {{#each actionList.action}}
+            <tr class="token-controller-action" data-action-type="action" data-action-index="{{@index}}">
+              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+              <td>{{this.name}}</td>
+              <td>{{this.labels.activation}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/checklength}}
+
+      
+      {{#checklength actionList.bonus.size 0}}
+        <h3>Bonus</h3>
+        <table>
+          {{#each actionList.bonus}}
+            <tr class="token-controller-action" data-action-type="bonus" data-action-index="{{@index}}">
+              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+              <td>{{this.name}}</td>
+              <td>{{this.labels.activation}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/checklength}}
+
+      {{#checklength actionList.crew.size 0}}
+        <h3>Crew</h3>
+        <table>
+          {{#each actionList.crew}}
+            <tr class="token-controller-action" data-action-type="crew" data-action-index="{{@index}}">
+              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+              <td>{{this.name}}</td>
+              <td>{{this.labels.activation}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/checklength}}
+
+      {{#checklength actionList.lair.size 0}}
+        <h3>Lair</h3>
+        <table>
+          {{#each actionList.lair}}
+            <tr class="token-controller-action" data-action-type="lair" data-action-index="{{@index}}">
+              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+              <td>{{this.name}}</td>
+              <td>{{this.labels.activation}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/checklength}}
+
+      {{#checklength actionList.legendary.size 0}}
+        <h3>Legendary</h3>
+        <table>
+          {{#each actionList.legendary}}
+            <tr class="token-controller-action" data-action-type="legendary" data-action-index="{{@index}}">
+              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+              <td>{{this.name}}</td>
+              <td>{{this.labels.activation}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/checklength}}
+
+      {{#checklength actionList.other.size 0}}
+        <h3>Other</h3>
+        <table>
+          {{#each actionList.other}}
+            <tr class="token-controller-action" data-action-type="other" data-action-index="{{@index}}">
+              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+              <td>{{this.name}}</td>
+              <td>{{this.labels.activation}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/checklength}}
+
+      {{#checklength actionList.reaction.size 0}}
+        <h3>Reactions</h3>
+        <table>
+          {{#each actionList.reaction}}
+            <tr class="token-controller-action" data-action-type="reaction" data-action-index="{{@index}}">
+              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+              <td>{{this.name}}</td>
+              <td>{{this.labels.activation}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      {{/checklength}}
       
 
     </div>

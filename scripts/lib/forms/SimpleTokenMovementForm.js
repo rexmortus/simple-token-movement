@@ -3,6 +3,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     constructor(socket) {
       super();
       this.socket = socket;
+      this.actionList = game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character);
     }
 
     static get defaultOptions() {
@@ -58,6 +59,13 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.move(1, 1)
   }
 
+  doAction(event) {
+    let actionType= $(event.currentTarget).data('actionType');
+    let actionIndex = $(event.currentTarget).data('actionIndex')
+    let action = [...this.actionList[actionType]][actionIndex]
+    action.use();
+  }
+
   activateListeners(html) {
     super.activateListeners(html)
     $('.mtmc-select', html).bind('touchstart click', $.proxy(this.selectToken, this))
@@ -71,19 +79,18 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('.mtmc-topright', html).bind('touchstart click', $.proxy(this.moveTopRight, this))
     $('.mtmc-right', html).bind('touchstart click', $.proxy(this.moveRight, this))
     $('.mtmc-bottomright', html).bind('touchstart click', $.proxy(this.moveBottomRight, this))
+
+    $('[data-action-type][data-action-index].token-controller-action', html).bind('touchstart click', $.proxy(this.doAction, this));
   }
 
-    getData() {
+  getData() {
+      return {
+        character: game.user.character,
+        actionList: this.actionList
+      }
+  }
 
-        // Create an object that is passed to the view template
-        let actionList = game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)
+  async _updateObject(event, formData) {
 
-        return {
-          character: game.user.character,
-          actionList: actionList
-        }
-    }
-
-    async _updateObject(event, formData) {
-    }
+  }
 }

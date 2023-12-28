@@ -1,5 +1,13 @@
 import { SimpleTokenMovementForm } from './lib/forms/SimpleTokenMovementForm.js'
 
+Handlebars.registerHelper('checklength', function (v1, v2, options) {
+    'use strict';
+    if (v1>v2) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+
 let socket;
 
 Hooks.once("socketlib.ready", () => {
