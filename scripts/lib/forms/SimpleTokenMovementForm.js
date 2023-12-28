@@ -22,21 +22,6 @@ export class SimpleTokenMovementForm extends FormApplication {
         });
   }
 
-  async _renderInner(...args) {
-    const html = await super._renderInner(...args);
-    const actionsListApi = game.modules.get('character-actions-list-5e').api;
-
-    try {
-      const actionsTab = html.find('.simple-token-controller-actions');
-      const actionsTabHtml = $(await actionsListApi.renderActionsList(game.user.character));
-      actionsTab.html(actionsTabHtml);
-    } catch (e) {
-      log(true, e);
-    }
-
-    return html;
-  }
-
   move(x, y) {
     this.socket.executeAsGM('moveToken', game.user.character.id, [x,y])
   }
@@ -91,9 +76,12 @@ export class SimpleTokenMovementForm extends FormApplication {
     getData() {
 
         // Create an object that is passed to the view template
+        let actionList = game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)
+
         return {
-          character: game.user.character
-        };
+          character: game.user.character,
+          actionList: actionList
+        }
     }
 
     async _updateObject(event, formData) {
