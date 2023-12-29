@@ -28,7 +28,7 @@
         <h3 class="items-header">Actions</h3>
         <table>
           {{#each actionList.action}}
-            <tr class="token-controller-action" data-action-type="action" data-action-index="{{@index}}">
+            <tr class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
@@ -42,7 +42,7 @@
         <h3>Bonus</h3>
         <table>
           {{#each actionList.bonus}}
-            <tr class="token-controller-action" data-action-type="bonus" data-action-index="{{@index}}">
+            <tr class="token-controller-action" data-event-type="action" data-action-subtype="bonus" data-action-index="{{@index}}">
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
@@ -55,7 +55,7 @@
         <h3>Crew</h3>
         <table>
           {{#each actionList.crew}}
-            <tr class="token-controller-action" data-action-type="crew" data-action-index="{{@index}}">
+            <tr class="token-controller-action" data-event-type="action" data-action-subtype="crew" data-action-index="{{@index}}">
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
@@ -68,7 +68,7 @@
         <h3>Lair</h3>
         <table>
           {{#each actionList.lair}}
-            <tr class="token-controller-action" data-action-type="lair" data-action-index="{{@index}}">
+            <tr class="token-controller-action" data-event-type="action" data-action-subtype="lair" data-action-index="{{@index}}">
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
@@ -81,7 +81,7 @@
         <h3>Legendary</h3>
         <table>
           {{#each actionList.legendary}}
-            <tr class="token-controller-action" data-action-type="legendary" data-action-index="{{@index}}">
+            <tr class="token-controller-action" data-event-type="action" data-action-subtype="legendary" data-action-index="{{@index}}">
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
@@ -94,7 +94,7 @@
         <h3>Other</h3>
         <table>
           {{#each actionList.other}}
-            <tr class="token-controller-action" data-action-type="other" data-action-index="{{@index}}">
+            <tr class="token-controller-action" data-event-type="action" data-action-subtype="other" data-action-index="{{@index}}">
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
@@ -107,7 +107,7 @@
         <h3>Reactions</h3>
         <table>
           {{#each actionList.reaction}}
-            <tr class="token-controller-action" data-action-type="reaction" data-action-index="{{@index}}">
+            <tr class="token-controller-action" data-event-type="action" data-action-subtype="reaction" data-action-index="{{@index}}">
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
@@ -132,8 +132,12 @@
         </tr>
       </thead>
       {{#each character.system.abilities}}
-        <tr data-ability="{{@key}}" style="text-align: center; font-size:16px">
-          <td style="font-size: 32px;">{{@key}}</td>
+        <tr class="token-controller-action" data-event-type="ability" data-ability="{{@key}}" style="text-align: center; font-size:16px">
+          <td style="text-align: left;">
+            {{#with (lookup ../abilityList @key) }}
+              {{label}}
+            {{/with}}
+          </td>
           <td>{{this.value}}</td>
           <td>{{this.mod}}</td>
           <td>{{this.save}}</td>
@@ -152,8 +156,12 @@
         </tr>
       </thead>
       {{#each character.system.skills}}
-        <tr data-skill="{{@key}}" style="text-align: center; font-size:16px">
-          <td style="font-size: 32px;">{{@key}}</td>
+        <tr class="token-controller-action" data-event-type="skill" data-skill="{{@key}}" style="text-align: center; font-size:16px">
+          <td style="text-align: left;">
+            {{#with (lookup ../skillList @key) }}
+              {{label}}
+            {{/with}}
+          </td>
           <td>{{this.ability}} <span style="color: grey;">({{this.mod}})</span></td>
           <td>{{this.total}}</td>
           <td style="color: grey;">{{this.passive}}</td>

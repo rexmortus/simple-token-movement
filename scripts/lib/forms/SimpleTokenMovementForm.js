@@ -63,20 +63,12 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.move(1, 1)
   }
 
-  doAction(event) {
-    let actionType= $(event.currentTarget).data('actionType');
-    let actionIndex = $(event.currentTarget).data('actionIndex')
-    let action = [...this.actionList[actionType]][actionIndex]
-    action.use();
-  }
-
   onTouchStart(event) {
     // Store the element where touchstart occurred
     this.startElement = event.currentTarget;
     this.touchStartX = event.touches[0].clientX;
     this.touchStartY = event.touches[0].clientY;
     this.scrolled = false;
-    console.log(`${this.touchStartX}, ${this.touchStartY}`)
   }
 
   onTouchMove(event) {
@@ -88,15 +80,33 @@ export class SimpleTokenMovementForm extends FormApplication {
   } 
 
   onTouchEnd(event) {
-    let eventType = $(this.startElement).data('actionType');
-    let eventIndex = $(this.startElement).data('actionIndex');
-    let action = [...this.actionList[eventType]][eventIndex]
 
-    // Check if the touchend event is on the same element
-    if (event.currentTarget === this.startElement && !this.scrolled) {
+    // Get the event type (ability, skill, action)
+    let eventType = $(this.startElement).data('eventType');
+
+    // Only trigger if there was no scroll
+    if (event.currentTarget === this.startElement && !this.scrolled) { 
+
+      // Depending on the event type, do a thing
+      if (eventType === 'ability') {
+        let ability = $(this.startElement).data('ability');
+        game.user.character.rollAbility(ability);
+      }
+
+      if (eventType === 'skill') {
+        let skill = $(this.startElement).data('skill');
+        game.user.character.rollSkill(skill);
+      }
+
+      if (eventType === 'action') {
+        let actionSubtype = $(this.startElement).data('actionSubtype')
+        let actionIndex = $(this.startElement).data('actionIndex');
+        let action = [...this.actionList[actionSubtype]][actionIndex]
         action.use();
+      }
+
     }
-      
+     
     // Reset the startElement for the next touch
     this.startElement = null;
   }
@@ -114,15 +124,17 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('.mtmc-topright', html).bind('touchstart click', $.proxy(this.moveTopRight, this))
     $('.mtmc-right', html).bind('touchstart click', $.proxy(this.moveRight, this))
     $('.mtmc-bottomright', html).bind('touchstart click', $.proxy(this.moveBottomRight, this))
-    $('[data-action-type][data-action-index].token-controller-action', html).bind('touchstart', $.proxy(this.onTouchStart, this))
-    $('[data-action-type][data-action-index].token-controller-action', html).bind('touchend', $.proxy(this.onTouchEnd, this))
-    $('[data-action-type][data-action-index].token-controller-action', html).bind('touchmove', $.proxy(this.onTouchMove, this))
+    $('.token-controller-action', html).bind('touchstart', $.proxy(this.onTouchStart, this))
+    $('.token-controller-action', html).bind('touchend', $.proxy(this.onTouchEnd, this))
+    $('.token-controller-action', html).bind('touchmove', $.proxy(this.onTouchMove, this))
   }
 
   getData() {
       return {
         character: game.user.character,
-        actionList: this.actionList
+        actionList: this.actionList,
+        skillList: game.system.config.skills,
+        abilityList: game.system.config.abilities
       }
   }
 
