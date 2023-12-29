@@ -1,26 +1,25 @@
 <nav class="token-controller-tabs tabs" data-group="primary-tabs">
   <a class="item" data-tab="tab1" data-group="primary-tabs">Movement</a>
   <a class="item" data-tab="tab2" data-group="primary-tabs">Actions</a>
-  <a class="item" data-tab="tab3" data-group="primary-tabs">Attributes</a>
-  <a class="item" data-tab="tab4" data-group="primary-tabs">Spells</a>
+  <a class="item" data-tab="tab3" data-group="primary-tabs">Abilities/Skills</a>
 </nav>
-
-<hr>
 
 <section class="token-controller-content">
   <div class="tab" data-tab="tab1" data-group="primary-tabs">
     <div class="token-controller-grid">
-      <div class="mtmc-topleft"></div>
-      <div class="mtmc-top"></div>
-      <div class="mtmc-topright"></div>
-      <div class="mtmc-left"></div>
+      <div class="mtmc-topleft">↖️</div>
+      <div class="mtmc-top">⬆️</div>
+      <div class="mtmc-topright">↗️</div>
+      <div class="mtmc-left">⬅️</div>
       <div class="mtmc-select"><img src="{{character.prototypeToken.texture.src}}" class="character-image" alt=""></div>
-      <div class="mtmc-right"></div>
-      <div class="mtmc-bottomleft"></div>
-      <div class="mtmc-bottom"></div>
-      <div class="mtmc-bottomright"></div>  
+      <div class="mtmc-right">➡️</div>
+      <div class="mtmc-bottomleft">↙️</div>
+      <div class="mtmc-bottom">⬇️</div>
+      <div class="mtmc-bottomright">↘️</div>  
     </div>
   </div>
+
+  <!-- Actions tab -->
   <div class="tab" data-tab="tab2" data-group="primary-tabs">
     <div class="simple-token-controller-actions">
 
@@ -119,6 +118,48 @@
       
 
     </div>
+  </div>
+
+  <!-- Abilities / Skills Tab -->
+  <div class="tab" data-tab="tab3" data-group="primary-tabs">
+    <table>
+      <thead>
+        <tr>
+          <th>Ability</th>
+          <th>Value</th>
+          <th>Modifier</th>
+          <th>Save</th>
+        </tr>
+      </thead>
+      {{#each character.system.abilities}}
+        <tr data-ability="{{@key}}" style="text-align: center; font-size:16px">
+          <td style="font-size: 32px;">{{@key}}</td>
+          <td>{{this.value}}</td>
+          <td>{{this.mod}}</td>
+          <td>{{this.save}}</td>
+        </tr>
+      {{/each}}
+    </table>
+
+    <!-- Skills -->
+    <table>
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>Ability</th>
+          <th>Total</th>
+          <th>Passive</th>
+        </tr>
+      </thead>
+      {{#each character.system.skills}}
+        <tr data-skill="{{@key}}" style="text-align: center; font-size:16px">
+          <td style="font-size: 32px;">{{@key}}</td>
+          <td>{{this.ability}} <span style="color: grey;">({{this.mod}})</span></td>
+          <td>{{this.total}}</td>
+          <td style="color: grey;">{{this.passive}}</td>
+        </tr>
+      {{/each}}
+    </table>
   </div>
 
 </section>
