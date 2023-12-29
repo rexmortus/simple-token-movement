@@ -1,11 +1,19 @@
+<!-- Nav -->
 <nav class="token-controller-tabs tabs" data-group="primary-tabs">
-  <a class="item" data-tab="tab1" data-group="primary-tabs">Movement</a>
-  <a class="item" data-tab="tab2" data-group="primary-tabs">Actions</a>
-  <a class="item" data-tab="tab3" data-group="primary-tabs">Abilities/Skills</a>
+  <a class="item" data-tab="movement-tab" data-group="primary-tabs">🧭</a>
+  <a class="item" data-tab="actions-tab" data-group="primary-tabs">🔥</a>
+  <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs">🎲</a>
+  <a class="item" data-tab="spells-tab" data-group="primary-tabs">🪄</a>
+  <a class="item" data-tab="inventory-tab" data-group="primary-tabs">🎒</a>
+  <a class="item" data-tab="character-tab" data-group="primary-tabs">👤</a>
 </nav>
 
+<!-- Content -->
 <section class="token-controller-content">
-  <div class="tab" data-tab="tab1" data-group="primary-tabs">
+  
+  <!-- Movement tab -->
+  <div class="tab" data-tab="movement-tab" data-group="primary-tabs">
+    <h3>Movement</h3>
     <div class="token-controller-grid">
       <div class="mtmc-topleft">↖️</div>
       <div class="mtmc-top">⬆️</div>
@@ -20,7 +28,7 @@
   </div>
 
   <!-- Actions tab -->
-  <div class="tab" data-tab="tab2" data-group="primary-tabs">
+  <div class="tab" data-tab="actions-tab" data-group="primary-tabs">
     <div class="simple-token-controller-actions">
 
 
@@ -120,8 +128,9 @@
     </div>
   </div>
 
-  <!-- Abilities / Skills Tab -->
-  <div class="tab" data-tab="tab3" data-group="primary-tabs">
+  <!-- Abilities / Skills tab -->
+  <div class="tab" data-tab="abilities-skills-tab" data-group="primary-tabs">
+    <h3>Abilities & Skills</h3>
     <table>
       <thead>
         <tr>
@@ -168,6 +177,21 @@
         </tr>
       {{/each}}
     </table>
+  </div>
+
+  <!-- Spells tab-->
+  <div class="tab" data-tab="spells-tab" data-group="primary-tabs">
+    <h3>Spellbook</h3>
+  </div>
+
+  <!--Inventory tab-->
+  <div class="tab" data-tab="inventory-tab" data-group="primary-tabs">
+    <h3>Inventory</h3>
+  </div>
+
+   <!--Character tab-->
+   <div class="tab" data-tab="character-tab" data-group="primary-tabs">
+    <h3>{{character.name}}</h3>
   </div>
 
 </section>

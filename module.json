@@ -1,6 +1,6 @@
 {
   "id": "simple-token-movement",
-  "title": "Simple Token Movement",
+  "title": "Mobile Token Controller",
   "description": "A very simple controller for token movement designed for mobile",
   "version": "#{VERSION}#",
   "library": "false",

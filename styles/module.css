@@ -1,5 +1,6 @@
 .token-controller-tabs {
-  max-height:30px;
+  font-size:32px;
+  padding-bottom: 10px;
 }
 
 .token-controller-grid {
