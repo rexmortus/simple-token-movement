@@ -40,6 +40,12 @@
               <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
               <td>{{this.name}}</td>
               <td>{{this.labels.activation}}</td>
+              <td style="text-align: center;">
+                {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                {{#each this.labels.derivedDamage}}
+                  {{this.label}}
+                {{/each}}
+              </td>
             </tr>
           {{/each}}
         </table>
@@ -182,16 +188,63 @@
   <!-- Spells tab-->
   <div class="tab" data-tab="spells-tab" data-group="primary-tabs">
     <h3>Spellbook</h3>
+    <table>
+    {{#each spellList}}
+      <table>
+        <thead>
+          <th>Level {{@key}}</th>
+          <th></th>
+          <th>0/0 slots</th>
+        </thead>
+        {{#each this}}
+        <tr class="token-controller-action">
+          <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
+          <td>{{this.name}}</td>
+          <td style="text-align: center;">{{this.system.preparation.prepared}}</td>
+        </tr>
+        {{/each}}
+      </table>
+    {{/each}}
+    </table>
   </div>
 
   <!--Inventory tab-->
   <div class="tab" data-tab="inventory-tab" data-group="primary-tabs">
-    <h3>Inventory</h3>
+    <table>
+      {{#each inventoryList}}
+      <h3>{{@key}}</h3>
+      <table>
+        {{#each this}}
+        <tr class="token-controller-action" style="text-align: left;">
+          <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
+          <td style="text-align: left;">{{this.name}}</td>
+        </tr>
+        {{/each}}
+      </table>
+    {{/each}}
+    </table>
   </div>
 
    <!--Character tab-->
    <div class="tab" data-tab="character-tab" data-group="primary-tabs">
-    <h3>{{character.name}}</h3>
+    <h3>Attributes</h3>
+    <div class="flexrow" style="text-align: center;">
+      <div><span style="font-size: x-large;">{{character.system.attributes.hp.value}} / {{character.system.attributes.hp.max}}</span><br>HP</div>
+      <div><span style="font-size: x-large;">{{character.system.attributes.ac.value}}</span><br>AC</div>
+      <div><span style="font-size: x-large;">{{character.system.attributes.movement.walk}}</span><br>Movement</div>
+      <div><span style="font-size: x-large;">{{character.system.attributes.init.total}}</span><br>Initiative</div>
+    </div>
+    {{#each featureList}}
+    <h3>{{@key}}</h3>
+    <table>
+      {{#each this}}
+      <tr class="token-controller-action" style="text-align: left;">
+        <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
+        <td style="text-align: left;">{{this.name}}</td>
+      </tr>
+      {{/each}}
+    </table>
+  {{/each}}
   </div>
 
 </section>

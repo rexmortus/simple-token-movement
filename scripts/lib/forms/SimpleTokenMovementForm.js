@@ -3,7 +3,6 @@ export class SimpleTokenMovementForm extends FormApplication {
     constructor(socket) {
       super();
       this.socket = socket;
-      this.actionList = game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character);
       this.startElement;
       this.touchStartX;
       this.touchStartY; 
@@ -11,20 +10,20 @@ export class SimpleTokenMovementForm extends FormApplication {
     }
 
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
-            classes: ["form"],
-            popOut: true,
-            template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
-            id: "simple-token-movement",
-            title: "Mobile Token Controller",
-            height: 500,
-            width: 374,
-            minimizable: false,
-            classes: ["simple-token-movement"],
-            tabs: [
-              { navSelector: ".token-controller-tabs", contentSelector: ".token-controller-content", initial: "tab1" }
-            ]
-        });
+      return mergeObject(super.defaultOptions, {
+          classes: ["form"],
+          popOut: true,
+          template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
+          id: "simple-token-movement",
+          title: "Mobile Token Controller",
+          height: 500,
+          width: 374,
+          minimizable: false,
+          classes: ["simple-token-movement"],
+          tabs: [
+            { navSelector: ".token-controller-tabs", contentSelector: ".token-controller-content", initial: "tab1" }
+          ]
+      });
   }
 
   move(x, y) {
@@ -101,7 +100,7 @@ export class SimpleTokenMovementForm extends FormApplication {
       if (eventType === 'action') {
         let actionSubtype = $(this.startElement).data('actionSubtype')
         let actionIndex = $(this.startElement).data('actionIndex');
-        let action = [...this.actionList[actionSubtype]][actionIndex]
+        let action = [...game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)[actionSubtype]][actionIndex]
         action.use();
       }
 
@@ -129,12 +128,67 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('.token-controller-action', html).bind('touchmove', $.proxy(this.onTouchMove, this))
   }
 
+  toPluralCamelCase(word) {
+    if (!word) return '';
+
+    // Capitalize the first letter and add 's' for plural
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+  spellsByLevel() {
+    let spellsByLevel = {};
+
+    game.user.character.items.filter(item => item.type === 'spell').forEach(spell => {
+        let level = spell.system.level;
+        if (!spellsByLevel[level]) {
+            spellsByLevel[level] = [];
+        }
+        spellsByLevel[level].push(spell);
+    });
+
+    return spellsByLevel;
+
+  }
+
+  itemsByType() {
+    let itemsByType = {};
+
+    game.user.character.items.filter(item => !['spell', 'feat', 'class', 'race', 'background'].includes(item.type)).forEach(item => {
+        let itemType = this.toPluralCamelCase(item.type);
+        if (!itemsByType[itemType]) {
+            itemsByType[itemType] = [];
+        }
+        itemsByType[itemType].push(item);
+    });
+
+    return itemsByType;
+  }
+
+  featuresByType() {
+    let featuresByType = {};
+
+    game.user.character.items.filter(item => ['feat', 'class', 'race', 'background'].includes(item.type)).forEach(item => {
+      let itemType = this.toPluralCamelCase(item.type);
+      if (!featuresByType[itemType]) {
+          featuresByType[itemType] = [];
+      }
+      featuresByType[itemType].push(item);
+    });
+
+    return featuresByType;
+
+  }
+
   getData() {
+
       return {
         character: game.user.character,
-        actionList: this.actionList,
+        actionList: game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character),
         skillList: game.system.config.skills,
-        abilityList: game.system.config.abilities
+        abilityList: game.system.config.abilities,
+        spellList: this.spellsByLevel(),
+        inventoryList: this.itemsByType(),
+        featureList: this.featuresByType()
       }
   }
 

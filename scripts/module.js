@@ -48,8 +48,24 @@ Hooks.once('ready', async function() {
     mainForm.render(true);
 
     // Show form
-    Hooks.on('simple-token-movement.openForm', function(tick) {
+    Hooks.on('simple-token-movement.openForm', function() {
         mainForm.render(true);
     });
+
+    Hooks.on('updateActor', function() {
+        mainForm.render(true);
+    });
+
+    Hooks.on('updateItem', function() {
+        mainForm.render(true);
+    })
+
+    Hooks.on('createItem', function() {
+        mainForm.render(true);
+    })
+
+    Hooks.on('deleteItem', function() {
+        mainForm.render(true);
+    })
 
 });
