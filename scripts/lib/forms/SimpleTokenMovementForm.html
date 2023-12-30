@@ -3,14 +3,15 @@
   <a class="item" data-tab="movement-tab" data-group="primary-tabs">🧭</a>
   <a class="item" data-tab="actions-tab" data-group="primary-tabs">🔥</a>
   <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs">🎲</a>
-  <a class="item" data-tab="spells-tab" data-group="primary-tabs">🪄</a>
+  <a class="item" data-tab="spellcasting-tab" data-group="primary-tabs">🪄</a>
   <a class="item" data-tab="inventory-tab" data-group="primary-tabs">🎒</a>
   <a class="item" data-tab="character-tab" data-group="primary-tabs">👤</a>
 </nav>
 
-<!-- Content -->
-<section class="token-controller-content">
+<section class="container token-controller-content">
   
+  <div class="scrollable-div">
+      
   <!-- Movement tab -->
   <div class="tab" data-tab="movement-tab" data-group="primary-tabs">
     <h3>Movement</h3>
@@ -30,7 +31,6 @@
   <!-- Actions tab -->
   <div class="tab" data-tab="actions-tab" data-group="primary-tabs">
     <div class="simple-token-controller-actions">
-
 
       {{#checklength actionList.action.size 0}}
         <h3 class="items-header">Actions</h3>
@@ -130,13 +130,12 @@
         </table>
       {{/checklength}}
       
-
     </div>
   </div>
 
   <!-- Abilities / Skills tab -->
   <div class="tab" data-tab="abilities-skills-tab" data-group="primary-tabs">
-    <h3>Abilities & Skills</h3>
+    <h3>Abilities</h3>
     <table>
       <thead>
         <tr>
@@ -161,6 +160,7 @@
     </table>
 
     <!-- Skills -->
+    <h3>Skills</h3>
     <table>
       <thead>
         <tr>
@@ -185,8 +185,28 @@
     </table>
   </div>
 
-  <!-- Spells tab-->
-  <div class="tab" data-tab="spells-tab" data-group="primary-tabs">
+  <!-- Spellcasting tab-->
+  <div class="tab" data-tab="spellcasting-tab" data-group="primary-tabs">
+    <h3>Spellcasting</h3>
+    
+    <!-- Wizard -->
+    {{#if isWizard}}
+    <div class="flexrow" style="text-align: center;">
+      <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+      <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+      <div><span style="font-size: x-large;">{{numOfSpellsPrepared}} / {{maxPrepared}}</span><br>Spells Prepared</div>  
+    </div>
+    <br>
+    {{/if}}
+
+    <!-- Sorcerer -->
+
+    <!-- Warlock -->
+
+    <!-- Paladin -->
+
+    <!-- Cleric -->
+
     <h3>Spellbook</h3>
     <table>
     {{#each spellList}}
@@ -194,13 +214,23 @@
         <thead>
           <th>Level {{@key}}</th>
           <th></th>
-          <th>0/0 slots</th>
+          <th>
+            {{#with (lookup ../spellSlots @key) }}
+              {{#if this.max includeZero=true}}
+                {{this.value}} / {{this.max}}  
+              {{/if}}
+            {{/with}}
+          </th>
         </thead>
         {{#each this}}
-        <tr class="token-controller-action">
+        <tr class="token-controller-action" data-event-type="spell" data-spell-name="{{this.name}}">
           <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
           <td>{{this.name}}</td>
-          <td style="text-align: center;">{{this.system.preparation.prepared}}</td>
+          <td style="text-align: center;">
+            {{#if this.system.preparation.prepared}}
+            <i class="original-class fas fa-sun" data-tooltip="DND5E.ClassOriginal"></i>
+            {{/if}}
+          </td>
         </tr>
         {{/each}}
       </table>
@@ -247,4 +277,6 @@
   {{/each}}
   </div>
 
-</section>
+
+  </div>
+</div>

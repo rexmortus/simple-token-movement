@@ -1,29 +1,29 @@
 export class SimpleTokenMovementForm extends FormApplication {
 
-    constructor(socket) {
-      super();
-      this.socket = socket;
-      this.startElement;
-      this.touchStartX;
-      this.touchStartY; 
-      this.scrolled;
-    }
+  constructor(socket) {
+    super();
+    this.socket = socket;
+    this.startElement;
+    this.touchStartX;
+    this.touchStartY; 
+    this.scrolled;
+  }
 
-    static get defaultOptions() {
-      return mergeObject(super.defaultOptions, {
-          classes: ["form"],
-          popOut: true,
-          template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
-          id: "simple-token-movement",
-          title: "Mobile Token Controller",
-          height: 500,
-          width: 374,
-          minimizable: false,
-          classes: ["simple-token-movement"],
-          tabs: [
-            { navSelector: ".token-controller-tabs", contentSelector: ".token-controller-content", initial: "tab1" }
-          ]
-      });
+  static get defaultOptions() {
+    return mergeObject(super.defaultOptions, {
+        classes: ["form"],
+        popOut: true,
+        template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
+        id: "simple-token-movement",
+        title: "Mobile Token Controller",
+        height: 600,
+        width: 374,
+        minimizable: false,
+        classes: ["simple-token-movement"],
+        tabs: [
+          { navSelector: ".token-controller-tabs", contentSelector: ".token-controller-content", initial: "tab1" }
+        ]
+    });
   }
 
   move(x, y) {
@@ -86,17 +86,19 @@ export class SimpleTokenMovementForm extends FormApplication {
     // Only trigger if there was no scroll
     if (event.currentTarget === this.startElement && !this.scrolled) { 
 
-      // Depending on the event type, do a thing
+      // Abilities
       if (eventType === 'ability') {
         let ability = $(this.startElement).data('ability');
         game.user.character.rollAbility(ability);
       }
 
+      // Skills
       if (eventType === 'skill') {
         let skill = $(this.startElement).data('skill');
         game.user.character.rollSkill(skill);
       }
 
+      // Actions
       if (eventType === 'action') {
         let actionSubtype = $(this.startElement).data('actionSubtype')
         let actionIndex = $(this.startElement).data('actionIndex');
@@ -104,10 +106,105 @@ export class SimpleTokenMovementForm extends FormApplication {
         action.use();
       }
 
+      // Spell
+      if(eventType === 'spell') {
+        let spellName = $(this.startElement).data('spellName');
+        let actor = game.user.character;
+        let spell = actor.itemTypes.spell.filter(_spell => _spell.name === spellName)[0];
+        let spellLevel = spell.system.level
+        let isPrepared = spell.system.preparation.prepared;
+        
+        if (spellLevel != 0) {
+          const updates = [{_id: spell.id, "system.preparation": { mode: "prepared", prepared: !isPrepared }}];
+          actor.updateEmbeddedDocuments("Item", updates);
+        }
+
+      }
+
     }
      
     // Reset the startElement for the next touch
     this.startElement = null;
+  }
+
+  toPluralCamelCase(word) {
+    if (!word) return '';
+
+    // Capitalize the first letter and add 's' for plural
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  // Create a Spell List, ordered by level
+  spellsByLevel() {
+    let spellsByLevel = {};
+
+    game.user.character.itemTypes.spell.forEach(spell => {
+        let level = spell.system.level;
+        if (!spellsByLevel[level]) {
+            spellsByLevel[level] = [];
+        }
+        spellsByLevel[level].push(spell);
+    });
+
+    return spellsByLevel;
+
+  }
+
+  // Create an inventory list, ordered by level
+  itemsByType() {
+    let itemsByType = {};
+
+    game.user.character.items.filter(item => !['spell', 'feat', 'class', 'race', 'background'].includes(item.type)).forEach(item => {
+        let itemType = this.toPluralCamelCase(item.type);
+        if (!itemsByType[itemType]) {
+            itemsByType[itemType] = [];
+        }
+        itemsByType[itemType].push(item);
+    });
+
+    return itemsByType;
+  }
+
+  // Create a list of character features, ordered by type
+  featuresByType() {
+    let featuresByType = {};
+
+    game.user.character.items.filter(item => ['race','class','background','feat'].includes(item.type)).forEach(item => {
+      let itemType = this.toPluralCamelCase(item.type);
+      if (!featuresByType[itemType]) {
+          featuresByType[itemType] = [];
+      }
+      featuresByType[itemType].push(item);
+    });
+
+    return featuresByType;
+
+  }
+
+  maxSpellsPrepared() {
+    return game.user.character.system.abilities.int.mod + game.user.character.system.details.level
+  }
+
+  numOfSpellsPrepared() {
+    let numOfSpellsPrepared = 0;
+
+    game.user.character.items.filter(item => item.type === 'spell').forEach(spell => {
+      
+      if (spell.system.preparation.prepared) {
+        numOfSpellsPrepared += 1;
+      }
+
+    });
+
+    return numOfSpellsPrepared;
+  }
+
+  spellSlots() {
+    let filteredSpellsArray = Object.keys(game.user.character.system.spells)
+        .filter(key => key !== 'pact').sort()
+        .map(key => game.user.character.system.spells[key]);
+    
+    return filteredSpellsArray;
   }
 
   activateListeners(html) {
@@ -128,57 +225,6 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('.token-controller-action', html).bind('touchmove', $.proxy(this.onTouchMove, this))
   }
 
-  toPluralCamelCase(word) {
-    if (!word) return '';
-
-    // Capitalize the first letter and add 's' for plural
-    return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
-  spellsByLevel() {
-    let spellsByLevel = {};
-
-    game.user.character.items.filter(item => item.type === 'spell').forEach(spell => {
-        let level = spell.system.level;
-        if (!spellsByLevel[level]) {
-            spellsByLevel[level] = [];
-        }
-        spellsByLevel[level].push(spell);
-    });
-
-    return spellsByLevel;
-
-  }
-
-  itemsByType() {
-    let itemsByType = {};
-
-    game.user.character.items.filter(item => !['spell', 'feat', 'class', 'race', 'background'].includes(item.type)).forEach(item => {
-        let itemType = this.toPluralCamelCase(item.type);
-        if (!itemsByType[itemType]) {
-            itemsByType[itemType] = [];
-        }
-        itemsByType[itemType].push(item);
-    });
-
-    return itemsByType;
-  }
-
-  featuresByType() {
-    let featuresByType = {};
-
-    game.user.character.items.filter(item => ['feat', 'class', 'race', 'background'].includes(item.type)).forEach(item => {
-      let itemType = this.toPluralCamelCase(item.type);
-      if (!featuresByType[itemType]) {
-          featuresByType[itemType] = [];
-      }
-      featuresByType[itemType].push(item);
-    });
-
-    return featuresByType;
-
-  }
-
   getData() {
 
       return {
@@ -188,7 +234,11 @@ export class SimpleTokenMovementForm extends FormApplication {
         abilityList: game.system.config.abilities,
         spellList: this.spellsByLevel(),
         inventoryList: this.itemsByType(),
-        featureList: this.featuresByType()
+        featureList: this.featuresByType(),
+        isWizard: game.user.character.items.filter(item => item.type === 'class')[0].name === 'Wizard',
+        maxPrepared: this.maxSpellsPrepared(),
+        numOfSpellsPrepared: this.numOfSpellsPrepared(),
+        spellSlots: this.spellSlots()
       }
   }
 

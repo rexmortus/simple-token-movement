@@ -1,6 +1,29 @@
+#simple-token-movement > section {
+  display: block !important;
+}
+
+.token-controller-content {
+  overflow: hidden;
+}
+
 .token-controller-tabs {
+  height: 10%;
   font-size:32px;
-  padding-bottom: 10px;
+}
+
+.container {
+  height: 90%;
+}
+
+.scrollable-div {
+  overflow-y: scroll;
+  height: 100%;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.scrollable-div::-webkit-scrollbar {
+  display: none; /* For WebKit browsers like Chrome and Safari */
 }
 
 .token-controller-grid {
@@ -8,7 +31,6 @@
   gap: 1px;
   grid-template-columns: repeat(3, 1fr);
   height:360px;
-  /* background-image: url('https://i.imgur.com/MRfwT6A.png'); */
   background-size: auto;
   background-repeat: no-repeat;
   background-position: center;
