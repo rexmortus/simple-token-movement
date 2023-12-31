@@ -1,5 +1,6 @@
 import { SimpleTokenMovementForm } from './lib/forms/SimpleTokenMovementForm.js'
 
+// Handlebars helpers
 Handlebars.registerHelper('checklength', function (v1, v2, options) {
     'use strict';
     if (v1>v2) {
@@ -7,6 +8,11 @@ Handlebars.registerHelper('checklength', function (v1, v2, options) {
     }
     return options.inverse(this);
 });
+
+Handlebars.registerHelper('equals', function(arg1, arg2, options) {
+    return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+});
+
 
 let socket;
 

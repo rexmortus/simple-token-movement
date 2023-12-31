@@ -187,19 +187,29 @@
 
   <!-- Spellcasting tab-->
   <div class="tab" data-tab="spellcasting-tab" data-group="primary-tabs">
-    <h3>Spellcasting</h3>
     
     <!-- Wizard -->
-    {{#if isWizard}}
+    {{#equals characterClass.name 'Wizard'}}
+    <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
     <div class="flexrow" style="text-align: center;">
       <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
       <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
       <div><span style="font-size: x-large;">{{numOfSpellsPrepared}} / {{maxPrepared}}</span><br>Spells Prepared</div>  
     </div>
     <br>
-    {{/if}}
+    {{/equals}}
 
     <!-- Sorcerer -->
+    {{#equals characterClass.name 'Sorcerer'}}
+    <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
+    <div class="flexrow" style="text-align: center;">
+      <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+      <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+      <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
+      <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
+    </div>
+    <br>
+    {{/equals}}
 
     <!-- Warlock -->
 
@@ -212,7 +222,11 @@
     {{#each spellList}}
       <table>
         <thead>
-          <th>Level {{@key}}</th>
+          <th>
+            {{#with (lookup ../spellLevels @key)}}
+              {{this}}
+            {{/with}}
+          </th>
           <th></th>
           <th>
             {{#with (lookup ../spellSlots @key) }}
@@ -227,9 +241,11 @@
           <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
           <td>{{this.name}}</td>
           <td style="text-align: center;">
-            {{#if this.system.preparation.prepared}}
-            <i class="original-class fas fa-sun" data-tooltip="DND5E.ClassOriginal"></i>
-            {{/if}}
+            {{#equals characterClass.name 'Wizard'}}
+              {{#if this.system.preparation.prepared}}
+              <i class="original-class fas fa-sun" data-tooltip="DND5E.ClassOriginal"></i>
+              {{/if}}
+            {{/equals}}
           </td>
         </tr>
         {{/each}}

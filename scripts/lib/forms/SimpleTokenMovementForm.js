@@ -113,6 +113,7 @@ export class SimpleTokenMovementForm extends FormApplication {
         let spell = actor.itemTypes.spell.filter(_spell => _spell.name === spellName)[0];
         let spellLevel = spell.system.level
         let isPrepared = spell.system.preparation.prepared;
+        let hasSpellSlots = this.spellSlots()
         
         if (spellLevel != 0) {
           const updates = [{_id: spell.id, "system.preparation": { mode: "prepared", prepared: !isPrepared }}];
@@ -169,7 +170,7 @@ export class SimpleTokenMovementForm extends FormApplication {
   featuresByType() {
     let featuresByType = {};
 
-    game.user.character.items.filter(item => ['race','class','background','feat'].includes(item.type)).forEach(item => {
+    game.user.character.items.filter(item => ['race','class','background','feat'].includes(item.type)).sort().forEach(item => {
       let itemType = this.toPluralCamelCase(item.type);
       if (!featuresByType[itemType]) {
           featuresByType[itemType] = [];
@@ -207,6 +208,15 @@ export class SimpleTokenMovementForm extends FormApplication {
     return filteredSpellsArray;
   }
 
+  numberOfSpellsKnown(cantrips=false) {
+    if (cantrips) {
+      return game.user.character.itemTypes.spell.filter(spell => spell.system.level === 0 && spell.system.preparation.mode != 'innate').length
+    } else {
+      return game.user.character.itemTypes.spell.filter(spell => spell.system.level != 0).length
+    }
+    
+  }
+
   activateListeners(html) {
     super.activateListeners(html)
     $('.mtmc-select', html).bind('touchstart click', $.proxy(this.selectToken, this))
@@ -233,12 +243,15 @@ export class SimpleTokenMovementForm extends FormApplication {
         skillList: game.system.config.skills,
         abilityList: game.system.config.abilities,
         spellList: this.spellsByLevel(),
+        spellLevels: game.system.config.spellLevels,
         inventoryList: this.itemsByType(),
         featureList: this.featuresByType(),
-        isWizard: game.user.character.items.filter(item => item.type === 'class')[0].name === 'Wizard',
-        maxPrepared: this.maxSpellsPrepared(),
+        characterClass: game.user.character.itemTypes.class[0],
         numOfSpellsPrepared: this.numOfSpellsPrepared(),
-        spellSlots: this.spellSlots()
+        maxPrepared: this.maxSpellsPrepared(),
+        spellSlots: this.spellSlots(),
+        numCantripsKnown: this.numberOfSpellsKnown(true),
+        numSpellsKnown: this.numberOfSpellsKnown(false)
       }
   }
 
