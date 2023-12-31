@@ -1,15 +1,48 @@
+<div class="token-controller-attributes">
+
+  <!-- Top Controls -->
+  <h1>{{character.name}} <span class="class-details">{{characterClass.name}} {{characterClass.system.levels}}</span></h1>
+
+  <div class="flexrow token-controller-top-left-controls">
+    <div class="flexcol">
+      <button data-event-type="manage-conditions">Conditions</button>
+      <button data-event-type="manage-rest">Rest</button>
+    </div>
+    <div class="flexcol token-controller-character-image">
+      <img src="{{character.img}}" alt="">
+    </div>
+    <div class="flexcol token-controller-top-right-controls">
+      <button data-event-type="manage-hp">{{character.system.attributes.hp.value}}/{{character.system.attributes.hp.max}} HP</button>
+      <button data-event-type="manage-defenses">Defenses</button>
+      <button data-event-type="manage-inspiration">Inspiration</button>
+    </div>
+  </div>
+
+  <br>
+  
+  <div class="flexrow" style="text-align: center;">
+    <div><span style="font-size: x-large;">{{character.system.attributes.prof}}</span><br>Prof. bonus</div>
+    <div><span style="font-size: x-large;">{{character.system.attributes.ac.value}}</span><br>AC</div>
+    <div><span style="font-size: x-large;">{{character.system.attributes.movement.walk}}</span><br>Movement</div>
+    <div><span style="font-size: x-large;">{{character.system.attributes.init.total}}</span><br>Initiative</div>
+  </div>
+
+</div>
+
 <!-- Nav -->
 <nav class="token-controller-tabs tabs" data-group="primary-tabs">
-  <a class="item" data-tab="movement-tab" data-group="primary-tabs">🧭</a>
-  <a class="item" data-tab="actions-tab" data-group="primary-tabs">🔥</a>
-  <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs">🎲</a>
-  <a class="item" data-tab="spellcasting-tab" data-group="primary-tabs">🪄</a>
-  <a class="item" data-tab="inventory-tab" data-group="primary-tabs">🎒</a>
-  <a class="item" data-tab="character-tab" data-group="primary-tabs">👤</a>
+  <a class="item" data-tab="movement-tab" data-group="primary-tabs"><i class="fa-solid fa-arrows-up-down-left-right"></i></a>
+  <a class="item" data-tab="actions-tab" data-group="primary-tabs"><i class="fa-solid fa-fire"></i></a>
+  <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs"><i class="fa-solid fa-dice"></i></a>
+  <a class="item" data-tab="spellcasting-tab" data-group="primary-tabs"><i class="fa-solid fa-wand-sparkles"></i></a>
+  <a class="item" data-tab="inventory-tab" data-group="primary-tabs"><i class="fa-solid fa-suitcase"></i></a>
+  <a class="item" data-tab="character-tab" data-group="primary-tabs"><i class="fa-solid fa-user"></i></a>
 </nav>
 
+<!-- Main content -->
 <section class="container token-controller-content">
   
+  <!-- All goes inside a scrollable div -->
   <div class="scrollable-div">
       
   <!-- Movement tab -->
@@ -273,13 +306,6 @@
 
    <!--Character tab-->
    <div class="tab" data-tab="character-tab" data-group="primary-tabs">
-    <h3>Attributes</h3>
-    <div class="flexrow" style="text-align: center;">
-      <div><span style="font-size: x-large;">{{character.system.attributes.hp.value}} / {{character.system.attributes.hp.max}}</span><br>HP</div>
-      <div><span style="font-size: x-large;">{{character.system.attributes.ac.value}}</span><br>AC</div>
-      <div><span style="font-size: x-large;">{{character.system.attributes.movement.walk}}</span><br>Movement</div>
-      <div><span style="font-size: x-large;">{{character.system.attributes.init.total}}</span><br>Initiative</div>
-    </div>
     {{#each featureList}}
     <h3>{{@key}}</h3>
     <table>

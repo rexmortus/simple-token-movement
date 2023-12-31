@@ -16,7 +16,7 @@ export class SimpleTokenMovementForm extends FormApplication {
         template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
         id: "simple-token-movement",
         title: "Mobile Token Controller",
-        height: 600,
+        height: 800,
         width: 374,
         minimizable: false,
         classes: ["simple-token-movement"],

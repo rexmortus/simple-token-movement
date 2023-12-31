@@ -6,13 +6,60 @@
   overflow: hidden;
 }
 
+.token-controller-attributes {
+  height:30%;
+}
+
+.token-controller-attributes > h1 > span.class-details {
+  font-size: medium;
+  color: grey;
+}
+
+.token-controller-top-left-controls > .flexcol {
+  padding-right: 10px;
+}
+
+.token-controller-top-right-controls > .flexcol {
+  padding-left: 10px;
+}
+
+[data-event-type=manage-hp] {
+  color:white;
+  background-color: steelblue;
+}
+
+[data-event-type=manage-conditions] {
+  color:white;
+  background-color: black;
+}
+
+[data-event-type=manage-defenses] {
+  color: white;
+  background-color: black;
+}
+
+div.flexcol.token-controller-character-image > img {
+  border: none;
+  border-radius: 12px;
+}
+
 .token-controller-tabs {
   height: 10%;
   font-size:32px;
+  padding-top: 16px;
+}
+
+.token-controller-tabs > .item {
+  color:grey;
+}
+
+.token-controller-tabs > .item.active {
+  color: black;
+  text-shadow: 0 0 10px steelblue;
 }
 
 .container {
-  height: 90%;
+  height: 60%;
 }
 
 .scrollable-div {
