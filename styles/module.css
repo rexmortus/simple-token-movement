@@ -73,15 +73,12 @@ section.window-content::-webkit-scrollbar {
 }
 
 .token-controller-tabs > .item {
-  color:white;
-  opacity: 0.8;
-  text-shadow: 1px 1px 1px black;
-  animation: color .3;
+  color:grey;
 }
 
 .token-controller-tabs > .item.active {
-  text-shadow: 0px 0px 10px white;
-  color:dodgerblue;
+  text-shadow: 0px 0px 10px steelblue;
+  color: black;
   opacity: 1;
 }
 
