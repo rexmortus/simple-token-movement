@@ -1,26 +1,53 @@
-#simple-token-movement > section {
-  display: block !important;
+ .character-name {
+  color:white;
+  font-size: xx-large;
+  text-shadow: 1px 1px 1px black;
+  margin-bottom:10px;
+ }
+ 
+ span.class-details {
+  font-size: large;
+}
+
+.attributes {
+  text-align: center;
+  color: white;
+}
+
+.top-section {
+  padding-top:10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  backdrop-filter: blur(2px);
+  min-height: 50%;
+}
+
+.character-image {
+  height: auto;
+  width: auto;
+  border-radius: 8px;
+  box-shadow: 1px 1px 1px black;
+  outline: none !important;
+  opacity: 1;
+  transform: scale(0.9);
+  filter: brightness(2), contrast(1.2);
+}
+
+.right-buttons > button {
+  border: none;
+  font-weight: bold;
+}
+
+.left-buttons > button {
+  border: none;
+  font-weight: bold;
 }
 
 .token-controller-content {
   overflow: hidden;
-}
-
-.token-controller-attributes {
-  height:30%;
-}
-
-.token-controller-attributes > h1 > span.class-details {
-  font-size: medium;
-  color: grey;
-}
-
-.token-controller-top-left-controls > .flexcol {
-  padding-right: 10px;
-}
-
-.token-controller-top-right-controls > .flexcol {
-  padding-left: 10px;
 }
 
 [data-event-type=manage-hp] {
@@ -38,46 +65,27 @@
   background-color: black;
 }
 
-div.flexcol.token-controller-character-image > img {
-  border: none;
-  border-radius: 12px;
-}
-
 .token-controller-tabs {
-  height: 10%;
   font-size:32px;
   padding-top: 16px;
 }
 
 .token-controller-tabs > .item {
-  color:grey;
+  color:white;
 }
 
 .token-controller-tabs > .item.active {
   color: black;
+  color:white;
   text-shadow: 0 0 10px steelblue;
-}
-
-.container {
-  height: 60%;
-}
-
-.scrollable-div {
-  overflow-y: scroll;
-  height: 100%;
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
-}
-
-.scrollable-div::-webkit-scrollbar {
-  display: none; /* For WebKit browsers like Chrome and Safari */
+  color: rgb(175, 195, 232);
 }
 
 .token-controller-grid {
   display: grid;
   gap: 1px;
+  height: 100%;
   grid-template-columns: repeat(3, 1fr);
-  height:360px;
   background-size: auto;
   background-repeat: no-repeat;
   background-position: center;
@@ -88,10 +96,9 @@ div.flexcol.token-controller-character-image > img {
   font-size: 64px;
 }
 
-.character-image {
+.character-token {
+  border: none;
   height: 64px;
-  margin-top: 10px;
-  padding: none;
-  border:none;
-  border-radius: 6px;
+  width: 64px;
 }
+

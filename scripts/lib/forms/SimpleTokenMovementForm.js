@@ -17,7 +17,7 @@ export class SimpleTokenMovementForm extends FormApplication {
         id: "simple-token-movement",
         title: "Mobile Token Controller",
         height: 800,
-        width: 374,
+        width: 400,
         minimizable: false,
         classes: ["simple-token-movement"],
         tabs: [

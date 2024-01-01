@@ -1,324 +1,343 @@
-<div class="token-controller-attributes">
-
-  <!-- Top Controls -->
-  <h1>{{character.name}} <span class="class-details">{{characterClass.name}} {{characterClass.system.levels}}</span></h1>
-
-  <div class="flexrow token-controller-top-left-controls">
-    <div class="flexcol">
-      <button data-event-type="manage-conditions">Conditions</button>
-      <button data-event-type="manage-rest">Rest</button>
-    </div>
-    <div class="flexcol token-controller-character-image">
-      <img src="{{character.img}}" alt="">
-    </div>
-    <div class="flexcol token-controller-top-right-controls">
-      <button data-event-type="manage-hp">{{character.system.attributes.hp.value}}/{{character.system.attributes.hp.max}} HP</button>
-      <button data-event-type="manage-defenses">Defenses</button>
-      <button data-event-type="manage-inspiration">Inspiration</button>
-    </div>
-  </div>
-
-  <br>
+<div class="flexcol" class="dnd5e-mobile-controller">
   
-  <div class="flexrow" style="text-align: center;">
-    <div><span style="font-size: x-large;">{{character.system.attributes.prof}}</span><br>Prof. bonus</div>
-    <div><span style="font-size: x-large;">{{character.system.attributes.ac.value}}</span><br>AC</div>
-    <div><span style="font-size: x-large;">{{character.system.attributes.movement.walk}}</span><br>Movement</div>
-    <div><span style="font-size: x-large;">{{character.system.attributes.init.total}}</span><br>Initiative</div>
-  </div>
-
-</div>
-
-<!-- Nav -->
-<nav class="token-controller-tabs tabs" data-group="primary-tabs">
-  <a class="item" data-tab="movement-tab" data-group="primary-tabs"><i class="fa-solid fa-arrows-up-down-left-right"></i></a>
-  <a class="item" data-tab="actions-tab" data-group="primary-tabs"><i class="fa-solid fa-fire"></i></a>
-  <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs"><i class="fa-solid fa-dice"></i></a>
-  <a class="item" data-tab="spellcasting-tab" data-group="primary-tabs"><i class="fa-solid fa-wand-sparkles"></i></a>
-  <a class="item" data-tab="inventory-tab" data-group="primary-tabs"><i class="fa-solid fa-suitcase"></i></a>
-  <a class="item" data-tab="character-tab" data-group="primary-tabs"><i class="fa-solid fa-user"></i></a>
-</nav>
-
-<!-- Main content -->
-<section class="container token-controller-content">
-  
-  <!-- All goes inside a scrollable div -->
-  <div class="scrollable-div">
+  <div class="top-section-bg" style="background: url({{character.img}}) center/cover no-repeat;opacity:0.8">
+    
+    <div class="top-section">
       
-  <!-- Movement tab -->
-  <div class="tab" data-tab="movement-tab" data-group="primary-tabs">
-    <h3>Movement</h3>
-    <div class="token-controller-grid">
-      <div class="mtmc-topleft">↖️</div>
-      <div class="mtmc-top">⬆️</div>
-      <div class="mtmc-topright">↗️</div>
-      <div class="mtmc-left">⬅️</div>
-      <div class="mtmc-select"><img src="{{character.prototypeToken.texture.src}}" class="character-image" alt=""></div>
-      <div class="mtmc-right">➡️</div>
-      <div class="mtmc-bottomleft">↙️</div>
-      <div class="mtmc-bottom">⬇️</div>
-      <div class="mtmc-bottomright">↘️</div>  
+      <!-- Top Section -->
+      <span class="character-name">{{character.name}} <span class="class-details">{{characterClass.name}} {{characterClass.system.levels}}</span></span>
+      <div class="flexrow">
+        
+        <!-- Left buttons -->
+        <div class="flexcol left-buttons">
+          <button data-event-type="manage-conditions">Conditions</button>
+          <button data-event-type="manage-rest">Rest</button>
+        </div>
+        <!-- Character Image -->
+        <div>
+          <img src="{{character.img}}" class="character-image"" alt="">
+        </div>
+        <!-- Right Buttons -->
+        <div class="flexcol right-buttons">
+          <button data-event-type="manage-hp">{{character.system.attributes.hp.value}}/{{character.system.attributes.hp.max}} HP</button>
+          <button data-event-type="manage-defenses">Defenses</button>
+          <button data-event-type="manage-inspiration">Inspiration</button>
+        </div>
+
+      </div>
+  
+
+      <!-- Attributes -->
+      <br>
+      <div class="flexrow attributes">
+        <div><span style="font-size: x-large;">{{character.system.attributes.prof}}</span><br>Prof. bonus</div>
+        <div><span style="font-size: x-large;">{{character.system.attributes.ac.value}}</span><br>AC</div>
+        <div><span style="font-size: x-large;">{{character.system.attributes.movement.walk}}</span><br>Movement</div>
+        <div><span style="font-size: x-large;">{{character.system.attributes.init.total}}</span><br>Initiative</div>
+      </div>
+
+      <!-- Navigation -->
+
+      <div class="flexrow ">
+        <nav class="token-controller-tabs tabs" data-group="primary-tabs">
+          <a class="item" data-tab="movement-tab" data-group="primary-tabs"><i class="fa-solid fa-arrows-up-down-left-right"></i></a>
+          <a class="item" data-tab="actions-tab" data-group="primary-tabs"><i class="fa-solid fa-fire"></i></a>
+          <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs"><i class="fa-solid fa-dice"></i></a>
+          <a class="item" data-tab="spellcasting-tab" data-group="primary-tabs"><i class="fa-solid fa-wand-sparkles"></i></a>
+          <a class="item" data-tab="inventory-tab" data-group="primary-tabs"><i class="fa-solid fa-suitcase"></i></a>
+          <a class="item" data-tab="character-tab" data-group="primary-tabs"><i class="fa-solid fa-user"></i></a>
+        </nav> 
+      </div>
+
+      <br>
+  
     </div>
   </div>
 
-  <!-- Actions tab -->
-  <div class="tab" data-tab="actions-tab" data-group="primary-tabs">
-    <div class="simple-token-controller-actions">
-
-      {{#checklength actionList.action.size 0}}
-        <h3 class="items-header">Actions</h3>
+  <!-- Main Content -->
+  <div class="flexrow">
+    <section class="token-controller-content">
+      
+      <br>
+      <!-- All goes inside a scrollable div -->
+      <div class="scrollable-div">
+          
+      <!-- Movement tab -->
+      <div class="tab" data-tab="movement-tab" data-group="primary-tabs" style="height:440px">
+        <h3>Movement</h3>
+        <div class="token-controller-grid">
+          <div class="mtmc-topleft">↖️</div>
+          <div class="mtmc-top">⬆️</div>
+          <div class="mtmc-topright">↗️</div>
+          <div class="mtmc-left">⬅️</div>
+          <div class="mtmc-select"><img class="character-token" src="{{character.prototypeToken.texture.src}}" alt=""></div>
+          <div class="mtmc-right">➡️</div>
+          <div class="mtmc-bottomleft">↙️</div>
+          <div class="mtmc-bottom">⬇️</div>
+          <div class="mtmc-bottomright">↘️</div>  
+        </div>
+      </div>
+    
+      <!-- Actions tab -->
+      <div class="tab" data-tab="actions-tab" data-group="primary-tabs">
+        <div class="simple-token-controller-actions">
+    
+          {{#checklength actionList.action.size 0}}
+            <h3 class="items-header">Actions</h3>
+            <table>
+              {{#each actionList.action}}
+                <tr class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.labels.activation}}</td>
+                  <td style="text-align: center;">
+                    {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                    {{#each this.labels.derivedDamage}}
+                      {{this.label}}
+                    {{/each}}
+                  </td>
+                </tr>
+              {{/each}}
+            </table>
+          {{/checklength}}
+    
+          
+          {{#checklength actionList.bonus.size 0}}
+            <h3>Bonus</h3>
+            <table>
+              {{#each actionList.bonus}}
+                <tr class="token-controller-action" data-event-type="action" data-action-subtype="bonus" data-action-index="{{@index}}">
+                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.labels.activation}}</td>
+                </tr>
+              {{/each}}
+            </table>
+          {{/checklength}}
+    
+          {{#checklength actionList.crew.size 0}}
+            <h3>Crew</h3>
+            <table>
+              {{#each actionList.crew}}
+                <tr class="token-controller-action" data-event-type="action" data-action-subtype="crew" data-action-index="{{@index}}">
+                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.labels.activation}}</td>
+                </tr>
+              {{/each}}
+            </table>
+          {{/checklength}}
+    
+          {{#checklength actionList.lair.size 0}}
+            <h3>Lair</h3>
+            <table>
+              {{#each actionList.lair}}
+                <tr class="token-controller-action" data-event-type="action" data-action-subtype="lair" data-action-index="{{@index}}">
+                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.labels.activation}}</td>
+                </tr>
+              {{/each}}
+            </table>
+          {{/checklength}}
+    
+          {{#checklength actionList.legendary.size 0}}
+            <h3>Legendary</h3>
+            <table>
+              {{#each actionList.legendary}}
+                <tr class="token-controller-action" data-event-type="action" data-action-subtype="legendary" data-action-index="{{@index}}">
+                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.labels.activation}}</td>
+                </tr>
+              {{/each}}
+            </table>
+          {{/checklength}}
+    
+          {{#checklength actionList.other.size 0}}
+            <h3>Other</h3>
+            <table>
+              {{#each actionList.other}}
+                <tr class="token-controller-action" data-event-type="action" data-action-subtype="other" data-action-index="{{@index}}">
+                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.labels.activation}}</td>
+                </tr>
+              {{/each}}
+            </table>
+          {{/checklength}}
+    
+          {{#checklength actionList.reaction.size 0}}
+            <h3>Reactions</h3>
+            <table>
+              {{#each actionList.reaction}}
+                <tr class="token-controller-action" data-event-type="action" data-action-subtype="reaction" data-action-index="{{@index}}">
+                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+                  <td>{{this.name}}</td>
+                  <td>{{this.labels.activation}}</td>
+                </tr>
+              {{/each}}
+            </table>
+          {{/checklength}}
+          
+        </div>
+      </div>
+    
+      <!-- Abilities / Skills tab -->
+      <div class="tab" data-tab="abilities-skills-tab" data-group="primary-tabs">
+        <h3>Abilities</h3>
         <table>
-          {{#each actionList.action}}
-            <tr class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
+          <thead>
+            <tr>
+              <th>Ability</th>
+              <th>Value</th>
+              <th>Modifier</th>
+              <th>Save</th>
+            </tr>
+          </thead>
+          {{#each character.system.abilities}}
+            <tr class="token-controller-action" data-event-type="ability" data-ability="{{@key}}" style="text-align: center; font-size:16px">
+              <td style="text-align: left;">
+                {{#with (lookup ../abilityList @key) }}
+                  {{label}}
+                {{/with}}
+              </td>
+              <td>{{this.value}}</td>
+              <td>{{this.mod}}</td>
+              <td>{{this.save}}</td>
+            </tr>
+          {{/each}}
+        </table>
+    
+        <!-- Skills -->
+        <h3>Skills</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Skill</th>
+              <th>Ability</th>
+              <th>Total</th>
+              <th>Passive</th>
+            </tr>
+          </thead>
+          {{#each character.system.skills}}
+            <tr class="token-controller-action" data-event-type="skill" data-skill="{{@key}}" style="text-align: center; font-size:16px">
+              <td style="text-align: left;">
+                {{#with (lookup ../skillList @key) }}
+                  {{label}}
+                {{/with}}
+              </td>
+              <td>{{this.ability}} <span style="color: grey;">({{this.mod}})</span></td>
+              <td>{{this.total}}</td>
+              <td style="color: grey;">{{this.passive}}</td>
+            </tr>
+          {{/each}}
+        </table>
+      </div>
+    
+      <!-- Spellcasting tab-->
+      <div class="tab" data-tab="spellcasting-tab" data-group="primary-tabs">
+        
+        <!-- Wizard -->
+        {{#equals characterClass.name 'Wizard'}}
+        <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
+        <div class="flexrow" style="text-align: center;">
+          <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+          <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+          <div><span style="font-size: x-large;">{{numOfSpellsPrepared}} / {{maxPrepared}}</span><br>Spells Prepared</div>  
+        </div>
+        <br>
+        {{/equals}}
+    
+        <!-- Sorcerer -->
+        {{#equals characterClass.name 'Sorcerer'}}
+        <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
+        <div class="flexrow" style="text-align: center;">
+          <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+          <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+          <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
+          <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
+        </div>
+        <br>
+        {{/equals}}
+    
+        <!-- Warlock -->
+    
+        <!-- Paladin -->
+    
+        <!-- Cleric -->
+    
+        <h3>Spellbook</h3>
+        <table>
+        {{#each spellList}}
+          <table>
+            <thead>
+              <th>
+                {{#with (lookup ../spellLevels @key)}}
+                  {{this}}
+                {{/with}}
+              </th>
+              <th></th>
+              <th>
+                {{#with (lookup ../spellSlots @key) }}
+                  {{#if this.max includeZero=true}}
+                    {{this.value}} / {{this.max}}  
+                  {{/if}}
+                {{/with}}
+              </th>
+            </thead>
+            {{#each this}}
+            <tr class="token-controller-action" data-event-type="spell" data-spell-name="{{this.name}}">
+              <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
               <td>{{this.name}}</td>
-              <td>{{this.labels.activation}}</td>
               <td style="text-align: center;">
-                {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                {{#each this.labels.derivedDamage}}
-                  {{this.label}}
-                {{/each}}
+                {{#equals characterClass.name 'Wizard'}}
+                  {{#if this.system.preparation.prepared}}
+                  <i class="original-class fas fa-sun" data-tooltip="DND5E.ClassOriginal"></i>
+                  {{/if}}
+                {{/equals}}
               </td>
             </tr>
-          {{/each}}
+            {{/each}}
+          </table>
+        {{/each}}
         </table>
-      {{/checklength}}
-
-      
-      {{#checklength actionList.bonus.size 0}}
-        <h3>Bonus</h3>
-        <table>
-          {{#each actionList.bonus}}
-            <tr class="token-controller-action" data-event-type="action" data-action-subtype="bonus" data-action-index="{{@index}}">
-              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-              <td>{{this.name}}</td>
-              <td>{{this.labels.activation}}</td>
-            </tr>
-          {{/each}}
-        </table>
-      {{/checklength}}
-
-      {{#checklength actionList.crew.size 0}}
-        <h3>Crew</h3>
-        <table>
-          {{#each actionList.crew}}
-            <tr class="token-controller-action" data-event-type="action" data-action-subtype="crew" data-action-index="{{@index}}">
-              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-              <td>{{this.name}}</td>
-              <td>{{this.labels.activation}}</td>
-            </tr>
-          {{/each}}
-        </table>
-      {{/checklength}}
-
-      {{#checklength actionList.lair.size 0}}
-        <h3>Lair</h3>
-        <table>
-          {{#each actionList.lair}}
-            <tr class="token-controller-action" data-event-type="action" data-action-subtype="lair" data-action-index="{{@index}}">
-              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-              <td>{{this.name}}</td>
-              <td>{{this.labels.activation}}</td>
-            </tr>
-          {{/each}}
-        </table>
-      {{/checklength}}
-
-      {{#checklength actionList.legendary.size 0}}
-        <h3>Legendary</h3>
-        <table>
-          {{#each actionList.legendary}}
-            <tr class="token-controller-action" data-event-type="action" data-action-subtype="legendary" data-action-index="{{@index}}">
-              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-              <td>{{this.name}}</td>
-              <td>{{this.labels.activation}}</td>
-            </tr>
-          {{/each}}
-        </table>
-      {{/checklength}}
-
-      {{#checklength actionList.other.size 0}}
-        <h3>Other</h3>
-        <table>
-          {{#each actionList.other}}
-            <tr class="token-controller-action" data-event-type="action" data-action-subtype="other" data-action-index="{{@index}}">
-              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-              <td>{{this.name}}</td>
-              <td>{{this.labels.activation}}</td>
-            </tr>
-          {{/each}}
-        </table>
-      {{/checklength}}
-
-      {{#checklength actionList.reaction.size 0}}
-        <h3>Reactions</h3>
-        <table>
-          {{#each actionList.reaction}}
-            <tr class="token-controller-action" data-event-type="action" data-action-subtype="reaction" data-action-index="{{@index}}">
-              <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-              <td>{{this.name}}</td>
-              <td>{{this.labels.activation}}</td>
-            </tr>
-          {{/each}}
-        </table>
-      {{/checklength}}
-      
-    </div>
-  </div>
-
-  <!-- Abilities / Skills tab -->
-  <div class="tab" data-tab="abilities-skills-tab" data-group="primary-tabs">
-    <h3>Abilities</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Ability</th>
-          <th>Value</th>
-          <th>Modifier</th>
-          <th>Save</th>
-        </tr>
-      </thead>
-      {{#each character.system.abilities}}
-        <tr class="token-controller-action" data-event-type="ability" data-ability="{{@key}}" style="text-align: center; font-size:16px">
-          <td style="text-align: left;">
-            {{#with (lookup ../abilityList @key) }}
-              {{label}}
-            {{/with}}
-          </td>
-          <td>{{this.value}}</td>
-          <td>{{this.mod}}</td>
-          <td>{{this.save}}</td>
-        </tr>
-      {{/each}}
-    </table>
-
-    <!-- Skills -->
-    <h3>Skills</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Skill</th>
-          <th>Ability</th>
-          <th>Total</th>
-          <th>Passive</th>
-        </tr>
-      </thead>
-      {{#each character.system.skills}}
-        <tr class="token-controller-action" data-event-type="skill" data-skill="{{@key}}" style="text-align: center; font-size:16px">
-          <td style="text-align: left;">
-            {{#with (lookup ../skillList @key) }}
-              {{label}}
-            {{/with}}
-          </td>
-          <td>{{this.ability}} <span style="color: grey;">({{this.mod}})</span></td>
-          <td>{{this.total}}</td>
-          <td style="color: grey;">{{this.passive}}</td>
-        </tr>
-      {{/each}}
-    </table>
-  </div>
-
-  <!-- Spellcasting tab-->
-  <div class="tab" data-tab="spellcasting-tab" data-group="primary-tabs">
+      </div>
     
-    <!-- Wizard -->
-    {{#equals characterClass.name 'Wizard'}}
-    <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
-    <div class="flexrow" style="text-align: center;">
-      <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
-      <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
-      <div><span style="font-size: x-large;">{{numOfSpellsPrepared}} / {{maxPrepared}}</span><br>Spells Prepared</div>  
-    </div>
-    <br>
-    {{/equals}}
-
-    <!-- Sorcerer -->
-    {{#equals characterClass.name 'Sorcerer'}}
-    <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
-    <div class="flexrow" style="text-align: center;">
-      <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
-      <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
-      <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
-      <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
-    </div>
-    <br>
-    {{/equals}}
-
-    <!-- Warlock -->
-
-    <!-- Paladin -->
-
-    <!-- Cleric -->
-
-    <h3>Spellbook</h3>
-    <table>
-    {{#each spellList}}
-      <table>
-        <thead>
-          <th>
-            {{#with (lookup ../spellLevels @key)}}
-              {{this}}
-            {{/with}}
-          </th>
-          <th></th>
-          <th>
-            {{#with (lookup ../spellSlots @key) }}
-              {{#if this.max includeZero=true}}
-                {{this.value}} / {{this.max}}  
-              {{/if}}
-            {{/with}}
-          </th>
-        </thead>
-        {{#each this}}
-        <tr class="token-controller-action" data-event-type="spell" data-spell-name="{{this.name}}">
-          <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
-          <td>{{this.name}}</td>
-          <td style="text-align: center;">
-            {{#equals characterClass.name 'Wizard'}}
-              {{#if this.system.preparation.prepared}}
-              <i class="original-class fas fa-sun" data-tooltip="DND5E.ClassOriginal"></i>
-              {{/if}}
-            {{/equals}}
-          </td>
-        </tr>
+      <!--Inventory tab-->
+      <div class="tab" data-tab="inventory-tab" data-group="primary-tabs">
+        <table>
+          {{#each inventoryList}}
+          <h3>{{@key}}</h3>
+          <table>
+            {{#each this}}
+            <tr class="token-controller-action" style="text-align: left;">
+              <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
+              <td style="text-align: left;">{{this.name}}</td>
+            </tr>
+            {{/each}}
+          </table>
         {{/each}}
-      </table>
-    {{/each}}
-    </table>
-  </div>
-
-  <!--Inventory tab-->
-  <div class="tab" data-tab="inventory-tab" data-group="primary-tabs">
-    <table>
-      {{#each inventoryList}}
-      <h3>{{@key}}</h3>
-      <table>
-        {{#each this}}
-        <tr class="token-controller-action" style="text-align: left;">
-          <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
-          <td style="text-align: left;">{{this.name}}</td>
-        </tr>
+        </table>
+      </div>
+    
+       <!--Character tab-->
+       <div class="tab" data-tab="character-tab" data-group="primary-tabs">
+        {{#each featureList}}
+        <h3>{{@key}}</h3>
+        <table>
+          {{#each this}}
+          <tr class="token-controller-action" style="text-align: left;">
+            <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
+            <td style="text-align: left;">{{this.name}}</td>
+          </tr>
+          {{/each}}
+        </table>
         {{/each}}
-      </table>
-    {{/each}}
-    </table>
-  </div>
-
-   <!--Character tab-->
-   <div class="tab" data-tab="character-tab" data-group="primary-tabs">
-    {{#each featureList}}
-    <h3>{{@key}}</h3>
-    <table>
-      {{#each this}}
-      <tr class="token-controller-action" style="text-align: left;">
-        <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
-        <td style="text-align: left;">{{this.name}}</td>
-      </tr>
-      {{/each}}
-    </table>
-  {{/each}}
-  </div>
-
-
+        </div>
+    
+    
+      </div>
+    </section>
   </div>
 </div>
