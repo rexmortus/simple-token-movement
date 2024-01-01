@@ -74,6 +74,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.touchStartX = event.touches[0].clientX;
     this.touchStartY = event.touches[0].clientY;
     this.scrolled = false;
+    $(this.startElement).addClass('tapped');
     this.longTouchTimer = setTimeout(this.showDescription.bind(this, event),500);
   }
 
@@ -82,6 +83,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     if (Math.abs(event.touches[0].clientX - this.touchStartX) > 10 || 
         Math.abs(event.touches[0].clientY - this.touchStartY) > 10) {
         this.scrolled = true;
+        $(this.startElement).removeClass('tapped');
         clearTimeout(this.longTouchTimer);
     }
   } 
@@ -131,12 +133,16 @@ export class SimpleTokenMovementForm extends FormApplication {
       }
 
     }
-     
+  
+    // Untap the timer
+    $(this.startElement).removeClass('tapped');
+
     // Reset the startElement for the next touch
     this.startElement = null;
 
     // Clear the long-touch interval timer
     clearTimeout(this.longTouchTimer);
+
 
   }
 
@@ -252,6 +258,7 @@ export class SimpleTokenMovementForm extends FormApplication {
       return {
         character: game.user.character,
         actionList: game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character),
+        actionKeys: Object.keys(game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)),
         skillList: game.system.config.skills,
         abilityList: game.system.config.abilities,
         spellList: this.spellsByLevel(),

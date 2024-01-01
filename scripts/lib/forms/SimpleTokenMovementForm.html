@@ -84,11 +84,12 @@
       <!-- Actions tab -->
       <div class="tab" data-tab="actions-tab" data-group="primary-tabs">
         <div class="simple-token-controller-actions">
-    
-          {{#checklength actionList.action.size 0}}
-            <h3 class="items-header">Actions</h3>
-              <div class="token-controller-actions">
-                {{#each actionList.action}}
+          {{#each actionKeys}}
+            <h3>{{toUpcase this}}</h3>
+            <div class="token-controller-actions">
+              {{#with (lookup ../actionList this) }}
+
+                {{#each this}}
                   <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
 
                       <!-- Entry -->
@@ -111,171 +112,9 @@
 
                   </div>
                 {{/each}}
-              </div>  
-          {{/checklength}}
-    
-          {{#checklength actionList.bonus.size 0}}
-          <h3>Bonus</h3>
-          {{#each actionList.bonus}}
-            <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-
-                <!-- Entry -->
-              <div class="flexrow token-controller-action-entry">
-                <img src="{{this.img}}"/>
-                <span>{{this.name}}</span>
-                <span>{{this.labels.activation}}</span>
-                <span style="text-align: center;">
-                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                  {{#each this.labels.derivedDamage}}
-                    {{this.label}}
-                  {{/each}}
-                </span>
-              </div>
-
-              <!-- Long Description -->
-              <div class="token-controller-action-description hidden">
-                {{{this.system.description.value}}}
-              </div>
-
-            </div>
+              {{/with}}
+            </div>  
           {{/each}}
-          {{/checklength}}
-    
-          {{#checklength actionList.crew.size 0}}
-            <h3>Crew</h3>
-              {{#each actionList.crew}}
-                <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-
-                  <!-- Entry -->
-                <div class="flexrow token-controller-action-entry">
-                  <img src="{{this.img}}"/>
-                  <span>{{this.name}}</span>
-                  <span>{{this.labels.activation}}</span>
-                  <span style="text-align: center;">
-                    {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                    {{#each this.labels.derivedDamage}}
-                      {{this.label}}
-                    {{/each}}
-                  </span>
-                </div>
-
-                <!-- Long Description -->
-                <div class="token-controller-action-description hidden">
-                  {{{this.system.description.value}}}
-                </div>
-
-              </div>
-              {{/each}}
-          {{/checklength}}
-    
-          {{#checklength actionList.lair.size 0}}
-            <h3>Lair</h3>
-              {{#each actionList.lair}}
-              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-
-                <!-- Entry -->
-              <div class="flexrow token-controller-action-entry">
-                <img src="{{this.img}}"/>
-                <span>{{this.name}}</span>
-                <span>{{this.labels.activation}}</span>
-                <span style="text-align: center;">
-                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                  {{#each this.labels.derivedDamage}}
-                    {{this.label}}
-                  {{/each}}
-                </span>
-              </div>
-
-              <!-- Long Description -->
-              <div class="token-controller-action-description hidden">
-                {{{this.system.description.value}}}
-              </div>
-
-            </div>
-              {{/each}}
-          {{/checklength}}
-    
-          {{#checklength actionList.legendary.size 0}}
-            <h3>Legendary</h3>
-              {{#each actionList.legendary}}
-              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-
-                <!-- Entry -->
-              <div class="flexrow token-controller-action-entry">
-                <img src="{{this.img}}"/>
-                <span>{{this.name}}</span>
-                <span>{{this.labels.activation}}</span>
-                <span style="text-align: center;">
-                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                  {{#each this.labels.derivedDamage}}
-                    {{this.label}}
-                  {{/each}}
-                </span>
-              </div>
-
-              <!-- Long Description -->
-              <div class="token-controller-action-description hidden">
-                {{{this.system.description.value}}}
-              </div>
-
-            </div>
-              {{/each}}
-          {{/checklength}}
-    
-          {{#checklength actionList.other.size 0}}
-            <h3>Other</h3>
-              {{#each actionList.other}}
-              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-
-                <!-- Entry -->
-              <div class="flexrow token-controller-action-entry">
-                <img src="{{this.img}}"/>
-                <span>{{this.name}}</span>
-                <span>{{this.labels.activation}}</span>
-                <span style="text-align: center;">
-                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                  {{#each this.labels.derivedDamage}}
-                    {{this.label}}
-                  {{/each}}
-                </span>
-              </div>
-
-              <!-- Long Description -->
-              <div class="token-controller-action-description hidden">
-                {{{this.system.description.value}}}
-              </div>
-
-            </div>
-              {{/each}}
-          {{/checklength}}
-    
-          {{#checklength actionList.reaction.size 0}}
-            <h3>Reactions</h3>
-              {{#each actionList.reaction}}
-              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-
-                <!-- Entry -->
-              <div class="flexrow token-controller-action-entry">
-                <img src="{{this.img}}"/>
-                <span>{{this.name}}</span>
-                <span>{{this.labels.activation}}</span>
-                <span style="text-align: center;">
-                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                  {{#each this.labels.derivedDamage}}
-                    {{this.label}}
-                  {{/each}}
-                </span>
-              </div>
-
-              <!-- Long Description -->
-              <div class="token-controller-action-description hidden">
-                {{{this.system.description.value}}}
-              </div>
-
-            </div>
-              {{/each}}
-          {{/checklength}}
-          
         </div>
       </div>
     
@@ -347,7 +186,7 @@
     
         <!-- Sorcerer -->
         {{#equals characterClass.name 'Sorcerer'}}
-        <h3>Spellcasting <span style="font-size: small;">{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
+        <h3>{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
         <div class="flexrow" style="text-align: center;">
           <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
           <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
@@ -363,41 +202,38 @@
     
         <!-- Cleric -->
     
-        <h3>Spellbook</h3>
-        <table>
         {{#each spellList}}
-          <table>
-            <thead>
-              <th>
+        <div class="token-controller-actions">
+          <h3>
                 {{#with (lookup ../spellLevels @key)}}
                   {{this}}
                 {{/with}}
-              </th>
-              <th></th>
-              <th>
+   
                 {{#with (lookup ../spellSlots @key) }}
                   {{#if this.max includeZero=true}}
                     {{this.value}} / {{this.max}}  
                   {{/if}}
                 {{/with}}
-              </th>
-            </thead>
-            {{#each this}}
-            <tr class="token-controller-action" data-event-type="spell" data-spell-name="{{this.name}}">
-              <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
-              <td>{{this.name}}</td>
-              <td style="text-align: center;">
-                {{#equals characterClass.name 'Wizard'}}
-                  {{#if this.system.preparation.prepared}}
-                  <i class="original-class fas fa-sun" data-tooltip="DND5E.ClassOriginal"></i>
-                  {{/if}}
-                {{/equals}}
-              </td>
-            </tr>
-            {{/each}}
-          </table>
+          </h3>
+          {{#each this}}
+          <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+              <!-- Entry -->
+            <div class="flexrow token-controller-action-entry">
+              <img src="{{this.img}}"/>
+              <span>{{this.name}}</span>
+              <span>{{this.labels.school}}</span>
+            </div>
+
+            <!-- Long Description -->
+            <div class="token-controller-action-description hidden">
+              {{{this.system.description.value}}}
+            </div>
+
+          </div>
+          {{/each}}
+        </div>  
         {{/each}}
-        </table>
       </div>
     
       <!--Inventory tab-->
