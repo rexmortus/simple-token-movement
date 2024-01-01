@@ -87,100 +87,193 @@
     
           {{#checklength actionList.action.size 0}}
             <h3 class="items-header">Actions</h3>
-            <table>
-              {{#each actionList.action}}
-                <tr class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
-                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-                  <td>{{this.name}}</td>
-                  <td>{{this.labels.activation}}</td>
-                  <td style="text-align: center;">
-                    {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
-                    {{#each this.labels.derivedDamage}}
-                      {{this.label}}
-                    {{/each}}
-                  </td>
-                </tr>
-              {{/each}}
-            </table>
+              <div class="token-controller-actions">
+                {{#each actionList.action}}
+                  <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                      <!-- Entry -->
+                    <div class="flexrow token-controller-action-entry">
+                      <img src="{{this.img}}"/>
+                      <span>{{this.name}}</span>
+                      <span>{{this.labels.activation}}</span>
+                      <span style="text-align: center;">
+                        {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                        {{#each this.labels.derivedDamage}}
+                          {{this.label}}
+                        {{/each}}
+                      </span>
+                    </div>
+
+                    <!-- Long Description -->
+                    <div class="token-controller-action-description hidden">
+                      {{{this.system.description.value}}}
+                    </div>
+
+                  </div>
+                {{/each}}
+              </div>  
           {{/checklength}}
     
-          
           {{#checklength actionList.bonus.size 0}}
-            <h3>Bonus</h3>
-            <table>
-              {{#each actionList.bonus}}
-                <tr class="token-controller-action" data-event-type="action" data-action-subtype="bonus" data-action-index="{{@index}}">
-                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-                  <td>{{this.name}}</td>
-                  <td>{{this.labels.activation}}</td>
-                </tr>
-              {{/each}}
-            </table>
+          <h3>Bonus</h3>
+          {{#each actionList.bonus}}
+            <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                <!-- Entry -->
+              <div class="flexrow token-controller-action-entry">
+                <img src="{{this.img}}"/>
+                <span>{{this.name}}</span>
+                <span>{{this.labels.activation}}</span>
+                <span style="text-align: center;">
+                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                  {{#each this.labels.derivedDamage}}
+                    {{this.label}}
+                  {{/each}}
+                </span>
+              </div>
+
+              <!-- Long Description -->
+              <div class="token-controller-action-description hidden">
+                {{{this.system.description.value}}}
+              </div>
+
+            </div>
+          {{/each}}
           {{/checklength}}
     
           {{#checklength actionList.crew.size 0}}
             <h3>Crew</h3>
-            <table>
               {{#each actionList.crew}}
-                <tr class="token-controller-action" data-event-type="action" data-action-subtype="crew" data-action-index="{{@index}}">
-                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-                  <td>{{this.name}}</td>
-                  <td>{{this.labels.activation}}</td>
-                </tr>
+                <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                  <!-- Entry -->
+                <div class="flexrow token-controller-action-entry">
+                  <img src="{{this.img}}"/>
+                  <span>{{this.name}}</span>
+                  <span>{{this.labels.activation}}</span>
+                  <span style="text-align: center;">
+                    {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                    {{#each this.labels.derivedDamage}}
+                      {{this.label}}
+                    {{/each}}
+                  </span>
+                </div>
+
+                <!-- Long Description -->
+                <div class="token-controller-action-description hidden">
+                  {{{this.system.description.value}}}
+                </div>
+
+              </div>
               {{/each}}
-            </table>
           {{/checklength}}
     
           {{#checklength actionList.lair.size 0}}
             <h3>Lair</h3>
-            <table>
               {{#each actionList.lair}}
-                <tr class="token-controller-action" data-event-type="action" data-action-subtype="lair" data-action-index="{{@index}}">
-                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-                  <td>{{this.name}}</td>
-                  <td>{{this.labels.activation}}</td>
-                </tr>
+              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                <!-- Entry -->
+              <div class="flexrow token-controller-action-entry">
+                <img src="{{this.img}}"/>
+                <span>{{this.name}}</span>
+                <span>{{this.labels.activation}}</span>
+                <span style="text-align: center;">
+                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                  {{#each this.labels.derivedDamage}}
+                    {{this.label}}
+                  {{/each}}
+                </span>
+              </div>
+
+              <!-- Long Description -->
+              <div class="token-controller-action-description hidden">
+                {{{this.system.description.value}}}
+              </div>
+
+            </div>
               {{/each}}
-            </table>
           {{/checklength}}
     
           {{#checklength actionList.legendary.size 0}}
             <h3>Legendary</h3>
-            <table>
               {{#each actionList.legendary}}
-                <tr class="token-controller-action" data-event-type="action" data-action-subtype="legendary" data-action-index="{{@index}}">
-                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-                  <td>{{this.name}}</td>
-                  <td>{{this.labels.activation}}</td>
-                </tr>
+              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                <!-- Entry -->
+              <div class="flexrow token-controller-action-entry">
+                <img src="{{this.img}}"/>
+                <span>{{this.name}}</span>
+                <span>{{this.labels.activation}}</span>
+                <span style="text-align: center;">
+                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                  {{#each this.labels.derivedDamage}}
+                    {{this.label}}
+                  {{/each}}
+                </span>
+              </div>
+
+              <!-- Long Description -->
+              <div class="token-controller-action-description hidden">
+                {{{this.system.description.value}}}
+              </div>
+
+            </div>
               {{/each}}
-            </table>
           {{/checklength}}
     
           {{#checklength actionList.other.size 0}}
             <h3>Other</h3>
-            <table>
               {{#each actionList.other}}
-                <tr class="token-controller-action" data-event-type="action" data-action-subtype="other" data-action-index="{{@index}}">
-                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-                  <td>{{this.name}}</td>
-                  <td>{{this.labels.activation}}</td>
-                </tr>
+              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                <!-- Entry -->
+              <div class="flexrow token-controller-action-entry">
+                <img src="{{this.img}}"/>
+                <span>{{this.name}}</span>
+                <span>{{this.labels.activation}}</span>
+                <span style="text-align: center;">
+                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                  {{#each this.labels.derivedDamage}}
+                    {{this.label}}
+                  {{/each}}
+                </span>
+              </div>
+
+              <!-- Long Description -->
+              <div class="token-controller-action-description hidden">
+                {{{this.system.description.value}}}
+              </div>
+
+            </div>
               {{/each}}
-            </table>
           {{/checklength}}
     
           {{#checklength actionList.reaction.size 0}}
             <h3>Reactions</h3>
-            <table>
               {{#each actionList.reaction}}
-                <tr class="token-controller-action" data-event-type="action" data-action-subtype="reaction" data-action-index="{{@index}}">
-                  <td><img src="{{this.img}}" alt="" height="32px" width="32px"></td>
-                  <td>{{this.name}}</td>
-                  <td>{{this.labels.activation}}</td>
-                </tr>
+              <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                <!-- Entry -->
+              <div class="flexrow token-controller-action-entry">
+                <img src="{{this.img}}"/>
+                <span>{{this.name}}</span>
+                <span>{{this.labels.activation}}</span>
+                <span style="text-align: center;">
+                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                  {{#each this.labels.derivedDamage}}
+                    {{this.label}}
+                  {{/each}}
+                </span>
+              </div>
+
+              <!-- Long Description -->
+              <div class="token-controller-action-description hidden">
+                {{{this.system.description.value}}}
+              </div>
+
+            </div>
               {{/each}}
-            </table>
           {{/checklength}}
           
         </div>

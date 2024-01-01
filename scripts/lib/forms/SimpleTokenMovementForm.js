@@ -7,6 +7,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.touchStartX;
     this.touchStartY; 
     this.scrolled;
+    this.longTouchTimer;
   }
 
   static get defaultOptions() {
@@ -62,12 +63,18 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.move(1, 1)
   }
 
+  showDescription(event) {
+    this.scrolled = true;
+    $(event.currentTarget).find('.token-controller-action-description').first().toggleClass('hidden');
+  }
+  
   onTouchStart(event) {
     // Store the element where touchstart occurred
     this.startElement = event.currentTarget;
     this.touchStartX = event.touches[0].clientX;
     this.touchStartY = event.touches[0].clientY;
     this.scrolled = false;
+    this.longTouchTimer = setTimeout(this.showDescription.bind(this, event),500);
   }
 
   onTouchMove(event) {
@@ -75,6 +82,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     if (Math.abs(event.touches[0].clientX - this.touchStartX) > 10 || 
         Math.abs(event.touches[0].clientY - this.touchStartY) > 10) {
         this.scrolled = true;
+        clearTimeout(this.longTouchTimer);
     }
   } 
 
@@ -126,6 +134,10 @@ export class SimpleTokenMovementForm extends FormApplication {
      
     // Reset the startElement for the next touch
     this.startElement = null;
+
+    // Clear the long-touch interval timer
+    clearTimeout(this.longTouchTimer);
+
   }
 
   toPluralCamelCase(word) {

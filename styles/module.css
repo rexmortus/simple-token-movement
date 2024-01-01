@@ -34,8 +34,6 @@ section.window-content::-webkit-scrollbar {
   border-radius: 10px;
   outline: none !important;
   border: non !important;
-  opacity: 1;
-  filter: brightness(1.25) contrast(1.25);
 }
 
 .right-buttons > button {
@@ -133,4 +131,36 @@ section.window-content::-webkit-scrollbar {
   height: 64px;
   width: 64px;
 }
+
+.token-controller-action-description {
+  padding: 6px;
+  font-size: small;
+  color: black;
+}
+
+.token-controller-action-description.hidden {
+  display: none;
+}
+
+.token-controller-action-description-token {
+  font-size: smaller;
+  font-weight: bold;
+  padding: 3px;
+  border: 1px solid black;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.token-controller-action-entry {
+  align-items: center;
+}
+
+.token-controller-action-entry > img {
+  max-width: 46px !important;
+  margin:6px;
+  margin-left: 0px;
+}
+
+.token-controller-actions .token-controller-action:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 
