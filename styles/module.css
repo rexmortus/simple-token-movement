@@ -2,7 +2,7 @@
   color:white;
   font-size: xx-large;
   text-shadow: 1px 1px 1px black;
-  margin-bottom:10px;
+  margin-bottom:20px;
  }
  
  span.class-details {
@@ -15,33 +15,37 @@
 }
 
 .top-section-bg {
-  border: 1px solid black;
-  border-radius: 8px;
-  box-shadow: inset 10px 10px 10px black;
+  border-radius: 10px;
+  box-shadow: inset 3px 3px 3px black;
+  border: 2px solid rgba(255, 255, 255, 0.25);
 }
 
 .top-section {
   padding-top:10px;
   padding-left: 10px;
   padding-right: 10px;
+  border-radius: 10px;
   background-size: cover;
   background-position: center;
   position: relative;
-  backdrop-filter: blur(1px);
-  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(1px) brightness(85%);
+  -webkit-backdrop-filter: blur(1px) brightness(85%);
   min-height: 50%;
   text-shadow: 1px 1px 1px black;
+  height: 280px;
+  min-height: 280px;
+  max-height: 280px;
 }
 
 .character-image {
-  height: auto;
-  width: auto;
-  border-radius: 8px;
-  box-shadow: 1px 1px 1px black;
+  background-size: contain !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border-radius: 10px;
   outline: none !important;
+  border: non !important;
   opacity: 1;
-  transform: scale(0.9);
-  filter: brightness(2), contrast(1.2);
+  filter: brightness(1.25) contrast(1.25);
 }
 
 .right-buttons > button {
@@ -86,20 +90,14 @@
   color: black;
   color:white;
   text-shadow: 0 0 10px steelblue;
-  color: rgb(175, 195, 232);
+  color: rgb(220, 229, 244);
 }
 
-.token-controller-grid {
-  display: grid;
-  gap: 1px;
-  height: 100%;
-  grid-template-columns: repeat(3, 1fr);
-  background-size: auto;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  border-radius: 6px;
-  vertical-align: middle;
+.movement-tab {
+  margin-bottom: 100px;
+}
+
+.movement-tab > .flexrow > span  {
   text-align: center;
   font-size: 64px;
 }

@@ -1,6 +1,6 @@
 <div class="flexcol" class="dnd5e-mobile-controller">
   
-  <div class="top-section-bg" style="background: url({{game.scenes.active.thumbnail}}) center/cover no-repeat;opacity:0.8">
+  <div class="top-section-bg" style="background: url({{game.scenes.active.thumbnail}}) center/cover no-repeat;">
     
     <div class="top-section">
       
@@ -14,9 +14,7 @@
           <button data-event-type="manage-rest">Rest</button>
         </div>
         <!-- Character Image -->
-        <div>
-          <img src="{{character.img}}" class="character-image"" alt="">
-        </div>
+        <div class="flexcol character-image" style="background: url({{character.img}})"></div>
         <!-- Right Buttons -->
         <div class="flexcol right-buttons">
           <button data-event-type="manage-hp">{{character.system.attributes.hp.value}}/{{character.system.attributes.hp.max}} HP</button>
@@ -63,19 +61,29 @@
       <div class="scrollable-div">
           
       <!-- Movement tab -->
-      <div class="tab" data-tab="movement-tab" data-group="primary-tabs" style="height:440px">
+      <div class="tab movement-tab" data-tab="movement-tab" data-group="primary-tabs" style="height:440px">
         <h3>Movement</h3>
-        <div class="token-controller-grid">
-          <div class="mtmc-topleft">↖️</div>
-          <div class="mtmc-top">⬆️</div>
-          <div class="mtmc-topright">↗️</div>
-          <div class="mtmc-left">⬅️</div>
-          <div class="mtmc-select"><img class="character-token" src="{{character.prototypeToken.texture.src}}" alt=""></div>
-          <div class="mtmc-right">➡️</div>
-          <div class="mtmc-bottomleft">↙️</div>
-          <div class="mtmc-bottom">⬇️</div>
-          <div class="mtmc-bottomright">↘️</div>  
+        <div class="flexrow">
+          <span class="mtmc-topleft">↖️</span>
+          <span class="mtmc-top">⬆️</span>
+          <span class="mtmc-topright">↗️</span>
         </div>
+        <div class="flexrow">
+          <span class="mtmc-left">⬅️</span>
+          <span class="mtmc-select"><img class="character-token" src="{{character.prototypeToken.texture.src}}" alt=""></span>
+          <span class="mtmc-right">➡️</span>
+        </div>
+        <div class="flexrow">
+          <span class="mtmc-bottomleft">↙️</span>
+          <span class="mtmc-bottom">⬇️</span>
+          <span class="mtmc-bottomright">↘️</span>  
+        </div>
+        <br><br>
+        <div class="flexrow">
+          <span><i class="fa-solid fa-magnifying-glass-plus"></i></span>
+          <span><i class="fa-solid fa-magnifying-glass-minus"></i></span>
+        </div>
+
       </div>
     
       <!-- Actions tab -->
@@ -251,7 +259,7 @@
     
         <!-- Sorcerer -->
         {{#equals characterClass.name 'Sorcerer'}}
-        <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
+        <h3>Spellcasting <span style="font-size: small;">{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
         <div class="flexrow" style="text-align: center;">
           <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
           <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
@@ -306,19 +314,17 @@
     
       <!--Inventory tab-->
       <div class="tab" data-tab="inventory-tab" data-group="primary-tabs">
+        {{#each inventoryList}}
+        <h3>{{@key}}</h3>
         <table>
-          {{#each inventoryList}}
-          <h3>{{@key}}</h3>
-          <table>
-            {{#each this}}
-            <tr class="token-controller-action" style="text-align: left;">
-              <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
-              <td style="text-align: left;">{{this.name}}</td>
-            </tr>
-            {{/each}}
-          </table>
-        {{/each}}
+          {{#each this}}
+          <tr class="token-controller-action" style="text-align: left;">
+            <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
+            <td style="text-align: left;">{{this.name}}</td>
+          </tr>
+          {{/each}}
         </table>
+      {{/each}}
       </div>
     
        <!--Character tab-->
