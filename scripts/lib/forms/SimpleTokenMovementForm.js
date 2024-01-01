@@ -251,7 +251,8 @@ export class SimpleTokenMovementForm extends FormApplication {
         maxPrepared: this.maxSpellsPrepared(),
         spellSlots: this.spellSlots(),
         numCantripsKnown: this.numberOfSpellsKnown(true),
-        numSpellsKnown: this.numberOfSpellsKnown(false)
+        numSpellsKnown: this.numberOfSpellsKnown(false),
+        game: game
       }
   }
 

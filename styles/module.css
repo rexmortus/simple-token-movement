@@ -14,6 +14,12 @@
   color: white;
 }
 
+.top-section-bg {
+  border: 1px solid black;
+  border-radius: 8px;
+  box-shadow: inset 10px 10px 10px black;
+}
+
 .top-section {
   padding-top:10px;
   padding-left: 10px;
@@ -21,9 +27,10 @@
   background-size: cover;
   background-position: center;
   position: relative;
-  backdrop-filter: blur(2px);
-  -webkit-filter: blur(2px);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
   min-height: 50%;
+  text-shadow: 1px 1px 1px black;
 }
 
 .character-image {
