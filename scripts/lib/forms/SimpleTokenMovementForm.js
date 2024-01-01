@@ -125,10 +125,12 @@ export class SimpleTokenMovementForm extends FormApplication {
         let isPrepared = spell.system.preparation.prepared;
         let hasSpellSlots = this.spellSlots()
         
-        if (spellLevel != 0) {
-          const updates = [{_id: spell.id, "system.preparation": { mode: "prepared", prepared: !isPrepared }}];
-          actor.updateEmbeddedDocuments("Item", updates);
-        }
+        spell.use();
+
+        // if (spellLevel != 0) {
+        //   const updates = [{_id: spell.id, "system.preparation": { mode: "prepared", prepared: !isPrepared }}];
+        //   actor.updateEmbeddedDocuments("Item", updates);
+        // }
 
       }
 

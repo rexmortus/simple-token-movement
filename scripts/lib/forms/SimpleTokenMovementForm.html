@@ -112,6 +112,7 @@
 
                   </div>
                 {{/each}}
+
               {{/with}}
             </div>  
           {{/each}}
@@ -176,53 +177,105 @@
         <!-- Wizard -->
         {{#equals characterClass.name 'Wizard'}}
         <h3>{{characterClass.name}} {{characterClass.system.levels}}</h3>
+        <br>
         <div class="flexrow" style="text-align: center;">
           <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
           <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
           <div><span style="font-size: x-large;">{{numOfSpellsPrepared}} / {{maxPrepared}}</span><br>Spells Prepared</div>  
         </div>
-        <br>
         {{/equals}}
     
         <!-- Sorcerer -->
         {{#equals characterClass.name 'Sorcerer'}}
         <h3>{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
+        <br>
         <div class="flexrow" style="text-align: center;">
           <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
           <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
           <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
           <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
         </div>
-        <br>
         {{/equals}}
     
         <!-- Warlock -->
+        {{#equals characterClass.name 'Warlock'}}
+        <h3>{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
+        <br>
+        <div class="flexrow" style="text-align: center;">
+          <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+          <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+          <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
+          <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
+        </div>
+        {{/equals}}
     
         <!-- Paladin -->
+        {{#equals characterClass.name 'Paladin'}}
+        <h3>{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
+        <br>
+        <div class="flexrow" style="text-align: center;">
+          <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+          <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+          <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
+          <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
+        </div>
+        {{/equals}}
     
         <!-- Cleric -->
+        {{#equals characterClass.name 'Cleric'}}
+        <h3>{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
+        <br>
+        <div class="flexrow" style="text-align: center;">
+          <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+          <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+          <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
+          <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
+        </div>
+        {{/equals}}
     
+        <!-- Artificer -->
+        {{#equals characterClass.name 'Artificer'}}
+        <h3>{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
+        <br>
+        <div class="flexrow" style="text-align: center;">
+          <div><span style="font-size: x-large;">{{character.system.attributes.spellcasting}}</span><br>Ability</div>
+          <div><span style="font-size: x-large;">{{character.system.attributes.spelldc}}</span><br>Spell DC</div>
+          <div><span style="font-size: x-large;">{{numCantripsKnown}} / {{character.system.scale.sorcerer.cantrips-known}}</span><br>Cantrips Known</div>  
+          <div><span style="font-size: x-large;">{{numSpellsKnown}} / {{character.system.scale.sorcerer.spells-known}}</span><br>Spells Known</div>    
+        </div>
+        {{/equals}}
+
+        <!-- Spell List -->
         {{#each spellList}}
         <div class="token-controller-actions">
+          
+          <!-- Spell Headings -->
+          <br>
           <h3>
-                {{#with (lookup ../spellLevels @key)}}
-                  {{this}}
-                {{/with}}
-   
-                {{#with (lookup ../spellSlots @key) }}
-                  {{#if this.max includeZero=true}}
-                    {{this.value}} / {{this.max}}  
-                  {{/if}}
-                {{/with}}
+            {{#with (lookup ../spellLevels @key)}}
+              {{this}}
+            {{/with}}
+            <span class="spell-slots">
+              {{#with (lookup ../spellSlots @key) }}
+                {{#if this.max includeZero=true}}
+                  {{this.value}} / {{this.max}}  
+                {{/if}}
+              {{/with}}
+            </span>
           </h3>
           {{#each this}}
-          <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+          <!-- Spell Action -->
+          <div class="token-controller-action" data-event-type="spell" data-spell-name="{{this.name}}">
 
               <!-- Entry -->
             <div class="flexrow token-controller-action-entry">
               <img src="{{this.img}}"/>
               <span>{{this.name}}</span>
               <span>{{this.labels.school}}</span>
+              {{#if this.system.preparation.prepared}}
+                <i class="original-class fas fa-sun" style="float: right;" data-tooltip="DND5E.ClassOriginal"></i>
+              {{/if}}
             </div>
 
             <!-- Long Description -->
@@ -232,7 +285,8 @@
 
           </div>
           {{/each}}
-        </div>  
+
+        </div>
         {{/each}}
       </div>
     
@@ -240,14 +294,29 @@
       <div class="tab" data-tab="inventory-tab" data-group="primary-tabs">
         {{#each inventoryList}}
         <h3>{{@key}}</h3>
-        <table>
           {{#each this}}
-          <tr class="token-controller-action" style="text-align: left;">
-            <td><img height="32px" width="32px" src="{{this.img}}" alt=""></td>
-            <td style="text-align: left;">{{this.name}}</td>
-          </tr>
+            <div class="token-controller-action" data-event-type="action" data-action-subtype="action" data-action-index="{{@index}}">
+
+                <!-- Entry -->
+              <div class="flexrow token-controller-action-entry">
+                <img src="{{this.img}}"/>
+                <span>{{this.name}}</span>
+                <span>{{this.labels.activation}}</span>
+                <span style="text-align: center;">
+                  {{#if this.labels.toHit}} {{this.labels.toHit}} to hit <br>{{/if}}
+                  {{#each this.labels.derivedDamage}}
+                    {{this.label}}
+                  {{/each}}
+                </span>
+              </div>
+
+              <!-- Long Description -->
+              <div class="token-controller-action-description hidden">
+                {{{this.system.description.value}}}
+              </div>
+
+            </div>
           {{/each}}
-        </table>
       {{/each}}
       </div>
     

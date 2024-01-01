@@ -187,3 +187,13 @@ section.window-content::-webkit-scrollbar {
   font-size: large;
 }
 
+.spell-slots {
+  float: right;
+  background-color: rgb(130, 128, 121);
+  border-radius: 6px;
+  color: #d4d2c6;
+  font-size: small;
+  font-weight: bold;
+  padding: 0px 6px 0px 6px;
+}
+
