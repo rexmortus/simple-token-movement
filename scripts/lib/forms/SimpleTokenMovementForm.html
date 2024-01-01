@@ -1,11 +1,9 @@
 <div class="flexcol" class="dnd5e-mobile-controller">
-  
-  <div class="top-section-bg" style="background: url({{game.scenes.active.thumbnail}}) center/cover no-repeat;">
-    
+      
     <div class="top-section">
       
       <!-- Top Section -->
-      <span class="character-name">{{character.name}} <span class="class-details">{{characterClass.name}} {{characterClass.system.levels}}</span></span>
+      <h3 class="character-name">{{character.name}} <span class="class-details">{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
       <div class="flexrow">
         
         <!-- Left buttons -->
@@ -45,12 +43,8 @@
           <a class="item" data-tab="inventory-tab" data-group="primary-tabs"><i class="fa-solid fa-suitcase"></i></a>
           <a class="item" data-tab="character-tab" data-group="primary-tabs"><i class="fa-solid fa-user"></i></a>
         </nav> 
-      </div>
-
-      <br>
-  
+      </div>  
     </div>
-  </div>
 
   <!-- Main Content -->
   <div class="flexrow">
@@ -63,23 +57,24 @@
       <!-- Movement tab -->
       <div class="tab movement-tab" data-tab="movement-tab" data-group="primary-tabs" style="height:440px">
         <h3>Movement</h3>
+        <br>
         <div class="flexrow">
-          <span class="mtmc-topleft">↖️</span>
-          <span class="mtmc-top">⬆️</span>
-          <span class="mtmc-topright">↗️</span>
+          <span class="mtmc-topleft"><i class="fa-solid fa-circle-arrow-up"></i></span>
+          <span class="mtmc-top"><i class="fa-solid fa-circle-arrow-up"></i></span>
+          <span class="mtmc-topright"><i class="fa-solid fa-circle-arrow-up"></i></span>
         </div>
         <div class="flexrow">
-          <span class="mtmc-left">⬅️</span>
+          <span class="mtmc-left"><i class="fa-solid fa-circle-arrow-up"></i></span>
           <span class="mtmc-select"><img class="character-token" src="{{character.prototypeToken.texture.src}}" alt=""></span>
-          <span class="mtmc-right">➡️</span>
+          <span class="mtmc-right"><i class="fa-solid fa-circle-arrow-up"></i></span>
         </div>
         <div class="flexrow">
-          <span class="mtmc-bottomleft">↙️</span>
-          <span class="mtmc-bottom">⬇️</span>
-          <span class="mtmc-bottomright">↘️</span>  
+          <span class="mtmc-bottomleft"><i class="fa-solid fa-circle-arrow-up"></i></span>
+          <span class="mtmc-bottom"><i class="fa-solid fa-circle-arrow-up"></i></span>
+          <span class="mtmc-bottomright"><i class="fa-solid fa-circle-arrow-up"></i></span>  
         </div>
-        <br><br>
-        <div class="flexrow">
+        <br>
+        <div class="flexrow zoom-controls">
           <span><i class="fa-solid fa-magnifying-glass-plus"></i></span>
           <span><i class="fa-solid fa-magnifying-glass-minus"></i></span>
         </div>

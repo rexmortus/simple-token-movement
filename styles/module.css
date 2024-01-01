@@ -1,7 +1,15 @@
- .character-name {
-  color:white;
+section.window-content {
+  overflow-y: scroll; /* Enables vertical scrolling */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+section.window-content::-webkit-scrollbar {
+  display: none; /* For WebKit browsers like Chrome and Safari */
+}
+
+.character-name {
   font-size: xx-large;
-  text-shadow: 1px 1px 1px black;
   margin-bottom:20px;
  }
  
@@ -11,30 +19,12 @@
 
 .attributes {
   text-align: center;
-  color: white;
 }
 
 .top-section-bg {
   border-radius: 10px;
   box-shadow: inset 3px 3px 3px black;
   border: 2px solid rgba(255, 255, 255, 0.25);
-}
-
-.top-section {
-  padding-top:10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 10px;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  backdrop-filter: blur(1px) brightness(85%);
-  -webkit-backdrop-filter: blur(1px) brightness(85%);
-  min-height: 50%;
-  text-shadow: 1px 1px 1px black;
-  height: 280px;
-  min-height: 280px;
-  max-height: 280px;
 }
 
 .character-image {
@@ -64,7 +54,7 @@
 
 [data-event-type=manage-hp] {
   color:white;
-  background-color: steelblue;
+  background-color: dodgerblue;
 }
 
 [data-event-type=manage-conditions] {
@@ -84,23 +74,62 @@
 
 .token-controller-tabs > .item {
   color:white;
+  opacity: 0.8;
+  text-shadow: 1px 1px 1px black;
+  animation: color .3;
 }
 
 .token-controller-tabs > .item.active {
-  color: black;
-  color:white;
-  text-shadow: 0 0 10px steelblue;
-  color: rgb(220, 229, 244);
+  text-shadow: 0px 0px 10px white;
+  color:dodgerblue;
+  opacity: 1;
 }
 
 .movement-tab {
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 
 .movement-tab > .flexrow > span  {
   text-align: center;
+  color: dodgerblue;
+  text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.5);
   font-size: 64px;
+  padding: 10px;
 }
+
+.movement-tab > .flexrow.zoom-controls > span  {
+  color: black;
+  text-shadow: none !important;
+}
+
+.mtmc-topleft {
+  transform: rotate(-45deg);
+}
+
+.mtmc-topright {
+  transform: rotate(45deg);
+}
+
+.mtmc-left {
+  transform: rotate(-90deg);
+}
+
+.mtmc-right {
+  transform: rotate(90deg);
+}
+
+.mtmc-bottomleft {
+  transform: rotate(-135deg);
+}
+
+.mtmc-bottomright {
+  transform: rotate(135deg);
+}
+
+.mtmc-bottom {
+  transform: rotate(180deg);
+}
+
 
 .character-token {
   border: none;
