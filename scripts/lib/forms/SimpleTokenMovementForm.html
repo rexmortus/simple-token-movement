@@ -1,50 +1,136 @@
-<div class="flexcol" class="dnd5e-mobile-controller">
-      
-    <div class="top-section">
-      
-      <!-- Top Section -->
-      <h3 class="character-name">{{character.name}} <span class="class-details">{{characterClass.name}} {{characterClass.system.levels}}</span></h3>
-      <div class="flexrow">
-        
-        <!-- Left buttons -->
-        <div class="flexcol left-buttons">
-          <button data-event-type="manage-conditions">Conditions</button>
-          <button data-event-type="manage-rest">Rest</button>
-        </div>
-        <!-- Character Image -->
-        <div class="flexcol character-image" style="background: url({{character.img}})"></div>
-        <!-- Right Buttons -->
-        <div class="flexcol right-buttons">
-          <button data-event-type="manage-hp">{{character.system.attributes.hp.value}}/{{character.system.attributes.hp.max}} HP</button>
-          <button data-event-type="manage-defenses">Defenses</button>
-          <button data-event-type="manage-inspiration">Inspiration</button>
-        </div>
+<!-- Condition management -->
+<div id="condition-management" class="hidden">
+  <div class="flexcol">
+    <h1>Conditions</h1>
+    {{#each statusEffects}}
+    <div class="token-controller-action {{#if (hasEffect ../character this.id)}}
+          active-effect{{/if}}" data-event-type="condition" data-condition="{{this.id}}">
 
-      </div>
-  
-
-      <!-- Attributes -->
-      <br>
-      <div class="flexrow attributes">
-        <div><span style="font-size: x-large;">{{character.system.attributes.prof}}</span><br>Prof. bonus</div>
-        <div><span style="font-size: x-large;">{{character.system.attributes.ac.value}}</span><br>AC</div>
-        <div><span style="font-size: x-large;">{{character.system.attributes.movement.walk}}</span><br>Movement</div>
-        <div><span style="font-size: x-large;">{{character.system.attributes.init.total}}</span><br>Initiative</div>
+        <!-- Entry -->
+      <div class="flexrow token-controller-action-entry status-effect">
+        <img src="{{this.icon}}"/>
+        <span>{{this.id}}</span>
       </div>
 
-      <!-- Navigation -->
-
-      <div class="flexrow ">
-        <nav class="token-controller-tabs tabs" data-group="primary-tabs">
-          <a class="item" data-tab="movement-tab" data-group="primary-tabs"><i class="fa-solid fa-arrows-up-down-left-right"></i></a>
-          <a class="item" data-tab="actions-tab" data-group="primary-tabs"><i class="fa-solid fa-fire"></i></a>
-          <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs"><i class="fa-solid fa-dice"></i></a>
-          <a class="item" data-tab="spellcasting-tab" data-group="primary-tabs"><i class="fa-solid fa-wand-sparkles"></i></a>
-          <a class="item" data-tab="inventory-tab" data-group="primary-tabs"><i class="fa-solid fa-suitcase"></i></a>
-          <a class="item" data-tab="character-tab" data-group="primary-tabs"><i class="fa-solid fa-user"></i></a>
-        </nav> 
-      </div>  
+      <!-- Long Description -->
+      <div class="token-controller-action-description hidden">
+        This is a long description of this motherfucking stupid bullshit
+      </div>
     </div>
+  {{/each}}
+  <a id="close-condition-management"><i class="fa-solid fa-circle-xmark"></i></a>
+  </div>
+</div>
+
+<div id="hp-management" class="hidden">
+
+  <div class="flexcol">
+    <h1>HP Management</h1>
+    <br>
+    <div class="flexrow hp-display">
+      <div class="flexcol">
+        <span class="value" data-current-hp>{{character.system.attributes.hp.value}}</span>
+        <span class="label">Current HP</span>
+      </div>
+      {{#if character.system.attributes.hp.temp includeZero=false}}
+        <div class="flexcol">
+          <span><i class="fa-solid fa-plus"></i></span>
+        </div>
+        <div class="flexcol">
+          <span class="value temp-hp-value" data-current-temp-hp>{{character.system.attributes.hp.temp}}</span>
+          <span class="label temp-hp-label">Temp HP</span>
+        </div>
+      {{/if}}
+      <div class="flexcol">
+        <span class="divider">/</span>
+      </div>
+      <div class="flexcol">
+        <span class="value">{{character.system.attributes.hp.max}}</span>
+        <span class="label">Max HP</span>
+      </div>
+    </div>
+    <br>
+    <div class="flexrow hp-controller">
+      <button class="death-button" data-increment="death"><i class="fa-solid fa-skull"></i></button>
+      <button class="minus-button" data-increment="-1"><i class="fa-solid fa-minus"></i></button>
+      <input type="number" class="hp-controller-value" value="0" placeholder="0">
+      <button class="plus-button" data-increment="1"><i class="fa-solid fa-plus"></i></button>
+      <button class="heal-button" data-increment="heal"><i class="fa-solid fa-heart"></i></button>
+    </div>
+    <br>
+    <div class="flexrow hp-damage-controls">
+      <button data-damage-button="update" disabled>No Action</button>
+    </div>
+    <br>
+    <h3>Advanced</h3>
+    <br>
+    <div class="flexrow hp-controller">
+      <span>Temp HP</span>
+      <input class="hp-controller-value" type="number" value="{{character.system.attributes.hp.temp}}">
+    </div>
+    <br>
+    <div class="flexrow hp-controller">
+      <span>Max HP Modifier</span>
+      <input class="hp-controller-value" type="number">
+    </div>
+    <br>
+    <div class="flexrow hp-controller">
+      <span>Override Max HP</span>
+      <input class="hp-controller-value" type="number">
+    </div>
+  
+    <a id="close-hp-management"><i class="fa-solid fa-circle-xmark"></i></a>
+  </div>
+</div>
+
+<!-- The actual controller -->
+<div class="flexcol" class="dnd5e-mobile-controller" id="mobile-controller">
+  
+  {{!-- Top section --}}
+  <div class="top-section">
+    
+    <!-- Top Section -->
+    <h1 class="character-name">{{character.name}} <span class="class-details">{{characterClass.name}} {{characterClass.system.levels}}</span></h1>
+    <div class="flexrow">
+      
+      <!-- Left buttons -->
+      <div class="flexcol left-buttons">
+        <button data-event-type="manage-conditions">Conditions</button>
+        <button data-event-type="manage-rest">Rest</button>
+      </div>
+      <!-- Character Image -->
+      <div class="flexcol character-image" style="background: url({{character.img}})"></div>
+      <!-- Right Buttons -->
+      <div class="flexcol right-buttons">
+        <button data-event-type="manage-hp">{{totalHp}}/{{character.system.attributes.hp.max}} HP</button>
+        <button data-event-type="manage-defenses">Defenses</button>
+        <button data-event-type="manage-inspiration">Inspiration</button>
+      </div>
+
+    </div>
+
+    <!-- Attributes -->
+    <br>
+    <div class="flexrow attributes">
+      <div><span style="font-size: x-large;">{{prependSign character.system.attributes.prof}}</span><br>Prof. bonus</div>
+      <div><span style="font-size: x-large;">{{character.system.attributes.ac.value}}</span><br>AC</div>
+      <div><span style="font-size: x-large;">{{character.system.attributes.movement.walk}}</span><br>Movement</div>
+      <div><span style="font-size: x-large;">{{prependSign character.system.attributes.init.total}}</span><br>Initiative</div>
+    </div>
+
+    <!-- Navigation -->
+
+    <div class="flexrow ">
+      <nav class="token-controller-tabs tabs" data-group="primary-tabs">
+        <a class="item" data-tab="movement-tab" data-group="primary-tabs"><i class="fa-solid fa-arrows-up-down-left-right"></i></a>
+        <a class="item" data-tab="actions-tab" data-group="primary-tabs"><i class="fa-solid fa-fire"></i></a>
+        <a class="item" data-tab="abilities-skills-tab" data-group="primary-tabs"><i class="fa-solid fa-dice"></i></a>
+        <a class="item" data-tab="spellcasting-tab" data-group="primary-tabs"><i class="fa-solid fa-wand-sparkles"></i></a>
+        <a class="item" data-tab="inventory-tab" data-group="primary-tabs"><i class="fa-solid fa-suitcase"></i></a>
+        <a class="item" data-tab="character-tab" data-group="primary-tabs"><i class="fa-solid fa-user"></i></a>
+      </nav> 
+    </div>  
+  </div>
 
   <!-- Main Content -->
   <div class="flexrow">
@@ -74,10 +160,10 @@
           <span class="mtmc-bottomright"><i class="fa-solid fa-circle-arrow-up"></i></span>  
         </div>
         <br>
-        <div class="flexrow zoom-controls">
+        {{!-- <div class="flexrow zoom-controls">
           <span><i class="fa-solid fa-magnifying-glass-plus"></i></span>
           <span><i class="fa-solid fa-magnifying-glass-minus"></i></span>
-        </div>
+        </div> --}}
 
       </div>
     
@@ -337,6 +423,7 @@
     
     
       </div>
+      
     </section>
   </div>
 </div>

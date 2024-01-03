@@ -8,6 +8,32 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.touchStartY; 
     this.scrolled;
     this.longTouchTimer;
+
+    Hooks.on('createActiveEffect', function(effect) {
+
+      if (effect.parent.id === game.user.character.id) {
+        let selector = '[data-condition=' + effect.statuses.first() + ']'
+        $(selector).toggleClass('active-effect');  
+      }
+
+    });
+
+    Hooks.on('deleteActiveEffect', function(effect) {
+      
+      if (effect.parent.id === game.user.character.id) {
+        let selector = '[data-condition=' + effect.statuses.first() + ']'
+        $(selector).toggleClass('active-effect');  
+      }
+
+    });
+
+    Hooks.on('updateActor', function(actor) {
+
+      if (actor.id === game.user.character.id) {
+          mainForm.render(true);
+      }
+  });
+
   }
 
   static get defaultOptions() {
@@ -75,7 +101,12 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.touchStartY = event.touches[0].clientY;
     this.scrolled = false;
     $(this.startElement).addClass('tapped');
+
+    // Get element type and set a different timer based on what is tapped
+    let eventType = $(this.startElement).data('eventType');
+
     this.longTouchTimer = setTimeout(this.showDescription.bind(this, event),500);
+
   }
 
   onTouchMove(event) {
@@ -127,11 +158,12 @@ export class SimpleTokenMovementForm extends FormApplication {
         
         spell.use();
 
-        // if (spellLevel != 0) {
-        //   const updates = [{_id: spell.id, "system.preparation": { mode: "prepared", prepared: !isPrepared }}];
-        //   actor.updateEmbeddedDocuments("Item", updates);
-        // }
+      }
 
+      // Condition
+      if(eventType === 'condition') {
+        let effectId = $(this.startElement).data('condition');
+        this.socket.executeAsGM('toggleStatus', game.user.character.id, effectId);
       }
 
     }
@@ -144,7 +176,6 @@ export class SimpleTokenMovementForm extends FormApplication {
 
     // Clear the long-touch interval timer
     clearTimeout(this.longTouchTimer);
-
 
   }
 
@@ -237,6 +268,184 @@ export class SimpleTokenMovementForm extends FormApplication {
     
   }
 
+  showConditionsManagement() {
+    $('#condition-management').show();
+    $('#mobile-controller').hide();
+    $('.window-content').scrollTop(0)
+  }
+
+  closeConditionManagement() {
+    $('#condition-management').hide();
+    $('#mobile-controller').show();
+    $('.window-content').scrollTop(0)
+  }
+
+  showRestDialog() {
+
+    let d = new Dialog({
+      title: "Rest",
+      content: "",
+      buttons: {
+       one: {
+        icon: '<i class="fas fa-clock"></i>',
+        label: "Short Rest",
+        callback: () => game.user.character.shortRest()
+       },
+       two: {
+        icon: '<i class="fas fa-bed"></i>',
+        label: "Long Rest",
+        callback: () => game.user.character.longRest()
+       }
+      },
+      default: "one",
+     });
+     d.render(true);
+
+  }
+
+  showHPManagement() {
+    $('#hp-management').show();
+    $('#mobile-controller').hide();
+    $('.window-content').scrollTop(0)
+  }
+
+  closeHPManagement() {
+    $('#hp-management').hide();
+    $('#mobile-controller').show();
+    $('.window-content').scrollTop(0)
+  }
+
+  incrementHPControllerValue(event) {
+    
+    let input = $(event.currentTarget);
+    let increment = input.data('increment');
+    let updateButton = $('[data-damage-button="update"]');
+    let currentValue = $('.hp-controller-value').val();
+    let hp = game.user.character.system.attributes.hp;
+    let currentHP = hp.value;
+    let maxHP = hp.max;
+    let currentTempHP = hp.temp;
+    let tempHPMax = hp.tempmax;
+    
+
+    if (increment === 'death') {
+
+      return game.user.character.applyDamage(hp.value);
+    
+    } 
+    
+    else if (increment === 'heal') {
+
+      return game.user.character.applyDamage(-(hp.max - hp.value));
+    
+    }
+
+    else {
+
+      // If there is no current value, set it to 0
+      if (currentValue === '') {
+
+        $('.hp-controller-value').val(0);
+
+      }
+      
+      let incrementorInput = $('.hp-controller-value').val( function(i, oldval) {
+
+        return parseInt( oldval, 10) + increment;
+     
+      });
+  
+      let incrementorValue = parseInt(incrementorInput.val());
+      let currentHPDisplay = $('[data-current-hp]');
+      let currentTempHPDisplay = $('[data-current-temp-hp]')
+  
+      // Reset display to current values
+      if (incrementorValue === 0) {
+  
+        updateButton
+          .removeClass('heal-button damage-button')
+          .prop('disabled', true)
+          .text('No Action');
+
+        currentHPDisplay
+            .removeClass('heal-display damage-display')
+            .text(currentHP);
+
+        currentTempHPDisplay.text(currentTempHP);
+  
+      } 
+      
+      // If they are trying to heal
+      else if (incrementorValue > 0 ) {
+         
+        if (currentHP + incrementorValue <= maxHP) {
+          
+          updateButton
+            .addClass('heal-button')
+            .removeClass('damage-button')
+            .prop('disabled', false)
+            .text('Heal')
+          
+          // If they have temp HP > 0, but are wounded
+          if (currentTempHP >= 0 && currentHP < maxHP) {
+
+            currentHPDisplay
+              .addClass('heal-display')
+              .removeClass('damage-display')
+              .text(currentHP + Math.abs(incrementorValue)) 
+          
+            // If they have no temp HP, but are wounded
+          } else if (currentTempHP === 0 && currentHP < maxHP) {
+  
+            currentHPDisplay
+              .addClass('heal-display')
+              .removeClass('damage-display')
+              .text(currentHP + incrementorValue)
+
+          } else {
+
+            currentHPDisplay.text(currentHP);
+
+          }
+
+        } else {
+
+          return incrementorInput.val(incrementorValue - 1);
+          
+        }
+  
+      } else if (incrementorValue < 0) {
+  
+        updateButton.addClass('damage-button').removeClass('heal-button');
+        updateButton.prop('disabled', false);
+        updateButton.text('Damage');
+  
+        if (currentTempHP > 0 && currentTempHP >= Math.abs(incrementorValue)) {
+          currentHPDisplay
+            .removeClass('damage-display')
+            .text(currentHP);
+          currentTempHPDisplay.text(currentTempHP + incrementorValue)
+  
+        } else {
+  
+          currentHPDisplay.removeClass('heal-display').addClass('damage-display');
+          currentHPDisplay.text(currentHP + (incrementorValue + currentTempHP))
+  
+        }
+
+      }
+
+    }
+
+  }
+
+  healOrDoDamage() {
+    let input = $('.hp-controller-value');
+    let val = input.val();
+    game.user.character.applyDamage(-(val));
+    input.val(0);
+  }
+
   activateListeners(html) {
     super.activateListeners(html)
     $('.mtmc-select', html).bind('touchstart click', $.proxy(this.selectToken, this))
@@ -250,9 +459,16 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('.mtmc-topright', html).bind('touchstart click', $.proxy(this.moveTopRight, this))
     $('.mtmc-right', html).bind('touchstart click', $.proxy(this.moveRight, this))
     $('.mtmc-bottomright', html).bind('touchstart click', $.proxy(this.moveBottomRight, this))
-    $('.token-controller-action', html).bind('touchstart', $.proxy(this.onTouchStart, this))
+    $('.token-controller-action', html).bind('touchstart click', $.proxy(this.onTouchStart, this))
     $('.token-controller-action', html).bind('touchend', $.proxy(this.onTouchEnd, this))
     $('.token-controller-action', html).bind('touchmove', $.proxy(this.onTouchMove, this))
+    $('[data-event-type=manage-conditions]', html).bind('touchstart', $.proxy(this.showConditionsManagement, this))
+    $('[data-event-type=manage-rest]', html).bind('touchstart', $.proxy(this.showRestDialog, this))
+    $('[data-event-type=manage-hp]', html).bind('touchstart', $.proxy(this.showHPManagement, this))
+    $('#close-condition-management', html).bind('touchstart', $.proxy(this.closeConditionManagement, this))
+    $('#close-hp-management', html).bind('touchstart', $.proxy(this.closeHPManagement, this))
+    $('[data-increment]', html).bind('touchstart', $.proxy(this.incrementHPControllerValue, this));
+    $('[data-damage-button]', html).bind('touchstart', $.proxy(this.healOrDoDamage, this));
   }
 
   getData() {
@@ -273,7 +489,9 @@ export class SimpleTokenMovementForm extends FormApplication {
         spellSlots: this.spellSlots(),
         numCantripsKnown: this.numberOfSpellsKnown(true),
         numSpellsKnown: this.numberOfSpellsKnown(false),
-        game: game
+        game: game,
+        statusEffects: CONFIG.statusEffects,
+        totalHp: game.user.character.system.attributes.hp.value + game.user.character.system.attributes.hp.temp
       }
   }
 

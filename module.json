@@ -19,7 +19,11 @@
   ],
   "relationships": {
     "systems": [],
-    "requires": []
+    "requires": [
+      "socketlib",
+      "dfreds-convenient-effects",
+      "character-actions-list-5e"
+    ]
   },
   "esmodules": [
     "scripts/module.js"

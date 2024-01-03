@@ -1,3 +1,7 @@
+body {
+  touch-action: pan-y; /* This disables double-tap zoom while allowing vertical scrolling */
+}
+
 section.window-content {
   overflow-y: scroll; /* Enables vertical scrolling */
   scrollbar-width: none; /* For Firefox */
@@ -9,12 +13,12 @@ section.window-content::-webkit-scrollbar {
 }
 
 .character-name {
-  font-size: xx-large;
   margin-bottom:20px;
  }
  
  span.class-details {
   font-size: large;
+  color:grey;
 }
 
 .attributes {
@@ -197,3 +201,150 @@ section.window-content::-webkit-scrollbar {
   padding: 0px 6px 0px 6px;
 }
 
+#manage-conditions {
+  /* position: absolute;
+  margin-left: -9999px;   */
+}
+
+.conditions-scrollable-area {
+  flex-grow: .5; /* Takes up the remaining space */
+  overflow-y: auto; /* Enables vertical scrolling */
+}
+
+#close-condition-management {
+  position: fixed;
+  color: grey;
+  font-size: 32px;
+  top: 32px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+}
+
+#close-hp-management {
+  position: fixed;
+  color: grey;
+  font-size: 32px;
+  top: 32px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+}
+
+.status-effect {
+
+}
+
+.status-effect > img {
+  border:none;
+  filter: invert(1);
+  padding-left: 4px;
+}
+
+.active-effect {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.active-effect > .token-controller-action-description {
+  color: white;
+}
+
+.active-effect > .token-controller-action-entry > img {
+  filter: invert(0);
+}
+
+[data-event-type=condition] > img {
+  border: none;
+} 
+
+.hp-display > .flexcol > span {
+  text-align: center;
+}
+
+.hp-display > .flexcol > span.value {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.hp-display > .flexcol > span.label {
+  font-size: small;
+  color: grey;
+}
+
+.hp-display > .flexcol > span.divider {
+  font-size: x-large;
+  color: grey;
+}
+
+.hp-controller > .minus-button {
+  color:white;
+  background-color: black;
+  font-size: x-large;
+}
+
+.hp-controller > .hp-controller-value {
+  text-align: center;
+  margin: none;
+  pad: none;
+  background-color: white;
+  font-weight: bold;
+  font-size: x-large;
+  height: 100%;
+}
+
+.hp-controller > .plus-button {
+  color:white;
+  background-color: dodgerblue;
+  font-size: x-large;
+}
+
+.hp-controller > .damage-button {
+  color:white;
+  background-color: red;
+  font-weight: bold;
+}
+
+.hp-controller > .death-button {
+  color: white;
+  background-color: red;
+  font-weight: bold;
+}
+
+.hp-controller > .heal-button {
+  color: white;
+  background-color: lightgreen;
+  font-weight: bold;
+}
+
+.hp-damage-controls > .heal-button {
+  color:white;
+  background-color: dodgerblue;
+}
+
+.hp-damage-controls > .damage-button {
+  color: white;
+  background-color: red;
+}
+
+.heal-display {
+  color: dodgerblue;
+}
+
+.damage-display {
+  color:red;
+}
+
+.temp-hp-value {
+  color:dodgerblue
+}
+
+.temp-hp-label {
+  color: dodgerblue !important;
+}
+
+.hp-controller > .hp-controller-value {
+  text-align: center;
+  margin: none;
+  pad: none;
+  background-color: white;
+  font-weight: bold;
+  font-size: x-large;
+  height: 100%;
+}

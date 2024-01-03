@@ -15,13 +15,27 @@ Handlebars.registerHelper('equals', function(arg1, arg2, options) {
 
 Handlebars.registerHelper('toUpcase', function(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
-  });
+});
+
+Handlebars.registerHelper('hasEffect', function(character, effectName) {
+    let hasEffect = character.statuses.has(effectName);
+    return hasEffect 
+});
+
+Handlebars.registerHelper('prependSign', function(number) {
+    if(number < 0) {
+        return '-' + Math.abs(number);
+    } else {
+        return '+' + number;
+    }
+});
 
 let socket;
 
 Hooks.once("socketlib.ready", () => {
     socket = socketlib.registerModule("simple-token-movement");
 	socket.register("moveToken", move);
+    socket.register("toggleStatus", toggleStatus)
 });
 
 function findByDocumentActorId(actorId) {
@@ -36,9 +50,9 @@ function findByDocumentActorId(actorId) {
     return foundEntry;
 }
 
-function move(actorID, move) {
+function move(actorId, move) {
 
-    let token = findByDocumentActorId(actorID)
+    let token = findByDocumentActorId(actorId)
 
     let newX = token.x + token.w * move[0]
     let newY = token.y + token.h * move[1]
@@ -48,6 +62,11 @@ function move(actorID, move) {
       token.document.update(newPoint)
     }
 }
+
+function toggleStatus(actorId, effectId) {
+    let token = findByDocumentActorId(actorId)
+    token.toggleEffect(CONFIG.statusEffects.find(effect => effect.id === effectId));
+}   
 
 
 Hooks.once('ready', async function() {
@@ -61,20 +80,28 @@ Hooks.once('ready', async function() {
         mainForm.render(true);
     });
 
-    Hooks.on('updateActor', function() {
-        mainForm.render(true);
+    Hooks.on('updateActor', function(actor) {
+        if (actor.id === game.user.character.id) {
+            mainForm.render(true);
+        }
     });
 
-    Hooks.on('updateItem', function() {
-        mainForm.render(true);
+    Hooks.on('updateItem', function(item) {
+        if (item.parent.id === game.user.character.id) {
+            mainForm.render(true);
+        }
     })
 
-    Hooks.on('createItem', function() {
-        mainForm.render(true);
+    Hooks.on('createItem', function(item) {
+        if (item.parent.id === game.user.character.id) {
+            mainForm.render(true);
+        }
     })
 
-    Hooks.on('deleteItem', function() {
-        mainForm.render(true);
+    Hooks.on('deleteItem', function(item) {
+        if (item.parent.id === game.user.character.id) {
+            mainForm.render(true);
+        }
     })
 
 });
