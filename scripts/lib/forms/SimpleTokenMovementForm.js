@@ -25,14 +25,7 @@ export class SimpleTokenMovementForm extends FormApplication {
         $(selector).toggleClass('active-effect');  
       }
 
-    });
-
-    Hooks.on('updateActor', function(actor) {
-
-      if (actor.id === game.user.character.id) {
-          mainForm.render(true);
-      }
-  });
+    })
 
   }
 
@@ -320,7 +313,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     let input = $(event.currentTarget);
     let increment = input.data('increment');
     let updateButton = $('[data-damage-button="update"]');
-    let currentValue = $('.hp-controller-value').val();
+    let currentValue = $('[data-hp-controller-value]').val();
     let hp = game.user.character.system.attributes.hp;
     let currentHP = hp.value;
     let maxHP = hp.max;
@@ -345,11 +338,11 @@ export class SimpleTokenMovementForm extends FormApplication {
       // If there is no current value, set it to 0
       if (currentValue === '') {
 
-        $('.hp-controller-value').val(0);
+        $('[data-hp-controller-value]').val(0);
 
       }
       
-      let incrementorInput = $('.hp-controller-value').val( function(i, oldval) {
+      let incrementorInput = $('[data-hp-controller-value]').val( function(i, oldval) {
 
         return parseInt( oldval, 10) + increment;
      
@@ -440,10 +433,15 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   healOrDoDamage() {
-    let input = $('.hp-controller-value');
+    let input = $('[data-hp-controller-value]');
     let val = input.val();
     game.user.character.applyDamage(-(val));
     input.val(0);
+  }
+
+  changeTempHP(event) {
+    let tempHP = $(event.currentTarget).val()
+    game.user.character.update({"system.attributes.hp.temp": tempHP});
   }
 
   activateListeners(html) {
@@ -469,6 +467,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('#close-hp-management', html).bind('touchstart', $.proxy(this.closeHPManagement, this))
     $('[data-increment]', html).bind('touchstart', $.proxy(this.incrementHPControllerValue, this));
     $('[data-damage-button]', html).bind('touchstart', $.proxy(this.healOrDoDamage, this));
+    $('[data-temp-hp-controller-value]', html).bind('change', $.proxy(this.changeTempHP, this));
   }
 
   getData() {

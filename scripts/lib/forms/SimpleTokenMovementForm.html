@@ -53,7 +53,7 @@
     <div class="flexrow hp-controller">
       <button class="death-button" data-increment="death"><i class="fa-solid fa-skull"></i></button>
       <button class="minus-button" data-increment="-1"><i class="fa-solid fa-minus"></i></button>
-      <input type="number" class="hp-controller-value" value="0" placeholder="0">
+      <input type="number" class="hp-controller-value" data-hp-controller-value value="0" placeholder="0">
       <button class="plus-button" data-increment="1"><i class="fa-solid fa-plus"></i></button>
       <button class="heal-button" data-increment="heal"><i class="fa-solid fa-heart"></i></button>
     </div>
@@ -66,19 +66,8 @@
     <br>
     <div class="flexrow hp-controller">
       <span>Temp HP</span>
-      <input class="hp-controller-value" type="number" value="{{character.system.attributes.hp.temp}}">
+      <input class="hp-controller-value" data-temp-hp-controller-value type="number" value="{{character.system.attributes.hp.temp}}">
     </div>
-    <br>
-    <div class="flexrow hp-controller">
-      <span>Max HP Modifier</span>
-      <input class="hp-controller-value" type="number">
-    </div>
-    <br>
-    <div class="flexrow hp-controller">
-      <span>Override Max HP</span>
-      <input class="hp-controller-value" type="number">
-    </div>
-  
     <a id="close-hp-management"><i class="fa-solid fa-circle-xmark"></i></a>
   </div>
 </div>
