@@ -5,15 +5,16 @@ export class SimpleTokenMovementForm extends FormApplication {
     super();
     
     // stuff
+    this.itemCompendium = itemCompendium;
     this.socket = socket
     this.startElement
     this.touchStartX
     this.touchStartY 
     this.cancelLongPress
-    this.longTouchTimer
+    this.longPressTimer
     this.characterTabOrder = ['race', 'class', 'background', 'feat']
-    this.equipmentCompendium = itemCompendium.filter(item => item.type === 'equipment').sort((a, b) => a.name.localeCompare(b.name))
-
+    this.equipmentCompendium = this.itemCompendium.filter(item => item.type === 'equipment').sort((a, b) => a.name.localeCompare(b.name))
+    this.actionKeys = Object.keys(game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character))
   }
 
   static get defaultOptions() {
@@ -33,13 +34,13 @@ export class SimpleTokenMovementForm extends FormApplication {
             group: 'page-controller',
             navSelector: ".page-controller",
             contentSelector: '.page-content',
-            initial: 'manage-inventory-tab'
+            initial: 'controller-tab'
           },
           {
             group: 'token-controller',
             navSelector: ".token-controller-tabs", 
             contentSelector: ".token-controller-content", 
-            initial: "inventory-tab" 
+            initial: "actions-tab" 
           },
         ],
     });
@@ -97,17 +98,18 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.cancelLongPress = false;
 
     $(this.startElement).addClass('tapped');
-    this.longTouchTimer = setTimeout(this.onLongPress.bind(this, event),500);
+    this.longPressTimer = setTimeout(this.onLongPress.bind(this, event),500);
 
   }
 
   onTouchMove(event) {
+    
     // Determine if the touch has moved significantly
     if (Math.abs(event.touches[0].clientX - this.touchStartX) > 10 || 
         Math.abs(event.touches[0].clientY - this.touchStartY) > 10) {
         this.cancelLongPress = true;
         $(this.startElement).removeClass('tapped');
-        clearTimeout(this.longTouchTimer);
+        clearTimeout(this.longPressTimer);
     }
   } 
 
@@ -178,6 +180,7 @@ export class SimpleTokenMovementForm extends FormApplication {
         let itemId = $(this.startElement).data('itemId');
         let item = game.user.character.items.filter(item => item.id === itemId)[0]
         item.use();
+        
       }
 
       // Condition
@@ -197,19 +200,22 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.startElement = null;
 
     // Clear the long-touch interval timer
-    clearTimeout(this.longTouchTimer);
+    clearTimeout(this.longPressTimer);
 
   }
 
   toPluralCamelCase(word) {
+
     if (!word) return '';
 
     // Capitalize the first letter and add 's' for plural
     return word.charAt(0).toUpperCase() + word.slice(1);
+
   }
 
   // Create a Spell List, ordered by level
   spellsByLevel() {
+
     let spellsByLevel = {};
 
     game.user.character.itemTypes.spell.forEach(spell => {
@@ -226,6 +232,7 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   // Create an inventory list, ordered by level
   itemsByType() {
+
     let itemsByType = {};
 
     game.user.character.items.filter(item => !['spell', 'feat', 'class', 'subclass', 'race', 'background'].includes(item.type)).forEach(item => {
@@ -237,10 +244,12 @@ export class SimpleTokenMovementForm extends FormApplication {
     });
 
     return itemsByType;
+
   }
 
   // Create a list of character features, ordered by type
   featuresByType() {
+
     let featuresByType = {};
 
     game.user.character.items.filter(item => ['race','class', 'subclass', 'background','feat'].includes(item.type)).forEach(item => {
@@ -259,10 +268,13 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   maxSpellsPrepared() {
+
     return game.user.character.system.abilities.int.mod + game.user.character.system.details.level
+
   }
 
   numOfSpellsPrepared() {
+
     let numOfSpellsPrepared = 0;
 
     game.user.character.items.filter(item => item.type === 'spell').forEach(spell => {
@@ -277,14 +289,17 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   spellSlots() {
+
     let filteredSpellsArray = Object.keys(game.user.character.system.spells)
         .filter(key => key !== 'pact').sort()
         .map(key => game.user.character.system.spells[key]);
     
     return filteredSpellsArray;
+
   }
 
   numberOfSpellsKnown(cantrips=false) {
+
     if (cantrips) {
       return game.user.character.itemTypes.spell.filter(spell => spell.system.level === 0 && spell.system.preparation.mode != 'innate').length
     } else {
@@ -294,16 +309,20 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   showConditionsManagement() {
+
     this._tabs[0].activate('conditions-tab');
+
   }
 
   closeConditionManagement() {
+
     this._tabs[0].activate('controller-tab');
+
   }
 
   showRestDialog() {
 
-    let d = new Dialog({
+    let dialog = new Dialog({
       title: "Rest",
       content: "",
       buttons: {
@@ -320,16 +339,19 @@ export class SimpleTokenMovementForm extends FormApplication {
       },
       default: "one",
      });
-     d.render(true);
+     dialog.render(true);
 
   }
 
   showHPManagement() {
+
     this._tabs[0].activate('hp-tab');
   }
 
   closeHPManagement() {
+
     this._tabs[0].activate('controller-tab');
+
   }
 
   incrementHPControllerValue(event) {
@@ -485,45 +507,63 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   equipItem(event) {
+
     let itemId = $(event.target).data('equipItem');
     game.user.character.items.filter(item => item.id === itemId)[0].update({"system.equipped": true})
+
   }
 
   unequipItem(event) {
+
     let itemId = $(event.target).data('unequipItem');
     game.user.character.items.filter(item => item.id === itemId)[0].update({"system.equipped": false})
+
   }
 
   attuneItem(event) {
+
     let itemId = $(event.target).data('attuneItem');
     game.user.character.items.filter(item => item.id === itemId)[0].update({"system.attunement": 2})
+
   }
 
   unattuneItem(event) {
+
     let itemId = $(event.target).data('unattuneItem');
     game.user.character.items.filter(item => item.id === itemId)[0].update({"system.attunement": 1, "system.equipped": false})
+
   }
 
   showManageInventory() {
+
     this._tabs[0].activate('manage-inventory-tab');
+
   }
 
   showManageSpells() {
+
     this._tabs[0].activate('manage-spells-tab');
+
   }
 
   closeManageInventory() {
+
     this._tabs[0].activate('controller-tab');
+
   }
 
   closeManageSpells() {
+
     this._tabs[0].activate('controller-tab');
+
   }
   
   addItem(event) {
+
     let itemId = $(event.currentTarget).data('addItem');
     let item = this.equipmentCompendium.filter(item => item._id === itemId)[0]
     game.user.character.createEmbeddedDocuments("Item", [item.toObject()]);
+
   }
 
   activateListeners(html) {
@@ -570,11 +610,12 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   getData() {
 
+    // debugger;
 
     return {
       character: game.user.character,
       actionList: game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character),
-      actionKeys: Object.keys(game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)),
+      actionKeys: this.actionKeys,
       skillList: game.system.config.skills,
       abilityList: game.system.config.abilities,
       spellList: this.spellsByLevel(),

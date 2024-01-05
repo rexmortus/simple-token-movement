@@ -90,9 +90,11 @@ function move(actorId, move) {
     let newY = token.y + token.h * move[1]
     
     const newPoint = canvas.grid.getSnappedPosition(newX, newY)
+
     if (!token.checkCollision(newPoint)) {
       token.document.update(newPoint)
     }
+    
 }
 
 function toggleStatus(actorId, effectId) {
