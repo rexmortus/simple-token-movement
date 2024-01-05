@@ -495,6 +495,22 @@ export class SimpleTokenMovementForm extends FormApplication {
     game.user.character.items.filter(item => item.id === itemId)[0].update({"system.attunement": 1, "system.equipped": false})
   }
 
+  showManageInventory() {
+    this._tabs[0].activate('manage-inventory-tab');
+  }
+
+  showManageSpells() {
+    this._tabs[0].activate('manage-spells-tab');
+  }
+
+  closeManageInventory() {
+    this._tabs[0].activate('controller-tab');
+  }
+
+  closeManageSpells() {
+    this._tabs[0].activate('controller-tab');
+  }
+
   activateListeners(html) {
 
     super.activateListeners(html)
@@ -517,8 +533,8 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-event-type=manage-conditions]', html).bind('touchstart', $.proxy(this.showConditionsManagement, this))
     $('[data-event-type=manage-rest]', html).bind('touchstart', $.proxy(this.showRestDialog, this))
     $('[data-event-type=manage-hp]', html).bind('touchstart', $.proxy(this.showHPManagement, this))
-    $('#close-condition-management', html).bind('touchstart', $.proxy(this.closeConditionManagement, this))
-    $('#close-hp-management', html).bind('touchstart', $.proxy(this.closeHPManagement, this))
+    $('[data-close-condition-management]', html).bind('touchstart', $.proxy(this.closeConditionManagement, this))
+    $('[data-close-hp-management]', html).bind('touchstart', $.proxy(this.closeHPManagement, this))
     $('[data-increment]', html).bind('touchstart', $.proxy(this.incrementHPControllerValue, this))
     $('[data-damage-button]', html).bind('touchstart', $.proxy(this.healOrDoDamage, this))
     $('[data-temp-hp-controller-value]', html).bind('change', $.proxy(this.changeTempHP, this))
@@ -530,7 +546,11 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-unequip-item]', html).bind('touchstart', $.proxy(this.unequipItem, this));
     $('[data-attune-item]', html).bind('touchstart', $.proxy(this.attuneItem, this));
     $('[data-unattune-item]', html).bind('touchstart', $.proxy(this.unattuneItem, this));
-  
+    $('[data-manage-inventory]', html).bind('touchstart', $.proxy(this.showManageInventory, this));
+    $('[data-manage-spells]', html).bind('touchstart', $.proxy(this.showManageSpells, this));
+    $('[data-close-manage-inventory]', html).bind('touchstart', $.proxy(this.closeManageInventory, this));
+    $('[data-close-manage-spells]', html).bind('touchstart', $.proxy(this.closeManageSpells, this));
+    
   }
 
   getData() {

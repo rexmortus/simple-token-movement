@@ -30,8 +30,14 @@ span.class-details {
   text-align: center;
 }
 
+.character-attributes > div > .attribute-value {
+  font-weight: bold !important;
+  font-size: large;
+}
+
 .attribute-label {
   color: grey;
+  font-size: small;
 }
 
 .top-section {
@@ -231,17 +237,10 @@ span.class-details {
   /* Enables vertical scrolling */
 }
 
-#close-condition-management {
-  position: fixed;
-  color: grey;
-  font-size: 32px;
-  top: 32px;
-  /* Adjust as needed */
-  right: 10px;
-  /* Adjust as needed */
-}
-
-#close-hp-management {
+[data-close-condition-management], 
+[data-close-hp-management], 
+[data-close-manage-inventory],  
+[data-close-manage-spells] {
   position: fixed;
   color: grey;
   font-size: 32px;
@@ -432,7 +431,7 @@ span.class-details {
   }
 }
 
-[data-event-type=manage-spells] {
+[data-manage-spells] {
   color: white;
   font-weight: bold;
   /* text-shadow: 1px 1px 1px black; */

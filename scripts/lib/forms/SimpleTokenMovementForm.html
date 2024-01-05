@@ -2,6 +2,8 @@
   <a data-tab="controller-tab" data-group="page-controller"></a>
   <a data-tab="hp-tab" data-group="page-controller"></a>
   <a data-tab="conditions-tab" data-group="page-controller"></a>
+  <a data-tab="manage-inventory-tab" data-group="page-controller"></a>
+  <a data-tab="manage-spells-tab" data-group="page-controller"></a>
 </nav> 
 
 <div class="page-content">
@@ -15,10 +17,10 @@
         
         <!-- Attributes -->
         <div class="flexrow character-attributes">
-          <div><span style="font-size: large;">{{prependSign character.system.attributes.prof}}</span><br><span class="attribute-label">Prof. bonus</span></div>
-          <div><span style="font-size: large;">{{character.system.attributes.ac.value}}</span><br><span class="attribute-label">AC</span></div>
-          <div><span style="font-size: large;">{{character.system.attributes.movement.walk}}</span><br><span class="attribute-label">Movement</span></div>
-          <div><span style="font-size: large;">{{prependSign character.system.attributes.init.total}}</span><br><span class="attribute-label">Initiative</span></div>
+          <div><span class="attribute-value">{{prependSign character.system.attributes.prof}}</span><br><span class="attribute-label">Prof. bonus</span></div>
+          <div><span class="attribute-value">{{character.system.attributes.ac.value}}</span><br><span class="attribute-label">AC</span></div>
+          <div><span class="attribute-value">{{character.system.attributes.movement.walk}}</span><br><span class="attribute-label">Movement</span></div>
+          <div><span class="attribute-value">{{prependSign character.system.attributes.init.total}}</span><br><span class="attribute-label">Initiative</span></div>
         </div>
         <br>
 
@@ -236,7 +238,7 @@
           <!-- Spellcasting tab-->
           <div class="tab" data-tab="spellcasting-tab" data-group="token-controller">
             
-            <button data-event-type="manage-spells">Manage Spells</button>
+            <button data-manage-spells>Manage Spells</button>
             <br><br>
 
             <!-- Wizard -->
@@ -534,7 +536,7 @@
   </div>
 
   <div data-tab="hp-tab" class="tab">
-      <div id="hp-management">
+    <div id="hp-management">
 
   <div class="flexcol">
     <h1>Manage HP</h1>
@@ -603,9 +605,9 @@
         <hr>
       </div>
       {{/equals}}
-    <a id="close-hp-management"><i class="fa-solid fa-circle-xmark"></i></a>
+    <a data-close-hp-management><i class="fa-solid fa-circle-xmark"></i></a>
   </div>
-</div>
+    </div>
   </div>
   
   <div data-tab="conditions-tab" class="tab">
@@ -628,8 +630,18 @@
         </div>
       </div>
     {{/each}}
-    <a id="close-condition-management"><i class="fa-solid fa-circle-xmark"></i></a>
+    <a data-close-condition-management><i class="fa-solid fa-circle-xmark"></i></a>
     </div>
   </div>
 
+  <div data-tab="manage-inventory-tab" class="tab">
+    <h1>Manage Inventory</h1>
+    <a data-close-manage-inventory><i class="fa-solid fa-circle-xmark"></i></a>
+  </div> 
+
+  <div data-tab="manage-spells-tab" class="tab">
+    <h1>Manage Spells</h1>
+    <a data-close-manage-spells><i class="fa-solid fa-circle-xmark"></i></a>
+  </div> 
+  
 </div>
