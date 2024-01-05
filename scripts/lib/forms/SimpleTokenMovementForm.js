@@ -138,12 +138,10 @@ export class SimpleTokenMovementForm extends FormApplication {
     else if(eventType === 'manage-inventory') {
 
       let itemId = $(this.startElement).data('itemId');
-
       let item = this.equipmentCompendium.filter(item => item._id === itemId)[0]
-
-      debugger;
-
-    }  
+      item.sheet.render(true);
+      
+    }
     
   }
 
@@ -521,6 +519,12 @@ export class SimpleTokenMovementForm extends FormApplication {
   closeManageSpells() {
     this._tabs[0].activate('controller-tab');
   }
+  
+  addItem(event) {
+    let itemId = $(event.currentTarget).data('addItem');
+    let item = this.equipmentCompendium.filter(item => item._id === itemId)[0]
+    game.user.character.createEmbeddedDocuments("Item", [item.toObject()]);
+  }
 
   activateListeners(html) {
 
@@ -561,7 +565,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-manage-spells]', html).bind('touchstart', $.proxy(this.showManageSpells, this));
     $('[data-close-manage-inventory]', html).bind('touchstart', $.proxy(this.closeManageInventory, this));
     $('[data-close-manage-spells]', html).bind('touchstart', $.proxy(this.closeManageSpells, this));
-    
+    $('[data-add-item]', html).bind('touchstart', $.proxy(this.addItem, this));
   }
 
   getData() {

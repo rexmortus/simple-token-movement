@@ -570,3 +570,8 @@ span.class-details {
 [data-event-type=manage-inspiration] {
   color: dodgerblue;
 }
+
+[data-add-item] {
+  color:dodgerblue;
+  font-weight: bold;
+}

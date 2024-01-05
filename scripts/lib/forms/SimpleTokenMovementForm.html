@@ -414,8 +414,6 @@
                         </div>
                       </div>
                       <span>{{{this.system.description.value}}}</span>
-                    </div>
-
                   </div>
                 {{/each}}
             {{/each}}
@@ -644,16 +642,11 @@
 
         <!-- Entry -->
       <div class="flexrow token-controller-action-entry">
-        <img src="{{this.img}}"/>
-        <span>{{this.name}}</span>
-      </div>
+          <img src="{{this.img}}"/>
+          <span class="flex2">{{this.name}}<br>
 
-      <!-- Long Description -->
-      <div class="token-controller-action-description {{#unless this.flags.simple-token-movement.compendiumItem.expanded}} hidden{{/unless}}">
-        <div class="flexrow">
-          <button>Add to Inventory</button>
-          <button>View Compendium Entry</button>
-        </div>
+          </span>
+          <div><button data-add-item="{{this.id}}">Add</button></div>
       </div>
 
     </div>
