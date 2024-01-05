@@ -103,7 +103,10 @@ function toggleStatus(actorId, effectId) {
 
 Hooks.once('ready', async function() {
 
-    const mainForm = new SimpleTokenMovementForm(socket, {tabs: [{navSelector: ".tabs", contentSelector: ".content", initial: "tab1"}] });
+    const mainForm = new SimpleTokenMovementForm(
+        socket, 
+        await game.packs.get('dnd5e.items').getDocuments()
+    )
 
     mainForm.render(true);
 

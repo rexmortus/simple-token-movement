@@ -1,6 +1,6 @@
 export class SimpleTokenMovementForm extends FormApplication {
-
-  constructor(socket) {
+  
+  constructor(socket, itemCompendium) {
     
     super();
     
@@ -12,6 +12,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.cancelLongPress
     this.longTouchTimer
     this.characterTabOrder = ['race', 'class', 'background', 'feat']
+    this.equipmentCompendium = itemCompendium.filter(item => item.type === 'equipment').sort((a, b) => a.name.localeCompare(b.name))
 
   }
 
@@ -32,7 +33,7 @@ export class SimpleTokenMovementForm extends FormApplication {
             group: 'page-controller',
             navSelector: ".page-controller",
             contentSelector: '.page-content',
-            initial: 'controller-tab'
+            initial: 'manage-inventory-tab'
           },
           {
             group: 'token-controller',
@@ -80,32 +81,6 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.move(1, 1)
   }
 
-  onLongPress(event) {
-
-    this.cancelLongPress = true;
-    
-    let eventType = $(this.startElement).data('eventType');
-
-    if (['action', 'spell', 'inventory', 'character'].includes(eventType)) {
-      
-      let itemId = $(this.startElement).data('itemId');
-      let item = game.user.character.items.filter(item => item.id === itemId)[0]
-      let isExpanded = item.getFlag('simple-token-movement', 'expanded');
-      
-      if (isExpanded) {
-
-        item.setFlag('simple-token-movement', 'expanded', false);
-
-      } else {
-
-        item.setFlag('simple-token-movement', 'expanded', true);
-
-      }
-
-    }    
-    
-  }
-  
   onTouchStart(event) {
 
     // If the player is tapping a button within the token-controller-action, then return and
@@ -135,6 +110,42 @@ export class SimpleTokenMovementForm extends FormApplication {
         clearTimeout(this.longTouchTimer);
     }
   } 
+
+  onLongPress(event) {
+
+    this.cancelLongPress = true;
+    
+    let eventType = $(this.startElement).data('eventType');
+
+    if (['action', 'spell', 'inventory', 'character'].includes(eventType)) {
+      
+      let itemId = $(this.startElement).data('itemId');
+      let item = game.user.character.items.filter(item => item.id === itemId)[0]
+      let isExpanded = item.getFlag('simple-token-movement', 'expanded');
+      
+      if (isExpanded) {
+
+        item.setFlag('simple-token-movement', 'expanded', false);
+
+      } else {
+
+        item.setFlag('simple-token-movement', 'expanded', true);
+
+      }
+
+    } 
+    
+    else if(eventType === 'manage-inventory') {
+
+      let itemId = $(this.startElement).data('itemId');
+
+      let item = this.equipmentCompendium.filter(item => item._id === itemId)[0]
+
+      debugger;
+
+    }  
+    
+  }
 
   onTouchEnd(event) {
 
@@ -555,6 +566,7 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   getData() {
 
+
     return {
       character: game.user.character,
       actionList: game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character),
@@ -579,7 +591,8 @@ export class SimpleTokenMovementForm extends FormApplication {
       statusEffects: CONFIG.statusEffects,
       totalHp: game.user.character.system.attributes.hp.value + game.user.character.system.attributes.hp.temp,
       characterTabOrder: this.characterTabOrder,
-      toHitRolls: game.user.character.items.filter(item => item.labels.toHit)
+      toHitRolls: game.user.character.items.filter(item => item.labels.toHit),
+      compendiumEquipment: this.equipmentCompendium
     }
 
   }
