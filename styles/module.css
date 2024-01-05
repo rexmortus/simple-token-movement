@@ -575,3 +575,35 @@ span.class-details {
   color:dodgerblue;
   font-weight: bold;
 }
+
+[data-add-spell] {
+  color: dodgerblue;
+  font-weight: bold;
+}
+
+[data-remove-spell] {
+  color:dimgray;
+  background-color: silver;
+  font-weight: bold;
+}
+
+.spell-school-label {
+  font-size: small;
+  color: dimgray;
+  background-color: silver;
+  padding: 0 4px 0 4px;
+  border-radius: 4px;
+}
+
+.spell-components-label {
+  font-size: small;
+  color: grey;
+}
+
+.known-spell-label {
+  font-size: small;
+  color: white;
+  background-color: dodgerblue;
+  padding: 0 4px 0 4px;
+  border-radius: 4px;
+}

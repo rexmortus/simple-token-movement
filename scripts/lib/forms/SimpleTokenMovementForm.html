@@ -238,7 +238,7 @@
           <!-- Spellcasting tab-->
           <div class="tab" data-tab="spellcasting-tab" data-group="token-controller">
             
-            <button data-manage-spells>Manage Spells</button>
+            <button data-manage-spells>Spell Compendium</button>
             <br><br>
 
             <!-- Wizard -->
@@ -348,7 +348,7 @@
           <!--Inventory tab-->
           <div class="tab" data-tab="inventory-tab" data-group="token-controller">
               <div class="flexcol">
-                <button data-manage-inventory>Manage Inventory</button>
+                <button data-manage-inventory>Equipment Compendium</button>
                 <br>
                 <div class="flexrow">
                   <span class="mobile-currency">{{character.system.currency.pp}}<br><span class="mobile-currency-label ">Platinum</span></span>
@@ -636,6 +636,7 @@
   <div data-tab="manage-inventory-tab" class="tab">
     <h1>Add Items</h1>
     <a data-close-manage-inventory><i class="fa-solid fa-circle-xmark"></i></a>
+    <div class="token-controller-actions">
 
     {{#each compendiumEquipment}}
     <!-- Manage Inventory Action -->
@@ -644,19 +645,60 @@
         <!-- Entry -->
       <div class="flexrow token-controller-action-entry">
           <img src="{{this.img}}"/>
-          <span class="flex2">{{this.name}}<br>
-
-          </span>
+          <span class="flex2">{{this.name}}</span>
           <div><button data-add-item="{{this.id}}">Add</button></div>
       </div>
 
     </div>
     {{/each}}
-    
+    </div>
   </div> 
 
   <div data-tab="manage-spells-tab" class="tab">
-    <h1>Manage Spells</h1>
+    <h1>Spell Compendium</h1>
+    {{!-- <div class="flexrow">
+      <span>Filter 1</span>
+      <span>Filter 2</span>
+      <span>Filter 3</span>
+      <span>Filter 4</span>
+      <span>Filter 5</span>
+    </div> --}}
+    
+    {{#each spellCompendiumByLevel}}
+      <div class="token-controller-actions">
+        
+        <!-- Spell Headings -->
+        <br>
+        <h3>
+          {{#with (lookup ../spellLevels @key)}}
+            {{this}}
+          {{/with}}
+        </h3>
+        {{#each this}}
+
+        <!-- Spell Action -->
+        <div class="token-controller-action" data-event-type="manage-spell" data-item-id="{{this.id}}">
+
+            <!-- Entry -->
+          <div class="flexrow token-controller-action-entry">
+            <img src="{{this.img}}"/>
+            <span class="flex2">
+              {{this.name}} <br>
+              {{#if (knowsSpell this.name)}}<span class="known-spell-label">Known</span>{{/if}}
+              <span class="spell-school-label">{{this.labels.school}}</span> 
+              <span class="spell-components-label">{{this.labels.components.vsm}}</span>
+            </span>
+            {{#unless (knowsSpell this.name)}}
+            <div><button data-add-spell="{{this.name}}">Learn</button></div>
+            {{else}}
+            <div><button data-remove-spell="{{this.name}}">Forget</button></div>
+            {{/unless}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+    
     <a data-close-manage-spells><i class="fa-solid fa-circle-xmark"></i></a>
   </div> 
   
