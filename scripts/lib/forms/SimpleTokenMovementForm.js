@@ -1,48 +1,46 @@
 export class SimpleTokenMovementForm extends FormApplication {
 
   constructor(socket) {
+    
     super();
-    this.socket = socket;
-    this.startElement;
-    this.touchStartX;
-    this.touchStartY; 
-    this.scrolled;
-    this.longTouchTimer;
-
-    Hooks.on('createActiveEffect', function(effect) {
-
-      if (effect.parent.id === game.user.character.id) {
-        let selector = '[data-condition=' + effect.statuses.first() + ']'
-        $(selector).toggleClass('active-effect');  
-      }
-
-    });
-
-    Hooks.on('deleteActiveEffect', function(effect) {
-      
-      if (effect.parent.id === game.user.character.id) {
-        let selector = '[data-condition=' + effect.statuses.first() + ']'
-        $(selector).toggleClass('active-effect');  
-      }
-
-    })
+    
+    // stuff
+    this.socket = socket
+    this.startElement
+    this.touchStartX
+    this.touchStartY 
+    this.cancelLongPress
+    this.longTouchTimer
+    this.characterTabOrder = ['race', 'class', 'background', 'feat']
 
   }
 
   static get defaultOptions() {
+
     return mergeObject(super.defaultOptions, {
         classes: ["form"],
         popOut: true,
         template: "modules/simple-token-movement/scripts/lib/forms/SimpleTokenMovementForm.html",
         id: "simple-token-movement",
-        title: "Mobile Token Controller",
+        title: game.user.character.name + " | " + game.user.character.itemTypes.class[0].name + " " + game.user.character.itemTypes.class[0].system.levels,
         height: 800,
         width: 400,
         minimizable: false,
         classes: ["simple-token-movement"],
         tabs: [
-          { navSelector: ".token-controller-tabs", contentSelector: ".token-controller-content", initial: "tab1" }
-        ]
+          {
+            group: 'page-controller',
+            navSelector: ".page-controller",
+            contentSelector: '.page-content',
+            initial: 'controller-tab'
+          },
+          {
+            group: 'token-controller',
+            navSelector: ".token-controller-tabs", 
+            contentSelector: ".token-controller-content", 
+            initial: "inventory-tab" 
+          },
+        ],
     });
   }
 
@@ -82,23 +80,49 @@ export class SimpleTokenMovementForm extends FormApplication {
     this.move(1, 1)
   }
 
-  showDescription(event) {
-    this.scrolled = true;
-    $(event.currentTarget).find('.token-controller-action-description').first().toggleClass('hidden');
+  onLongPress(event) {
+
+    this.cancelLongPress = true;
+    
+    let eventType = $(this.startElement).data('eventType');
+
+    if (['action', 'spell', 'inventory', 'character'].includes(eventType)) {
+      
+      let itemId = $(this.startElement).data('itemId');
+      let item = game.user.character.items.filter(item => item.id === itemId)[0]
+      let isExpanded = item.getFlag('simple-token-movement', 'expanded');
+      
+      if (isExpanded) {
+
+        item.setFlag('simple-token-movement', 'expanded', false);
+
+      } else {
+
+        item.setFlag('simple-token-movement', 'expanded', true);
+
+      }
+
+    }    
+    
   }
   
   onTouchStart(event) {
-    // Store the element where touchstart occurred
+
+    // If the player is tapping a button within the token-controller-action, then return and
+    // let the button-specific handler do its thing
+    let isButton = $(event.target).is(':button')
+    if (isButton) {
+      return;
+    }
+
+    // Otherwise, store the element where touchstart occurred
     this.startElement = event.currentTarget;
     this.touchStartX = event.touches[0].clientX;
     this.touchStartY = event.touches[0].clientY;
-    this.scrolled = false;
+    this.cancelLongPress = false;
+
     $(this.startElement).addClass('tapped');
-
-    // Get element type and set a different timer based on what is tapped
-    let eventType = $(this.startElement).data('eventType');
-
-    this.longTouchTimer = setTimeout(this.showDescription.bind(this, event),500);
+    this.longTouchTimer = setTimeout(this.onLongPress.bind(this, event),500);
 
   }
 
@@ -106,7 +130,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     // Determine if the touch has moved significantly
     if (Math.abs(event.touches[0].clientX - this.touchStartX) > 10 || 
         Math.abs(event.touches[0].clientY - this.touchStartY) > 10) {
-        this.scrolled = true;
+        this.cancelLongPress = true;
         $(this.startElement).removeClass('tapped');
         clearTimeout(this.longTouchTimer);
     }
@@ -116,47 +140,43 @@ export class SimpleTokenMovementForm extends FormApplication {
 
     // Get the event type (ability, skill, action)
     let eventType = $(this.startElement).data('eventType');
+    let isButton = $(event.target).is(':button')
 
-    // Only trigger if there was no scroll
-    if (event.currentTarget === this.startElement && !this.scrolled) { 
+    // Only trigger if the touchEnd target is the same as the touchStart element
+    // That the long press hasn't been cancelled
+    // And that it's not a button (inside the main element, use individual handlers for that)
+    if (event.currentTarget === this.startElement && !this.cancelLongPress && !isButton) { 
 
       // Abilities
       if (eventType === 'ability') {
-        let ability = $(this.startElement).data('ability');
-        game.user.character.rollAbility(ability);
+
+        let ability = $(this.startElement).data('ability')
+        game.user.character.rollAbility(ability)
+
       }
 
       // Skills
       if (eventType === 'skill') {
-        let skill = $(this.startElement).data('skill');
-        game.user.character.rollSkill(skill);
+       
+        let skill = $(this.startElement).data('skill')
+        game.user.character.rollSkill(skill)
+
       }
 
-      // Actions
-      if (eventType === 'action') {
-        let actionSubtype = $(this.startElement).data('actionSubtype')
-        let actionIndex = $(this.startElement).data('actionIndex');
-        let action = [...game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)[actionSubtype]][actionIndex]
-        action.use();
-      }
-
-      // Spell
-      if(eventType === 'spell') {
-        let spellName = $(this.startElement).data('spellName');
-        let actor = game.user.character;
-        let spell = actor.itemTypes.spell.filter(_spell => _spell.name === spellName)[0];
-        let spellLevel = spell.system.level
-        let isPrepared = spell.system.preparation.prepared;
-        let hasSpellSlots = this.spellSlots()
+      // Actions/spells/inventory
+      if (['action', 'spell', 'inventory', 'character'].includes(eventType)) {
         
-        spell.use();
-
+        let itemId = $(this.startElement).data('itemId');
+        let item = game.user.character.items.filter(item => item.id === itemId)[0]
+        item.use();
       }
 
       // Condition
       if(eventType === 'condition') {
+
         let effectId = $(this.startElement).data('condition');
         this.socket.executeAsGM('toggleStatus', game.user.character.id, effectId);
+        
       }
 
     }
@@ -199,7 +219,7 @@ export class SimpleTokenMovementForm extends FormApplication {
   itemsByType() {
     let itemsByType = {};
 
-    game.user.character.items.filter(item => !['spell', 'feat', 'class', 'race', 'background'].includes(item.type)).forEach(item => {
+    game.user.character.items.filter(item => !['spell', 'feat', 'class', 'subclass', 'race', 'background'].includes(item.type)).forEach(item => {
         let itemType = this.toPluralCamelCase(item.type);
         if (!itemsByType[itemType]) {
             itemsByType[itemType] = [];
@@ -214,11 +234,14 @@ export class SimpleTokenMovementForm extends FormApplication {
   featuresByType() {
     let featuresByType = {};
 
-    game.user.character.items.filter(item => ['race','class','background','feat'].includes(item.type)).sort().forEach(item => {
+    game.user.character.items.filter(item => ['race','class', 'subclass', 'background','feat'].includes(item.type)).forEach(item => {
+
       let itemType = this.toPluralCamelCase(item.type);
+
       if (!featuresByType[itemType]) {
           featuresByType[itemType] = [];
       }
+      
       featuresByType[itemType].push(item);
     });
 
@@ -262,15 +285,11 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   showConditionsManagement() {
-    $('#condition-management').show();
-    $('#mobile-controller').hide();
-    $('.window-content').scrollTop(0)
+    this._tabs[0].activate('conditions-tab');
   }
 
   closeConditionManagement() {
-    $('#condition-management').hide();
-    $('#mobile-controller').show();
-    $('.window-content').scrollTop(0)
+    this._tabs[0].activate('controller-tab');
   }
 
   showRestDialog() {
@@ -297,15 +316,11 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   showHPManagement() {
-    $('#hp-management').show();
-    $('#mobile-controller').hide();
-    $('.window-content').scrollTop(0)
+    this._tabs[0].activate('hp-tab');
   }
 
   closeHPManagement() {
-    $('#hp-management').hide();
-    $('#mobile-controller').show();
-    $('.window-content').scrollTop(0)
+    this._tabs[0].activate('controller-tab');
   }
 
   incrementHPControllerValue(event) {
@@ -433,31 +448,70 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   healOrDoDamage() {
+
     let input = $('[data-hp-controller-value]');
     let val = input.val();
     game.user.character.applyDamage(-(val));
     input.val(0);
+
   }
 
   changeTempHP(event) {
+
     let tempHP = $(event.currentTarget).val()
     game.user.character.update({"system.attributes.hp.temp": tempHP});
+
+  }
+
+  rollDeathSave(event) {
+    game.user.character.rollDeathSave();
+  }
+
+  rollInitiative(event) {
+    game.user.character.rollInitiative()
+  }
+
+  rollDice(event) {
+    return;
+  }
+
+  equipItem(event) {
+    let itemId = $(event.target).data('equipItem');
+    game.user.character.items.filter(item => item.id === itemId)[0].update({"system.equipped": true})
+  }
+
+  unequipItem(event) {
+    let itemId = $(event.target).data('unequipItem');
+    game.user.character.items.filter(item => item.id === itemId)[0].update({"system.equipped": false})
+  }
+
+  attuneItem(event) {
+    let itemId = $(event.target).data('attuneItem');
+    game.user.character.items.filter(item => item.id === itemId)[0].update({"system.attunement": 2})
+  }
+
+  unattuneItem(event) {
+    let itemId = $(event.target).data('unattuneItem');
+    game.user.character.items.filter(item => item.id === itemId)[0].update({"system.attunement": 1, "system.equipped": false})
   }
 
   activateListeners(html) {
+
     super.activateListeners(html)
-    $('.mtmc-select', html).bind('touchstart click', $.proxy(this.selectToken, this))
-    $('.mtmc-zoomin', html).bind('touchstart click', $.proxy(this.zoomIn, this))
-    $('.mtmc-zoomout', html).bind('touchstart click', $.proxy(this.zoomOut, this))
-    $('.mtmc-topleft', html).bind('touchstart click', $.proxy(this.moveTopLeft, this))
-    $('.mtmc-left', html).bind('touchstart click', $.proxy(this.moveLeft, this))
-    $('.mtmc-bottomleft', html).bind('touchstart click', $.proxy(this.moveBottomLeft, this))
-    $('.mtmc-top', html).bind('touchstart click', $.proxy(this.moveTop, this))
-    $('.mtmc-bottom', html).bind('touchstart click', $.proxy(this.moveBottom, this))
-    $('.mtmc-topright', html).bind('touchstart click', $.proxy(this.moveTopRight, this))
-    $('.mtmc-right', html).bind('touchstart click', $.proxy(this.moveRight, this))
-    $('.mtmc-bottomright', html).bind('touchstart click', $.proxy(this.moveBottomRight, this))
-    $('.token-controller-action', html).bind('touchstart click', $.proxy(this.onTouchStart, this))
+
+    // A wall of UI bindings :|
+    $('.mtmc-select', html).bind('touchstart', $.proxy(this.selectToken, this))
+    $('.mtmc-zoomin', html).bind('touchstart', $.proxy(this.zoomIn, this))
+    $('.mtmc-zoomout', html).bind('touchstart', $.proxy(this.zoomOut, this))
+    $('.mtmc-topleft', html).bind('touchstart', $.proxy(this.moveTopLeft, this))
+    $('.mtmc-left', html).bind('touchstart', $.proxy(this.moveLeft, this))
+    $('.mtmc-bottomleft', html).bind('touchstart', $.proxy(this.moveBottomLeft, this))
+    $('.mtmc-top', html).bind('touchstart', $.proxy(this.moveTop, this))
+    $('.mtmc-bottom', html).bind('touchstart', $.proxy(this.moveBottom, this))
+    $('.mtmc-topright', html).bind('touchstart', $.proxy(this.moveTopRight, this))
+    $('.mtmc-right', html).bind('touchstart', $.proxy(this.moveRight, this))
+    $('.mtmc-bottomright', html).bind('touchstart', $.proxy(this.moveBottomRight, this))
+    $('.token-controller-action', html).bind('touchstart', $.proxy(this.onTouchStart, this))
     $('.token-controller-action', html).bind('touchend', $.proxy(this.onTouchEnd, this))
     $('.token-controller-action', html).bind('touchmove', $.proxy(this.onTouchMove, this))
     $('[data-event-type=manage-conditions]', html).bind('touchstart', $.proxy(this.showConditionsManagement, this))
@@ -465,33 +519,49 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-event-type=manage-hp]', html).bind('touchstart', $.proxy(this.showHPManagement, this))
     $('#close-condition-management', html).bind('touchstart', $.proxy(this.closeConditionManagement, this))
     $('#close-hp-management', html).bind('touchstart', $.proxy(this.closeHPManagement, this))
-    $('[data-increment]', html).bind('touchstart', $.proxy(this.incrementHPControllerValue, this));
-    $('[data-damage-button]', html).bind('touchstart', $.proxy(this.healOrDoDamage, this));
-    $('[data-temp-hp-controller-value]', html).bind('change', $.proxy(this.changeTempHP, this));
+    $('[data-increment]', html).bind('touchstart', $.proxy(this.incrementHPControllerValue, this))
+    $('[data-damage-button]', html).bind('touchstart', $.proxy(this.healOrDoDamage, this))
+    $('[data-temp-hp-controller-value]', html).bind('change', $.proxy(this.changeTempHP, this))
+    $('[data-death-save-controller]', html).bind('touchstart', $.proxy(this.rollDeathSave, this))
+    $('[data-roll-initiative]', html).bind('touchstart', $.proxy(this.rollInitiative, this))
+    $('[data-roll-death-save]', html).bind('touchstart', $.proxy(this.rollDeathSave, this))
+    $('[data-roll-dice]', html).bind('touchstart', $.proxy(this.rollDice, this))
+    $('[data-equip-item]', html).bind('touchstart', $.proxy(this.equipItem, this));
+    $('[data-unequip-item]', html).bind('touchstart', $.proxy(this.unequipItem, this));
+    $('[data-attune-item]', html).bind('touchstart', $.proxy(this.attuneItem, this));
+    $('[data-unattune-item]', html).bind('touchstart', $.proxy(this.unattuneItem, this));
+  
   }
 
   getData() {
 
-      return {
-        character: game.user.character,
-        actionList: game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character),
-        actionKeys: Object.keys(game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)),
-        skillList: game.system.config.skills,
-        abilityList: game.system.config.abilities,
-        spellList: this.spellsByLevel(),
-        spellLevels: game.system.config.spellLevels,
-        inventoryList: this.itemsByType(),
-        featureList: this.featuresByType(),
-        characterClass: game.user.character.itemTypes.class[0],
-        numOfSpellsPrepared: this.numOfSpellsPrepared(),
-        maxPrepared: this.maxSpellsPrepared(),
-        spellSlots: this.spellSlots(),
-        numCantripsKnown: this.numberOfSpellsKnown(true),
-        numSpellsKnown: this.numberOfSpellsKnown(false),
-        game: game,
-        statusEffects: CONFIG.statusEffects,
-        totalHp: game.user.character.system.attributes.hp.value + game.user.character.system.attributes.hp.temp
-      }
+    return {
+      character: game.user.character,
+      actionList: game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character),
+      actionKeys: Object.keys(game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character)),
+      skillList: game.system.config.skills,
+      abilityList: game.system.config.abilities,
+      spellList: this.spellsByLevel(),
+      spellLevels: game.system.config.spellLevels,
+      inventoryList: this.itemsByType(),
+      featureList: this.featuresByType(),
+      raceList: this.featuresByType().Race,
+      classList: this.featuresByType().Class,
+      backgroundList: this.featuresByType().Background,
+      featList: this.featuresByType().Feat,
+      characterClass: game.user.character.itemTypes.class[0],
+      numOfSpellsPrepared: this.numOfSpellsPrepared(),
+      maxPrepared: this.maxSpellsPrepared(),
+      spellSlots: this.spellSlots(),
+      numCantripsKnown: this.numberOfSpellsKnown(true),
+      numSpellsKnown: this.numberOfSpellsKnown(false),
+      game: game,
+      statusEffects: CONFIG.statusEffects,
+      totalHp: game.user.character.system.attributes.hp.value + game.user.character.system.attributes.hp.temp,
+      characterTabOrder: this.characterTabOrder,
+      toHitRolls: game.user.character.items.filter(item => item.labels.toHit)
+    }
+
   }
 
   async _updateObject(event, formData) {

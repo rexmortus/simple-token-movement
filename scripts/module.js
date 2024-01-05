@@ -30,12 +30,44 @@ Handlebars.registerHelper('prependSign', function(number) {
     }
 });
 
+Handlebars.registerHelper('isLessThan', function(value1, value2, options) {
+    // debugger;
+    return value1 < value2;
+});
+
+Handlebars.registerHelper('loop', function(n, block) {
+    var accum = '';
+    for(var i = 0; i < n; ++i)
+        accum += block.fn(i);
+    return accum;
+});
+
+Handlebars.registerHelper('iterateAtIndex', function(context, index) {
+    var items = context[index];
+    var result = '';
+
+    for(var i = 0; i < items.length; i++) {
+        result += options.fn(items[i]);
+    }
+
+    return result;
+});
+
+Handlebars.registerHelper('isEqualToAny', function(value, ...options) {
+    var possibleValues = options.slice(0, -1);
+    return possibleValues.includes(value);
+});
+
+
+// 
 let socket;
 
 Hooks.once("socketlib.ready", () => {
+
     socket = socketlib.registerModule("simple-token-movement");
 	socket.register("moveToken", move);
     socket.register("toggleStatus", toggleStatus)
+
 });
 
 function findByDocumentActorId(actorId) {
@@ -102,6 +134,22 @@ Hooks.once('ready', async function() {
         if (item.parent.id === game.user.character.id) {
             mainForm.render(true);
         }
+    })
+
+    Hooks.on('createActiveEffect', function(effect) {
+
+        if (effect.parent.id === game.user.character.id) {
+            mainForm.render(true)
+        }
+    
+    })
+    
+    Hooks.on('deleteActiveEffect', function(effect) {
+    
+        if (effect.parent.id === game.user.character.id) {
+            mainForm.render(true)
+        }
+
     })
 
 });
