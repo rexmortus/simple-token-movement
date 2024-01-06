@@ -601,6 +601,7 @@ export class SimpleTokenMovementForm extends FormApplication {
   rollInitiative() {
 
     game.user.character.rollInitiative()
+    this._tabs[0].activate('chat-message-tab')
 
   }
 

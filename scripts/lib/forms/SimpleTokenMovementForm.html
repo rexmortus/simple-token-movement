@@ -732,8 +732,10 @@
 
   {{!-- Chat Messages --}}
   <div data-tab="chat-message-tab" class="tab">
+
       <div class="flexcol chat-messages" id="dnd5e-mobile-chat-messages">
-        {{#each chatMessages}}
+        {{#if chatMessages}}
+          {{#each chatMessages}}
           <div data-message-id="{{this.id}}" class="flexcol mobile-chat-message">
             <header class="mobile-message-header">{{this.speaker.alias}}</header>
             <span class="mobile-message-flavor">{{this.flavor}}</span>
@@ -743,7 +745,13 @@
                   <div class="mobile-message-rolls">
                     {{this._formula}}
                   </div>
-                  <div class="mobile-message-rolls-result">
+                  <div class="mobile-message-rolls-result 
+                    {{#if this.isCritical}}
+                      critical
+                    {{else if this.isFumble}}
+                      fumble
+                    {{/if}}
+                  ">
                     {{this._total}}
                   </div>
                 {{/each}}
@@ -753,6 +761,9 @@
 
           </div>
         {{/each}}
+        {{else}}
+        <span>Rolls</span>
+        {{/if}}
       </div>
       <a data-clear-chat-messages><i class="fa-solid fa-circle-xmark"></i></a>
     </div>
