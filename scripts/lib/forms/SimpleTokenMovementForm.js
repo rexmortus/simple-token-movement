@@ -10,7 +10,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     // Preload compendiums
     this.itemCompendium = itemCompendium
     this.spellCompendium = spellCompendium
-    this.equipmentCompendium = this.itemCompendium.filter(item => item.type === 'equipment').sort((a, b) => a.name.localeCompare(b.name))
+    this.equipmentCompendium = this.itemCompendium.filter(item => ['equipment', 'weapon'].includes(item.type)).sort((a, b) => a.name.localeCompare(b.name))
 
     // Relating to touches
     this.startElement
@@ -22,7 +22,13 @@ export class SimpleTokenMovementForm extends FormApplication {
     // Some Configuration stuff
     this.characterTabOrder = ['race', 'class', 'background', 'feat']
     this.actionKeys = Object.keys(game.modules.get('character-actions-list-5e').api.getActorActionsData(game.user.character))
-  
+    
+    // Relating to spell compendium UI filters
+    this.spellCompendiumFilters = ['all-levels']
+
+    // Chat messages
+    this.chatMessages = []
+
   }
 
   static get defaultOptions() {
@@ -42,13 +48,13 @@ export class SimpleTokenMovementForm extends FormApplication {
             group: 'page-controller',
             navSelector: ".page-controller",
             contentSelector: '.page-content',
-            initial: 'manage-spells-tab'
+            initial: 'controller-tab'
           },
           {
             group: 'token-controller',
             navSelector: ".token-controller-tabs", 
             contentSelector: ".token-controller-content", 
-            initial: "spellcasting-tab" 
+            initial: "actions-tab" 
           },
         ],
     });
@@ -145,10 +151,10 @@ export class SimpleTokenMovementForm extends FormApplication {
 
     } 
     
-    else if(eventType === 'manage-inventory') {
+    else if(['manage-inventory', 'manage-spell'].includes(eventType)) {
 
       let itemId = $(this.startElement).data('itemId');
-      let item = this.equipmentCompendium.filter(item => item._id === itemId)[0]
+      let item = this.spellCompendium.filter(item => item._id === itemId)[0]
       item.sheet.render(true);
       
     }
@@ -166,11 +172,15 @@ export class SimpleTokenMovementForm extends FormApplication {
     // And that it's not a button (inside the main element, use individual handlers for that)
     if (event.currentTarget === this.startElement && !this.cancelLongPress && !isButton) { 
 
+      // Clear out old chat messages
+      this.chatMessages = []
+
       // Abilities
       if (eventType === 'ability') {
 
         let ability = $(this.startElement).data('ability')
         game.user.character.rollAbility(ability)
+        this._tabs[0].activate('chat-message-tab')
 
       }
 
@@ -179,6 +189,7 @@ export class SimpleTokenMovementForm extends FormApplication {
        
         let skill = $(this.startElement).data('skill')
         game.user.character.rollSkill(skill)
+        this._tabs[0].activate('chat-message-tab')
 
       }
 
@@ -188,6 +199,7 @@ export class SimpleTokenMovementForm extends FormApplication {
         let itemId = $(this.startElement).data('itemId');
         let item = game.user.character.items.filter(item => item.id === itemId)[0]
         item.use();
+        this._tabs[0].activate('chat-message-tab');
 
       }
 
@@ -245,23 +257,62 @@ export class SimpleTokenMovementForm extends FormApplication {
   // Create a compendium Spell List, ordered by level
 
   // Create a Spell List, ordered by level
-  spellCompendiumByLevel() {
+  filteredSpellCompendiumByLevel() {
 
     let spellsByLevel = {};
 
+    // Prepare all spell compendium entries, grouped by spell level 
     this.spellCompendium.forEach(spell => {
+
         let level = spell.system.level;
+
         if (!spellsByLevel[level]) {
             spellsByLevel[level] = [];
         }
-        spellsByLevel[level].push(spell);
+
+        if (this.spellCompendiumFilters.includes('known')) {
+          
+          if (game.user.character.items.getName(spell.name)) {
+
+            spellsByLevel[level].push(spell);
+
+          }
+
+        } else {
+
+          spellsByLevel[level].push(spell);
+
+        }
+
     });
 
+    // Sort the spells within each spell level group alphabetically
     Object.keys(spellsByLevel).forEach(spellLevel => {
+
       this.sortItemsByName(spellsByLevel[spellLevel])
+
     })
 
-    return spellsByLevel;
+    // Filter by spell level
+    if (this.spellCompendiumFilters.includes('all-levels')) {
+
+      return spellsByLevel;
+
+    } else {
+
+      let filteredSpells = {};
+
+      this.spellCompendiumFilters.forEach(spellLevel => {
+          if (spellsByLevel.hasOwnProperty(spellLevel)) {
+            filteredSpells[spellLevel] = spellsByLevel[spellLevel];
+          }
+      });
+
+      return filteredSpells;
+
+    }
+
+    // return spellsByLevel;
 
   }
 
@@ -645,6 +696,84 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   }
 
+  toggleSpellCompendiumLevelFilter(event) {
+    
+    let spellLevelFilter = $(event.target).data('spellLevel').toString();
+    
+    // Show all spell-levels
+    if (spellLevelFilter === 'all-levels') {
+
+      if (this.spellCompendiumFilters.includes('all-levels')) {
+        return;
+      } else {
+        this.spellCompendiumFilters.push('all-levels')
+        this.spellCompendiumFilters = this.spellCompendiumFilters.filter(filter => ['all-levels', 'known'].includes(filter))
+      }
+
+    } 
+
+    // Filter known spells
+    else if (spellLevelFilter === 'known') {
+
+      if (this.spellCompendiumFilters.includes('known')) {
+        this.spellCompendiumFilters = this.spellCompendiumFilters.filter(filter => filter !== 'known')
+      } else {
+        this.spellCompendiumFilters.push('known')
+      }
+
+    } 
+    
+    // Toggling a spell level between 0-9
+    else {
+      
+      if (!this.spellCompendiumFilters.includes(spellLevelFilter)) {
+
+        this.spellCompendiumFilters.push(spellLevelFilter)
+
+      } 
+      
+      else {
+        this.spellCompendiumFilters = this.spellCompendiumFilters.filter(filter => filter !== spellLevelFilter)
+      }
+     
+      if (this.spellCompendiumFilters.includes('all-levels')) {
+        this.spellCompendiumFilters = this.spellCompendiumFilters.filter(filter => !['all-levels'].includes(filter))
+      } 
+
+    }
+
+    if ((this.spellCompendiumFilters.includes('known') && this.spellCompendiumFilters.length === 1) || this.spellCompendiumFilters.length === 0) {
+      this.spellCompendiumFilters.push('all-levels')
+    } 
+    
+    // this.spellCompendiumFilters = this.spellCompendiumFilters.filter(filter => filter !== spellLevel.toString());
+    Hooks.call('simple-token-movement.openForm')
+  }
+
+  addChatMessage(chatMessage) {
+    this.chatMessages.push(chatMessage)
+    console.log(chatMessage)
+  }
+
+  clearChatMessages() {
+    this.chatMessages = []
+    this.render(true);
+    this._tabs[0].activate('controller-tab');
+  }
+
+  handleNotificationsTouch(event) {
+
+    let chatCardId = $(event.currentTarget).data('messageId');
+    let chatCard = $('#chat-log > [data-message-id=' + chatCardId + ']');
+
+    let action = $(event.target).data('action');
+
+    if (action !== undefined) {
+      chatCard.find(`[data-action=${action}]`).trigger('click');
+    }
+
+  }
+
   activateListeners(html) {
 
     super.activateListeners(html)
@@ -687,6 +816,9 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-add-item]', html).bind('touchstart', $.proxy(this.addItem, this));
     $('[data-add-spell]', html).bind('touchstart', $.proxy(this.addSpell, this));
     $('[data-remove-spell]', html).bind('touchstart', $.proxy(this.removeSpell, this));
+    $('[data-spell-level]', html).bind('touchstart', $.proxy(this.toggleSpellCompendiumLevelFilter, this));
+    $('[data-clear-chat-messages]', html).bind('touchstart', $.proxy(this.clearChatMessages, this));
+    $('[data-message-id]', html).bind('touchstart', $.proxy(this.handleNotificationsTouch, this));
   }
 
   getData() {
@@ -701,6 +833,7 @@ export class SimpleTokenMovementForm extends FormApplication {
       character: game.user.character,
       characterClass: game.user.character.itemTypes.class[0],
       characterTabOrder: this.characterTabOrder,
+      chatMessages: this.chatMessages,
       classList: this.featuresByType().Class,
       compendiumEquipment: this.equipmentCompendium,
       featList: this.featuresByType().Feat,
@@ -713,9 +846,11 @@ export class SimpleTokenMovementForm extends FormApplication {
       numSpellsKnown: this.numberOfSpellsKnown(false),
       raceList: this.featuresByType().Race,
       skillList: game.system.config.skills,
-      spellCompendiumByLevel: this.spellCompendiumByLevel(),
+      spellCompendiumByLevel: this.filteredSpellCompendiumByLevel(),
+      spellCompendiumFilters: this.spellCompendiumFilters,
       spellLevels: game.system.config.spellLevels,
       spellList: this.spellsByLevel(),
+      spellSchools: game.system.config.spellSchools,
       spellSlots: this.spellSlots(),
       statusEffects: CONFIG.statusEffects,
       toHitRolls: game.user.character.items.filter(item => item.labels.toHit),
@@ -725,6 +860,7 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   async _updateObject(event, formData) {
+
 
   }
 }

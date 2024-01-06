@@ -240,7 +240,8 @@ span.class-details {
 [data-close-condition-management], 
 [data-close-hp-management], 
 [data-close-manage-inventory],  
-[data-close-manage-spells] {
+[data-close-manage-spells],
+[data-clear-chat-messages] {
   position: fixed;
   color: grey;
   font-size: 32px;
@@ -607,3 +608,71 @@ span.class-details {
   padding: 0 4px 0 4px;
   border-radius: 4px;
 }
+
+.spell-level-buttons button {
+  font-weight: bold;
+  color: dodgerblue;
+  line-height: 12px;
+  padding:10px;
+  margin-bottom: 2px;
+}
+
+.spell-level-selected {
+  color:white !important;
+  background-color: dodgerblue;
+}
+
+[chat-message-tab] {
+  background-color: dodgerblue;
+}
+
+#dnd5e-mobile-chat-messages > .mobile-chat-message {
+  margin: 3px;
+  padding: 5px;
+  font-size: var(--font-size-14);
+  color: var(--color-text-dark-primary);
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid #6f6c66;
+  border-radius: 5px;
+}
+
+.mobile-message-header {
+  color: #4b4a44;
+  font-size: medium;
+  /* line-height: 24px; */
+}
+
+.mobile-message-flavor {
+  color: #4b4a44;
+  font-size: small;
+  margin-bottom: 4px;
+}
+
+.mobile-message-rolls {
+  margin: 0;
+  line-height: 24px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #999;
+  border-radius: 3px;
+  text-align: center;
+  box-shadow: 0 0 2px #FFF inset;
+  word-break: break-all;
+}
+
+.mobile-message-rolls-result {
+  margin: 0;
+  line-height: 24px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #999;
+  border-radius: 3px;
+  text-align: center;
+  box-shadow: 0 0 2px #FFF inset;
+  word-break: break-all;
+  font-size: large;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+

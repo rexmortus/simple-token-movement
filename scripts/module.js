@@ -74,6 +74,13 @@ Handlebars.registerHelper('isEqualToAny', function(value, ...options) {
 
 });
 
+Handlebars.registerHelper('contains', function(array, value, options) {
+
+    return array.includes(value) ? options.fn(this) : options.inverse(this);
+
+});
+
+
 Handlebars.registerHelper('knowsSpell', function(spellName, ...options) {
 
     let knownSpell = game.user.character.itemTypes.spell.filter(spell => spell.name === spellName)
@@ -82,6 +89,7 @@ Handlebars.registerHelper('knowsSpell', function(spellName, ...options) {
 });
 
 Handlebars.registerHelper('hasItem', function(itemUuid, ...options) {
+
     return true;
 });
 
@@ -138,7 +146,7 @@ Hooks.once('ready', async function() {
     const mainForm = new SimpleTokenMovementForm(
         socket, 
         await game.packs.get('dnd5e.items').getDocuments(),
-        await game.packs.get('dnd5e.spells').getDocuments()
+        await game.packs.get('dnd5e.spells').getDocuments()    
     )
 
     mainForm.render(true);
@@ -187,5 +195,15 @@ Hooks.once('ready', async function() {
         }
 
     })
+
+    Hooks.on('createChatMessage', function(chatMessage, options, userId) {
+        mainForm.addChatMessage(chatMessage)
+        mainForm.render(true);
+    })
+
+    // Hooks.on('dnd5e.displayCard', function(item, chatMessage) {
+    //     mainForm.render(true)
+    //     mainForm._tabs[0].activate('chat-message-tab')
+    // })
 
 });

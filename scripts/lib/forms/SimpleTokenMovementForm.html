@@ -4,10 +4,12 @@
   <a data-tab="conditions-tab" data-group="page-controller"></a>
   <a data-tab="manage-inventory-tab" data-group="page-controller"></a>
   <a data-tab="manage-spells-tab" data-group="page-controller"></a>
+  <a data-tab="chat-message-tab" data-group="chat-message-tab"></a>
 </nav> 
 
 <div class="page-content">
 
+  {{!-- Controller --}}
   <div data-tab="controller-tab" class="tab">
     <!-- The actual controller -->
     <div class="flexcol" class="dnd5e-mobile-controller" id="mobile-controller">
@@ -49,7 +51,7 @@
         <div class="flexrow ">
           <nav class="token-controller-tabs tabs" data-group="token-controller">
             <a class="item" data-tab="movement-tab" data-group="token-controller"><i class="fa-solid fa-arrows-up-down-left-right"></i></a>
-            <a class="item" data-tab="actions-tab" data-group="token-controller"><i class="fa-solid fa-fire"></i></a>
+            <a class="item" data-tab="actions-tab" data-group="token-controller"><i class="fa-solid fa-swords"></i></a>
             <a class="item" data-tab="rolls-tab" data-group="token-controller"><i class="fa-solid fa-dice"></i></a>
             <a class="item" data-tab="spellcasting-tab" data-group="token-controller"><i class="fa-solid fa-wand-sparkles"></i></a>
             <a class="item" data-tab="inventory-tab" data-group="token-controller"><i class="fa-solid fa-suitcase"></i></a>
@@ -144,7 +146,7 @@
           <div class="tab" data-tab="rolls-tab" data-group="token-controller">
             
             <div class="flexcol">
-            <button data-roll-initiative>Initiative</button>
+            <button data-roll-initiative>Initiative {{prependSign character.system.attributes.init.total}}</button>
             <button data-roll-death-save>Death Save</button>
             <button data-roll-dice>Dice</button>
             <br>
@@ -326,11 +328,14 @@
                   <!-- Entry -->
                 <div class="flexrow token-controller-action-entry">
                   <img src="{{this.img}}"/>
-                  <span>{{this.name}}</span>
-                  <span>{{this.labels.school}}</span>
-                  {{#if this.system.preparation.prepared}}
-                    <i class="original-class fas fa-sun" style="float: right;" data-tooltip="DND5E.ClassOriginal"></i>
-                  {{/if}}
+                  <span class="flex2">
+                    {{this.name}}<br>
+                    {{#if this.system.preparation.prepared}}
+                    <span class="known-spell-label">Prepared</span>
+                    {{/if}}
+                    <span class="spell-school-label">{{this.labels.school}}</span> 
+                    <span class="spell-components-label">{{this.labels.components.vsm}}</span>
+                  </span>                  
                 </div>
 
                 <!-- Long Description -->
@@ -534,6 +539,7 @@
     </div>
   </div>
 
+  {{!-- HP --}}
   <div data-tab="hp-tab" class="tab">
     <div id="hp-management">
 
@@ -608,9 +614,11 @@
   </div>
     </div>
   </div>
-  
+
+  {{!-- Conditions --}}
   <div data-tab="conditions-tab" class="tab">
-        <!-- Condition management -->
+
+    <!-- Condition management -->
     <div class="flexcol">
       <h1>Conditions</h1>
       {{#each statusEffects}}
@@ -633,14 +641,16 @@
     </div>
   </div>
 
+  {{!-- Inventory Compendium --}}
   <div data-tab="manage-inventory-tab" class="tab">
-    <h1>Add Items</h1>
+    <h1>Equipment Compendium</h1>
     <a data-close-manage-inventory><i class="fa-solid fa-circle-xmark"></i></a>
     <div class="token-controller-actions">
 
     {{#each compendiumEquipment}}
     <!-- Manage Inventory Action -->
-    <div class="token-controller-action" data-event-type="manage-inventory" data-item-id="{{this.id}}" data-manage-inventory-uuid="{{this._id}}">
+    <div class="token-controller-action" data-event-type="manage-inventory" 
+      data-item-id="{{this.id}}">
 
         <!-- Entry -->
       <div class="flexrow token-controller-action-entry">
@@ -654,20 +664,36 @@
     </div>
   </div> 
 
+  {{!-- Spell Compendium --}}
   <div data-tab="manage-spells-tab" class="tab">
     <h1>Spell Compendium</h1>
-    {{!-- <div class="flexrow">
-      <span>Filter 1</span>
-      <span>Filter 2</span>
-      <span>Filter 3</span>
-      <span>Filter 4</span>
-      <span>Filter 5</span>
-    </div> --}}
-    
+    <br>
+    <div class="flexrow spell-level-buttons">
+      <button data-spell-level="known" class="flex2
+      {{#contains spellCompendiumFilters 'known'}}
+      spell-level-selected
+      {{/contains}}">Known</button>
+      {{#each spellLevels}}
+
+
+      <button data-spell-level="{{@key}}" 
+        {{#contains ../spellCompendiumFilters @key}}
+        class="spell-level-selected
+        {{/contains}}
+        ">{{this}}</button>
+      {{/each}}
+      <button data-spell-level="all-levels"  
+      {{#contains spellCompendiumFilters 'all-levels'}}
+      class="spell-level-selected"
+      {{/contains}}
+      >All Levels</button>
+    </div>
+
+
     {{#each spellCompendiumByLevel}}
       <div class="token-controller-actions">
         
-        <!-- Spell Headings -->
+        <!-- Spell Level Headings -->
         <br>
         <h3>
           {{#with (lookup ../spellLevels @key)}}
@@ -677,7 +703,9 @@
         {{#each this}}
 
         <!-- Spell Action -->
-        <div class="token-controller-action" data-event-type="manage-spell" data-item-id="{{this.id}}">
+        <div class="token-controller-action" 
+          data-event-type="manage-spell" 
+          data-item-id="{{this.id}}">
 
             <!-- Entry -->
           <div class="flexrow token-controller-action-entry">
@@ -701,5 +729,33 @@
     
     <a data-close-manage-spells><i class="fa-solid fa-circle-xmark"></i></a>
   </div> 
+
+  {{!-- Chat Messages --}}
+  <div data-tab="chat-message-tab" class="tab">
+      <div class="flexcol chat-messages" id="dnd5e-mobile-chat-messages">
+        {{#each chatMessages}}
+          <div data-message-id="{{this.id}}" class="flexcol mobile-chat-message">
+            <header class="mobile-message-header">{{this.speaker.alias}}</header>
+            <span class="mobile-message-flavor">{{this.flavor}}</span>
+
+            {{#if this.rolls}}
+                {{#each this.rolls}}
+                  <div class="mobile-message-rolls">
+                    {{this._formula}}
+                  </div>
+                  <div class="mobile-message-rolls-result">
+                    {{this._total}}
+                  </div>
+                {{/each}}
+            {{else}}
+              <span>{{{this.content}}}</span>
+            {{/if}}
+
+          </div>
+        {{/each}}
+      </div>
+      <a data-clear-chat-messages><i class="fa-solid fa-circle-xmark"></i></a>
+    </div>
+  </div>
   
 </div>
