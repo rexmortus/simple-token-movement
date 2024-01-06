@@ -1,97 +1,74 @@
 import { SimpleTokenMovementForm } from './lib/forms/SimpleTokenMovementForm.js'
 
-// Handlebars helpers
+// Modified to work as both block and simple expression helpers where appropriate
+
 Handlebars.registerHelper('checklength', function (v1, v2, options) {
-
-    if (v1>v2) {
-        return options.fn(this);
+    if (options.fn && options.inverse) {
+        return v1 > v2 ? options.fn(this) : options.inverse(this);
     }
-    return options.inverse(this);
-
+    return v1 > v2;
 });
 
 Handlebars.registerHelper('equals', function(arg1, arg2, options) {
-
-    return arg1 === arg2 ? options.fn(this) : options.inverse(this);
-
+    if (options.fn && options.inverse) {
+        return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+    }
+    return arg1 === arg2;
 });
 
 Handlebars.registerHelper('toUpcase', function(str) {
-
     return str.charAt(0).toUpperCase() + str.slice(1);
 });
 
 Handlebars.registerHelper('hasEffect', function(character, effectName) {
-
-    let hasEffect = character.statuses.has(effectName);
-    return hasEffect 
-
+    return character.statuses.has(effectName);
 });
 
 Handlebars.registerHelper('prependSign', function(number) {
-
-    if(number < 0) {
-        return '-' + Math.abs(number);
-    } else {
-        return '+' + number;
-    }
-
+    return number < 0 ? '-' + Math.abs(number) : '+' + number;
 });
 
-Handlebars.registerHelper('isLessThan', function(value1, value2, options) {
-
+Handlebars.registerHelper('isLessThan', function(value1, value2) {
     return value1 < value2;
-
 });
 
 Handlebars.registerHelper('loop', function(n, block) {
-
     var accum = '';
     for(var i = 0; i < n; ++i)
         accum += block.fn(i);
-
     return accum;
-
 });
 
-Handlebars.registerHelper('iterateAtIndex', function(context, index) {
-
+Handlebars.registerHelper('iterateAtIndex', function(context, index, options) {
     var items = context[index];
     var result = '';
-
     for(var i = 0; i < items.length; i++) {
         result += options.fn(items[i]);
     }
-
     return result;
-
 });
 
 Handlebars.registerHelper('isEqualToAny', function(value, ...options) {
-
     var possibleValues = options.slice(0, -1);
     return possibleValues.includes(value);
-
 });
 
 Handlebars.registerHelper('contains', function(array, value, options) {
-
-    return array.includes(value) ? options.fn(this) : options.inverse(this);
-
+    if (options.fn && options.inverse) {
+        return array.includes(value) ? options.fn(this) : options.inverse(this);
+    }
+    return array.includes(value);
 });
 
-
 Handlebars.registerHelper('knowsSpell', function(spellName, ...options) {
-
-    let knownSpell = game.user.character.itemTypes.spell.filter(spell => spell.name === spellName)
-    return knownSpell.length > 0
-
+    let knownSpell = game.user.character.itemTypes.spell.filter(spell => spell.name === spellName);
+    return knownSpell.length > 0;
 });
 
 Handlebars.registerHelper('hasItem', function(itemUuid, ...options) {
-
-    return true;
+    return true; // Assuming this is a placeholder for actual logic
 });
+
 
 
 // 
