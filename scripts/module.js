@@ -2,6 +2,8 @@ import { SimpleTokenMovementForm } from './lib/forms/SimpleTokenMovementForm.js'
 
 // Modified to work as both block and simple expression helpers where appropriate
 
+// Modified to work as both block and simple expression helpers where appropriate
+
 Handlebars.registerHelper('checklength', function (v1, v2, options) {
     if (options.fn && options.inverse) {
         return v1 > v2 ? options.fn(this) : options.inverse(this);
@@ -28,9 +30,13 @@ Handlebars.registerHelper('prependSign', function(number) {
     return number < 0 ? '-' + Math.abs(number) : '+' + number;
 });
 
-Handlebars.registerHelper('isLessThan', function(value1, value2) {
+Handlebars.registerHelper('isLessThan', function(value1, value2, options) {
+    if (options.fn && options.inverse) {
+        return value1 < value2 ? options.fn(this) : options.inverse(this);
+    }
     return value1 < value2;
 });
+
 
 Handlebars.registerHelper('loop', function(n, block) {
     var accum = '';
@@ -68,6 +74,7 @@ Handlebars.registerHelper('knowsSpell', function(spellName, ...options) {
 Handlebars.registerHelper('hasItem', function(itemUuid, ...options) {
     return true; // Assuming this is a placeholder for actual logic
 });
+
 
 
 
