@@ -1,7 +1,11 @@
+html {
+  background-color: black;
+}
+
 body {
   touch-action: pan-y;
-  /* This disables double-tap zoom while allowing vertical scrolling */
 }
+
 
 section.window-content {
   overflow-y: scroll;
@@ -683,4 +687,65 @@ span.class-details {
   background-color: dodgerblue;
   border-radius: 5px;
 
+}
+
+[data-roll] {
+  font-weight: bold;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: large;
+}
+
+[data-roll="1d4"] {
+  background-color: #2E8B57;
+  color: white;
+}
+
+[data-roll="1d6"] {
+  background-color: #CD5C5C;
+  color: white;
+}
+
+[data-roll="1d8"] {
+  background-color: #4682B4;
+  color: white;
+}
+
+[data-roll="1d10"] {
+  background-color: #FFFFFF;
+  color: black;
+}
+
+[data-roll="1d12"] {
+  background-color: #FFD700;
+  color: black;
+}
+
+[data-roll="1d20"] {
+  background-color: #FF8C00;
+  color: black;
+}
+
+[data-roll="1d100"] {
+  background-color: #FFFFFF;
+  color: black;
+}
+
+
+.dice-roller-header {
+  font-size: larger;
+  color: white;
+  font-weight: bold;
+}
+
+.mobile-dice-buttons > div > div {
+  padding: 4px;
+}
+
+[data-event-type=emote] {
+  color: white;
+  background-color: dodgerblue;
 }

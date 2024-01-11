@@ -61,7 +61,18 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   move(x, y) {
-    this.socket.executeAsGM('moveToken', game.user.character.id, [x,y])
+    // this.socket.executeAsGM('moveToken', game.user.character.id, [x,y])
+
+    let sharedScreenUser = game.users.find(function(user) {
+      return game.settings.get('monks-common-display', 'playerdata')[user.id]?.display
+    })
+
+    if (!sharedScreenUser) {
+      return;
+    }
+
+    this.socket.executeAsUser('moveToken', sharedScreenUser.id, game.user.character.id, [x,y])
+    
   }
 
   moveTopLeft() {
@@ -605,8 +616,8 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   }
 
-  rollDice() {
-    return;
+  showChatTab() {
+    this._tabs[0].activate('chat-message-tab')
   }
 
   equipItem(event) {
@@ -699,7 +710,11 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   toggleSpellCompendiumLevelFilter(event) {
     
-    let spellLevelFilter = $(event.target).data('spellLevel').toString();
+    // debugger;
+
+    let spellLevelFilter = $(event.target).data('spellLevelFilter').toString();
+
+    // debugger;
     
     // Show all spell-levels
     if (spellLevelFilter === 'all-levels') {
@@ -747,13 +762,21 @@ export class SimpleTokenMovementForm extends FormApplication {
       this.spellCompendiumFilters.push('all-levels')
     } 
     
-    // this.spellCompendiumFilters = this.spellCompendiumFilters.filter(filter => filter !== spellLevel.toString());
-    Hooks.call('simple-token-movement.openForm')
+    this.render(true)
   }
 
   addChatMessage(chatMessage) {
+
     this.chatMessages.push(chatMessage)
-    console.log(chatMessage)
+
+    if (this._tabs[0].active === 'chat-message-tab') {
+
+      let windowContent = $('#simple-token-movement > .window-content');
+      let scrollPosition = windowContent.prop('scrollHeight');
+      windowContent.animate({ scrollTop: scrollPosition }, 'slow');
+
+    }
+    
   }
 
   clearChatMessages() {
@@ -771,7 +794,64 @@ export class SimpleTokenMovementForm extends FormApplication {
 
     if (action !== undefined) {
       chatCard.find(`[data-action=${action}]`).trigger('click');
+    } else {
+      return;
     }
+
+  }
+
+  rollDice(event) {
+
+    let diceString = $(event.target).data('roll'); 
+    let roll = new Roll(diceString);
+    roll.roll({async: false});
+
+    roll.toMessage({
+      speaker: ChatMessage.getSpeaker(),
+      flavor: "Rolling a " + diceString,
+      rolls: [roll]
+    });
+
+  }
+
+  showEmoteDialogue() {
+
+    let sharedScreenUser = game.users.find(function(user) {
+      return game.settings.get('monks-common-display', 'playerdata')[user.id]?.display
+    })
+
+    if (!sharedScreenUser) {
+      return;
+    }
+
+    let dialog = new Dialog({
+      title: "Emote",
+      content: "Express yourself",
+      buttons: {
+       one: {
+        label: "Attention",
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'attention')
+       },
+       two: {
+        label: "Joy",
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'joy')
+       },
+       three: {
+        label: "Sad",
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'sad')
+       },
+       four: {
+        label: "Angry",
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'angry')
+       },
+       five: {
+        label: "Blush",
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'blush')
+       }
+      },
+      default: "one",
+     });
+     dialog.render(true);
 
   }
 
@@ -817,9 +897,13 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-add-item]', html).bind('touchstart', $.proxy(this.addItem, this));
     $('[data-add-spell]', html).bind('touchstart', $.proxy(this.addSpell, this));
     $('[data-remove-spell]', html).bind('touchstart', $.proxy(this.removeSpell, this));
-    $('[data-spell-level]', html).bind('touchstart', $.proxy(this.toggleSpellCompendiumLevelFilter, this));
+    $('[data-spell-level-filter]', html).bind('touchstart', $.proxy(this.toggleSpellCompendiumLevelFilter, this));
     $('[data-clear-chat-messages]', html).bind('touchstart', $.proxy(this.clearChatMessages, this));
     $('[data-message-id]', html).bind('touchstart', $.proxy(this.handleNotificationsTouch, this));
+    $('[data-roll]', html).bind('touchstart', $.proxy(this.rollDice, this))
+    $('[data-show-chat-tab]', html).bind('touchstart', $.proxy(this.showChatTab, this))
+    $('[data-event-type="emote"]', html).bind('touchstart', $.proxy(this.showEmoteDialogue, this))
+
   }
 
   getData() {
@@ -858,6 +942,11 @@ export class SimpleTokenMovementForm extends FormApplication {
       totalHp: game.user.character.system.attributes.hp.value + game.user.character.system.attributes.hp.temp,
     }
 
+  }
+
+  render(...args) {
+    super.render(...args);
+    // this.setPosition({ width: "100%", height: "100%", left: 0, top: 0 });
   }
 
   async _updateObject(event, formData) {

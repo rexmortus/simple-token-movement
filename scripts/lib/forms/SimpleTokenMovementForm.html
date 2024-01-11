@@ -34,6 +34,7 @@
           <div class="flexcol left-buttons">
             <button data-event-type="manage-conditions">Conditions</button>
             <button data-event-type="manage-rest">Rest</button>
+            <button data-event-type="emote">Emote</button>
           </div>
           <!-- Character Image -->
           <div class="flexcol character-image" style="background: url({{character.img}})"></div>
@@ -148,7 +149,7 @@
             <div class="flexcol">
             <button data-roll-initiative>Initiative {{prependSign character.system.attributes.init.total}}</button>
             <button data-roll-death-save>Death Save</button>
-            <button data-roll-dice>Dice</button>
+            <button data-show-chat-tab>Dice</button>
             <br>
             </div>
             <table class="mobile-roll-table">
@@ -669,20 +670,20 @@
     <h1>Spell Compendium</h1>
     <br>
     <div class="flexrow spell-level-buttons">
-      <button data-spell-level="known" class="flex2
+      <button data-spell-level-filter="known" class="flex2
       {{#contains spellCompendiumFilters 'known'}}
       spell-level-selected
       {{/contains}}">Known</button>
       {{#each spellLevels}}
 
 
-      <button data-spell-level="{{@key}}" 
+      <button data-spell-level-filter="{{@key}}" 
         {{#contains ../spellCompendiumFilters @key}}
         class="spell-level-selected
         {{/contains}}
         ">{{this}}</button>
       {{/each}}
-      <button data-spell-level="all-levels"  
+      <button data-spell-level-filter="all-levels"  
       {{#contains spellCompendiumFilters 'all-levels'}}
       class="spell-level-selected"
       {{/contains}}
@@ -734,6 +735,7 @@
   <div data-tab="chat-message-tab" class="tab">
 
       <div class="flexcol chat-messages" id="dnd5e-mobile-chat-messages">
+
         {{#if chatMessages}}
           {{#each chatMessages}}
           <div data-message-id="{{this.id}}" class="flexcol mobile-chat-message">
@@ -758,12 +760,27 @@
             {{else}}
               <span>{{{this.content}}}</span>
             {{/if}}
-
           </div>
         {{/each}}
         {{else}}
-        {{!-- <span>Rolls</span> --}}
+        <span class="dice-roller-header">Dice Roller</span>
         {{/if}}
+        <div class="flexcol mobile-dice-buttons">
+          
+          <div class="flexrow">
+            <div><button data-roll="1d4">d4</button></div>
+            <div><button data-roll="1d6">d6</button></div>
+            <div><button data-roll="1d8">d8</button></div>
+            <div><button data-roll="1d10">d10</button></div>
+          </div>
+        
+          <div class="flexrow">
+            <div><button data-roll="1d12">d12</button></div>
+            <div><button data-roll="1d20">d20</button></div>
+            <div><button data-roll="1d100">d100</button></div>
+          </div>
+        </div>
+      
       </div>
       <a data-clear-chat-messages><i class="fa-solid fa-circle-xmark"></i></a>
     </div>
