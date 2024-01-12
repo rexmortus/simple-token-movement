@@ -71,7 +71,12 @@
               
           <!-- Movement tab -->
           <div class="tab movement-tab" data-tab="movement-tab" data-group="token-controller" style="height:440px">
-            <br>
+            <div class="flexrow zoom-controls">
+              <button data-zoom-feet="15">15ft</button>
+              <button data-zoom-feet="30">30ft</button>
+              <button data-zoom-feet="60">60ft</button>
+              <button data-zoom-feet="90">90ft</button>
+            </div>
             <div class="flexrow">
               <span class="mtmc-topleft"><i class="fa-solid fa-circle-arrow-up"></i></span>
               <span class="mtmc-top"><i class="fa-solid fa-circle-arrow-up"></i></span>
@@ -79,7 +84,7 @@
             </div>
             <div class="flexrow">
               <span class="mtmc-left"><i class="fa-solid fa-circle-arrow-up"></i></span>
-              <span class="mtmc-select"><img class="character-token" src="{{character.prototypeToken.texture.src}}" alt=""></span>
+              <span class="mtmc-select" data-select-token><img class="character-token" src="{{character.prototypeToken.texture.src}}" alt=""></span>
               <span class="mtmc-right"><i class="fa-solid fa-circle-arrow-up"></i></span>
             </div>
             <div class="flexrow">

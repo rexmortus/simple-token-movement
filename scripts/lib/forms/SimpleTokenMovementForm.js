@@ -709,13 +709,9 @@ export class SimpleTokenMovementForm extends FormApplication {
   }
 
   toggleSpellCompendiumLevelFilter(event) {
-    
-    // debugger;
 
     let spellLevelFilter = $(event.target).data('spellLevelFilter').toString();
 
-    // debugger;
-    
     // Show all spell-levels
     if (spellLevelFilter === 'all-levels') {
 
@@ -855,12 +851,44 @@ export class SimpleTokenMovementForm extends FormApplication {
 
   }
 
+  selectToken(event) {
+
+    let actorId = game.user.character.id;
+
+    let sharedScreenUser = game.users.find(function(user) {
+      return game.settings.get('monks-common-display', 'playerdata')[user.id]?.display
+    })
+
+    if (!sharedScreenUser) {
+      return;
+    }
+
+    this.socket.executeAsUser('selectOrReleaseToken', sharedScreenUser.id, actorId)
+
+  }
+
+  changeZoomLevel(event) {
+
+    let sharedScreenUser = game.users.find(function(user) {
+      return game.settings.get('monks-common-display', 'playerdata')[user.id]?.display
+    })
+
+    if (!sharedScreenUser) {
+      return;
+    }
+
+    let button = $(event.target);
+    let zoomLevelInFeet = button.data('zoomFeet');
+
+    this.socket.executeAsUser('changeZoomLevel', sharedScreenUser.id, zoomLevelInFeet)
+    
+  }
+
   activateListeners(html) {
 
     super.activateListeners(html)
 
     // A wall of UI bindings :|
-    $('.mtmc-select', html).bind('touchstart', $.proxy(this.selectToken, this))
     $('.mtmc-zoomin', html).bind('touchstart', $.proxy(this.zoomIn, this))
     $('.mtmc-zoomout', html).bind('touchstart', $.proxy(this.zoomOut, this))
     $('.mtmc-topleft', html).bind('touchstart', $.proxy(this.moveTopLeft, this))
@@ -903,6 +931,8 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-roll]', html).bind('touchstart', $.proxy(this.rollDice, this))
     $('[data-show-chat-tab]', html).bind('touchstart', $.proxy(this.showChatTab, this))
     $('[data-event-type="emote"]', html).bind('touchstart', $.proxy(this.showEmoteDialogue, this))
+    $('[data-zoom-feet]', html).bind('touchstart', $.proxy(this.changeZoomLevel, this));
+    $('[data-select-token]', html).bind('touchstart', $.proxy(this.selectToken, this));
 
   }
 

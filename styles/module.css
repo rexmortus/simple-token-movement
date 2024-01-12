@@ -749,3 +749,10 @@ span.class-details {
   color: white;
   background-color: dodgerblue;
 }
+
+.zoom-controls > button {
+  color: DimGray;
+  background-color: silver;
+  font-weight: bold;
+  padding:5px;
+} 
