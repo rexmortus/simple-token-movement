@@ -86,7 +86,7 @@ span.class-details {
   background-color: black;
 }
 
-[data-event-type=manage-defenses] {
+[data-event-type=manage-effects] {
   color: white;
   background-color: black;
 }
@@ -755,4 +755,14 @@ span.class-details {
   background-color: silver;
   font-weight: bold;
   padding:5px;
-} 
+}
+
+[data-end-turn] {
+  font-weight: bold;
+  color: white;
+  background-color: red;
+}
+
+.combat-bar {
+  max-height: 30px;
+}

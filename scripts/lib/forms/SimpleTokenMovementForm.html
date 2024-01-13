@@ -1,3 +1,11 @@
+{{#if isActiveCombat}}
+  {{#if isCombatTurn}}
+    <div class="flexcol" class="combat-bar">
+      <button data-end-turn>End Turn</button>
+    </div>
+  {{/if}}
+{{/if}}
+
 <nav class="page-controller tabs hidden" data-group="page-controller">
   <a data-tab="controller-tab" data-group="page-controller"></a>
   <a data-tab="hp-tab" data-group="page-controller"></a>
@@ -41,7 +49,7 @@
           <!-- Right Buttons -->
           <div class="flexcol right-buttons">
             <button data-event-type="manage-hp">{{totalHp}}/{{character.system.attributes.hp.max}} HP</button>
-            <button data-event-type="manage-defenses">Defenses</button>
+            <button data-event-type="manage-effects">Effects</button>
             <button data-event-type="manage-inspiration">Inspiration</button>
           </div>
 
@@ -662,7 +670,7 @@
       <div class="flexrow token-controller-action-entry">
           <img src="{{this.img}}"/>
           <span class="flex2">{{this.name}}</span>
-          <div><button data-add-item="{{this.id}}">Add</button></div>
+          <div><button data-add-item="{{this.uuid}}">Add</button></div>
       </div>
 
     </div>
@@ -788,7 +796,7 @@
       
       </div>
       <a data-clear-chat-messages><i class="fa-solid fa-circle-xmark"></i></a>
-    </div>
+    
   </div>
   
 </div>

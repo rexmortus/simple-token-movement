@@ -78,7 +78,7 @@ Hooks.once("socketlib.ready", () => {
 
     socket = socketlib.registerModule("simple-token-movement");
 
-	socket.register("moveToken", move);
+    socket.register("moveToken", move);
     socket.register("toggleStatus", toggleStatus)
     socket.register("tokenEmote", tokenEmote)
 
@@ -229,7 +229,6 @@ Hooks.once('ready', async function() {
     
         mainForm.render(true);
     
-        // Setup hooks
         Hooks.on('simple-token-movement.openForm', function() {
             mainForm.render(true);
         });
@@ -276,6 +275,11 @@ Hooks.once('ready', async function() {
     
         Hooks.on('createChatMessage', function(chatMessage, options, userId) {
             mainForm.addChatMessage(chatMessage)
+            mainForm.render(true);
+        })
+
+
+        Hooks.on('updateCombat', function(...args) {
             mainForm.render(true);
         })
 

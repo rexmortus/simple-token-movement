@@ -60,8 +60,14 @@ export class SimpleTokenMovementForm extends FormApplication {
     });
   }
 
+    _getHeaderButtons() {
+    let buttons = super._getHeaderButtons();
+    // Filter out the close button
+    buttons = buttons.filter(button => button.label !== "Close");
+    return buttons;
+  }
+
   move(x, y) {
-    // this.socket.executeAsGM('moveToken', game.user.character.id, [x,y])
 
     let sharedScreenUser = game.users.find(function(user) {
       return game.settings.get('monks-common-display', 'playerdata')[user.id]?.display
@@ -72,6 +78,9 @@ export class SimpleTokenMovementForm extends FormApplication {
     }
 
     this.socket.executeAsUser('moveToken', sharedScreenUser.id, game.user.character.id, [x,y])
+    .catch(error => {
+        ui.notifications.error(error);
+    });
     
   }
 
@@ -218,7 +227,9 @@ export class SimpleTokenMovementForm extends FormApplication {
       if(eventType === 'condition') {
 
         let effectId = $(this.startElement).data('condition');
-        this.socket.executeAsGM('toggleStatus', game.user.character.id, effectId);
+        this.socket.executeAsGM('toggleStatus', game.user.character.id, effectId).catch(error => {
+            ui.notifications.error(error);
+        });
         
       }
 
@@ -826,23 +837,33 @@ export class SimpleTokenMovementForm extends FormApplication {
       buttons: {
        one: {
         label: "Attention",
-        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'attention')
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'attention').catch(error => {
+          ui.notifications.error(error);
+        })
        },
        two: {
         label: "Joy",
-        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'joy')
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'joy').catch(error => {
+          ui.notifications.error(error);
+        })
        },
        three: {
         label: "Sad",
-        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'sad')
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'sad').catch(error => {
+          ui.notifications.error(error);
+        })
        },
        four: {
         label: "Angry",
-        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'angry')
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'angry').catch(error => {
+          ui.notifications.error(error);
+        })
        },
        five: {
         label: "Blush",
-        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'blush')
+        callback: () => this.socket.executeAsUser('tokenEmote', sharedScreenUser.id, game.user.character.id, 'blush').catch(error => {
+          ui.notifications.error(error);
+        })
        }
       },
       default: "one",
@@ -863,7 +884,9 @@ export class SimpleTokenMovementForm extends FormApplication {
       return;
     }
 
-    this.socket.executeAsUser('selectOrReleaseToken', sharedScreenUser.id, actorId)
+    this.socket.executeAsUser('selectOrReleaseToken', sharedScreenUser.id, actorId).catch(error => {
+      ui.notifications.error(error);
+    });
 
   }
 
@@ -880,8 +903,16 @@ export class SimpleTokenMovementForm extends FormApplication {
     let button = $(event.target);
     let zoomLevelInFeet = button.data('zoomFeet');
 
-    this.socket.executeAsUser('changeZoomLevel', sharedScreenUser.id, zoomLevelInFeet)
+    this.socket.executeAsUser('changeZoomLevel', sharedScreenUser.id, zoomLevelInFeet).catch(error => {
+      ui.notifications.error(error);
+    })
     
+  }
+
+  endTurn() {
+    if (game.combat) {
+      game.combat.nextTurn();
+    }
   }
 
   activateListeners(html) {
@@ -933,7 +964,7 @@ export class SimpleTokenMovementForm extends FormApplication {
     $('[data-event-type="emote"]', html).bind('touchstart', $.proxy(this.showEmoteDialogue, this))
     $('[data-zoom-feet]', html).bind('touchstart', $.proxy(this.changeZoomLevel, this));
     $('[data-select-token]', html).bind('touchstart', $.proxy(this.selectToken, this));
-
+    $('[data-end-turn]', html).bind('touchstart', $.proxy(this.endTurn, this));
   }
 
   getData() {
@@ -970,13 +1001,14 @@ export class SimpleTokenMovementForm extends FormApplication {
       statusEffects: CONFIG.statusEffects,
       toHitRolls: game.user.character.items.filter(item => item.labels.toHit),
       totalHp: game.user.character.system.attributes.hp.value + game.user.character.system.attributes.hp.temp,
+      isActiveCombat: game.combats?.active && game.combats?.active?.started,
+      isCombatTurn: game.combats?.active?.combatant?.token?.actor === game.user?.character
     }
 
   }
 
   render(...args) {
     super.render(...args);
-    // this.setPosition({ width: "100%", height: "100%", left: 0, top: 0 });
   }
 
   async _updateObject(event, formData) {
